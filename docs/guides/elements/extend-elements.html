@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- History.js -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/guides/elements/extend-elements.html">
+
+  <script src="/api-docs/swagger-ui.js" type="text/javascript"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper">
+      <div markdown="span" class="bs-callout bs-callout-warning" role="alert">
+  <h4>The docs are moving! </h4><p>Find us at our new <a href ="https://docs.cloud-elements.com/">Help Center</a> where we've combined our documentation and knowledgebase articles in one easy-to-search location.</p><p>We aren't updating the Developer Portal anymore, except for the Element Docs &mdash; all updates happen in the <a href ="https://docs.cloud-elements.com/">Help Center</a>. We're retiring the Developer Portal as you know it in:</p><h4 id="demo"></h4>
+  <script>
+  // Set the date we're counting down to
+  var countDownDate = new Date("December 14, 2018 20:00:00").getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+
+      // Get todays date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now an the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Output the result in an element with id="demo"
+      document.getElementById("demo").innerHTML = days + " days " + hours + " hours " + minutes + "m " + seconds + "s ";
+
+      // If the count down is over, write some text
+      if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("demo").innerHTML = "EXPIRED";
+      }
+  }, 1000);
+  </script>
+
+</div>
+
+      <script src="/assets/js/application.js"></script>
+<link href="/assets/css/contentToggle.css" rel="stylesheet">
+
+
+
+      
+      <h1 id="extend-elements">Extend Elements</h1>
+
+<p>Element Builder gives you the integration tools to extend the current feature set of any of our Elements by adding a resource or method. If your use case requires a resource our Element doesn’t currently support, you can easily add it in yourself using Element Builder.</p>
+
+<p>Each Element starts with a standard set of features, including authentication, paging, errors, events and search. Use Element Builder to add:</p>
+
+<ul>
+<li>Additional Resources: With an HTTP verb like POST, GET, PATCH, PUT, or DELETE.</li>
+<li>Events: Cloud Elements currently supports building integrations with polling or webhooks capability.</li>
+<li>Bulk Functionality: Cloud Elements supports bulk download of objects in JSON format if the endpoint supports filter by date.</li>
+<li>Docs: API documentation is automatically generated for your updated Element.</li>
+</ul>
+
+<h2 id="add-resources-to-an-existing-element">Add Resources to an Existing Element</h2>
+
+<p>You can extend an element by adding resources. To add a resource, hover over an element card, and then click <strong>My Resources</strong>. After you arrive on the editable Resources page, follow the instructions in <a href="#define-new-resources">Define New Resources</a>.
+<img src="img/my-resources.gif" alt="My Resources"></p>
+
+<h2 id="define-new-resources">Define New Resources</h2>
+
+<p>Defining a resource is a multi-step process, but you do not need to complete each step. For example, you need to add hooks only for advanced or complex use cases. You need to configure bulk for only the resources that you plan to download or upload bulk changes.</p>
+
+<p>When defining resources, begin by adding a resource and providing basic information about the resource as a whole. For each endpoint, provide a description and add any endpoint-level configuration. If needed, add parameters to pass along with each request to each endpoint. For more complex use cases, write hooks needed to perform complex tasks. If the method requires models (POST, PUT, PATCH), define the models for each request and response. Lastly, if you want to be able to upload or download bulk CSV or JSON files, configure bulk for the endpoint.</p>
+
+<p>Before you begin, review the <a href="custom-elements.html#element-conventions">Element Conventions</a> so your element will align with others in the Elements Catalog.</p>
+
+<h3 id="add-a-resource">Add a Resource</h3>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='#add-a-resource';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Add</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#configure-endpoints';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Configure</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-parameters';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Parameters</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-hooks';">
+
+  <div class="workFlowStepNum"> 4</div>
+  <div>Hooks</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-models';">
+
+  <div class="workFlowStepNum"> 5</div>
+  <div>Models</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#configure-bulk';">
+
+  <div class="workFlowStepNum"> 6</div>
+  <div>Bulk</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-endpoints';">
+
+  <div class="workFlowStepNum"> 7</div>
+  <div>Endpoints</div>
+</div>
+
+<p></div>
+</div></p>
+
+<p>Adding a resource enables you to create multiple endpoints for a single resource at one time. You can also add individual endpoints one at a time. Cloud Elements automatically groups individual endpoints by resource name when they match.</p>
+
+<p>To add a resource:</p>
+
+<ol>
+<li>Click <strong>Add a new resource</strong> at the top of the page.</li>
+<li>Identify if the resource is a child resource, such as <code>/users/{id}/tasks</code> or <code>/contacts/{id}/tasks</code>.</li>
+<li><p>In <strong>Cloud Elements Resource Name</strong> add the name of the resource as you want to see it in Cloud Elements. For example, enter <code>deals</code> to add a <code>/deals</code> resource to a CRM element. The name you choose is what appears in the API documentation and also creates an endpoint in the hub. For example, the new <code>GET /deals</code> endpoint appears as <strong>GET /deals</strong> in the docs and is accessible via the <code>hubs/crm/deals</code> endpoint.
+<img src="img/deals-swagger.png" alt="deals in the docs"></p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> To remain consistent with Cloud Elements naming conventions, we recommend that you name the resources in the plural form. For example, `/deals` not `/deal`.  </div></li>
+<li><p>In <strong>Vendor Resource Name</strong> add the path to the resource at the API provider. The value that you enter is appended directly to the Base URL. If your Base URL ends with a slash <code>/</code> then do not enter a slash before the resource name. If your Base URL does not end in a slash <code>/</code>, then add one before the resource name.</p></li>
+<li><p>In <strong>Primary Key</strong> enter the property that uniquely identifies the resource. Primary keys are typically ID fields associated with the resource. In this example, a primary key could be <code>id</code>.</p></li>
+<li><p>In <strong>Created Date Key</strong> and <strong>Updated Date Key</strong> enter the properties that identify the created and updated dates. Created and updated date keys vary widely, but can be <code>created</code>, <code>createdate</code>, or <code>timecreated</code> and  <code>updated</code>, <code>lastModified</code>, or <code>dateModified</code>.</p></li>
+<li><p>Select the methods to add. You will define the methods that you select when you <a href="#configure-endpoints">set up the endpoints</a>. Make sure that the methods that you select are supported by the API provider.</p>
+
+<p>For a new deals resource with all methods, our basic resource information looks like this:
+<img src="img/resource-basic-info.png" alt="Basic Resource Information"></p></li>
+<li><p>Click <strong>Go</strong>.</p></li>
+<li><p>Configure to <a href="#configure-endpoints">Configure Endpoints</a></p></li>
+</ol>
+
+<h3 id="configure-endpoints">Configure Endpoints</h3>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-a-resource';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Add</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='#configure-endpoints';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Configure</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-parameters';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Parameters</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-hooks';">
+
+  <div class="workFlowStepNum"> 4</div>
+  <div>Hooks</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-models';">
+
+  <div class="workFlowStepNum"> 5</div>
+  <div>Models</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#configure-bulk';">
+
+  <div class="workFlowStepNum"> 6</div>
+  <div>Bulk</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-endpoints';">
+
+  <div class="workFlowStepNum"> 7</div>
+  <div>Endpoints</div>
+</div>
+
+<p></div>
+</div></p>
+
+<p>After you provide the basic information to create a resource, Cloud Elements shows the endpoints associated with each method that you chose to configure for the resource in an editable API documentation format. Use the Endpoints tab to configure each of the endpoints created from the combination of the resource and the methods that you selected in the previous step. If you did not select the correct methods in the previous step, you can add or remove endpoints on the Endpoints tab.
+<img src="img/endpoints.png" alt="Configure Endpoints"></p>
+
+<p>If you have any authenticated element instances for the element, they appear on the left. Select an element instance to test the endpoints as you build them.</p>
+
+<p>To set up endpoints:</p>
+
+<ol>
+<li>Click <img src="img/resource-pencil.png" alt="Edit" class="inlineImage">.</li>
+<li>In <strong>Resource Type</strong> select a resource type other than <strong>API</strong> only if you want to alter how the API documentation treats the endpoint.</li>
+<li><p>Add a  <strong>Root Key</strong> to identify the top level field of the resource and limit what you send (<strong>Request Root Key</strong>) or receive (<strong>Response Root Key</strong>). For example, if you receive the following payload, but only want <code>items</code>, not <code>numberOfItems</code> and <code>items</code>, enter <code>items</code>.</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"numberOfItems"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"itemOne"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"hello"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"itemtwo"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"world"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></li>
+<li><p>In <strong>Pagination Type</strong> select to override the default pagination settings of the element. If you select nothing, the default is <strong>Supported</strong>.</p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> If the API provider does not support paging, Cloud Elements uses the `page` or `nextPage` and `pageSize` parameters to page through the result set. </div></li>
+<li><p>In <strong>Next Resource</strong> select another endpoint if your use case requires requests to multiple endpoints one after another.</p></li>
+<li><p>Enter a description. This appears in the API documentation and should help a user understand what the request is for and what to expect in the response. A description of the <code>GET /deals</code> endpoint could be: &quot;Retrieves a list of deals. Use CEQL to filter by related fields like company and contact.&quot;</p>
+
+<p><div markdown="span" class="alert alert-success" role="alert"><i class="fa fa-check-square-o"></i> <b>Tip:</b> The descriptions that you enter for each endpoint should help a user understand what the endpoint does. Keep the descriptions short, no more than three sentences. Start with a verb associated with a method like gets, retrieves, checks, creates, returns, updates, or deletes. Then describe what resource is being manipulated and add any other helpful information about required fields, filtering, or formatting. </div>8. Continue to <a href="#add-parameters">Add Parameters</a>.</p></li>
+</ol>
+
+<h4 id="endpoint-configuration-parameters">Endpoint Configuration Parameters</h4>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">Resource Type</td>
+<td style="text-align: left">Describes the endpoint, when it executes, and whether it appears in the API documentation.</td>
+<td style="text-align: left">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">API &mdash; The default resource type where the endpoint makes a request to the API provider and is documented within the API documentation.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">API No Documentation &mdash; The endpoint makes a request to the API provider but it is hidden from the API documentation.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">On Delete &mdash; The endpoint makes a request when you delete an element instance. Use this type of resource to clean up after someone deletes an instance of the element.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">On Provision &mdash; The endpoint makes a request when you authenticate an element instance. Use this type of resource to extract information during the authentication process to add to the element configuration.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">On Refresh &mdash; The endpoint makes a request after the element makes an OAuth 2.0 token refresh request.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">Provision Auth Validation &mdash; The endpoint makes a request during authentication validation.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">On Provision Webhook &mdash; The endpoint makes a request during authentication of an element instance to register one or more webhooks with the API provider.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">On Delete Webhook &mdash; The endpoint makes a request during deletion of an element instance to remove one or more webhooks from the API provider.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">OAuth On Authorize URL &mdash; The endpoint makes a request bypassing the generic OAuth flow.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">OAuth On Token Exchange &mdash; The endpoint makes a request bypassing the generic OAuth flow.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">OAuth On Token Refresh &mdash; The endpoint makes a request bypassing the generic OAuth flow.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">OAuth On Token Revoke &mdash; The endpoint makes a request bypassing the generic OAuth flow.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">OAuth On Token Request  &mdash; The endpoint makes a request bypassing the generic OAuth flow.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">OAuth1 On Token Request  &mdash; The endpoint makes a request bypassing the generic OAuth flow.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">Request Root Key</td>
+<td style="text-align: left">Identifies the root object in the JSON request that contains the relevant information about the resource.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">Response Root Key</td>
+<td style="text-align: left">Identifies the root object in the JSON response that contains the relevant information about the resource.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">Pagination Type</td>
+<td style="text-align: left">Identifies whether the resource supports the default pagination settings of the element. If you leave this parameter empty it defaults to Supported.</td>
+<td style="text-align: left">No</td>
+</tr>
+<tr>
+<td style="text-align: left">Next Resource</td>
+<td style="text-align: left">If <a href="#chaining-resources">chaining resources</a>, identifies the endpoint request that follows this request in the chain.</td>
+<td style="text-align: left">No</td>
+</tr>
+</tbody></table>
+
+<h3 id="add-parameters">Add Parameters</h3>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-a-resource';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Add</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#configure-endpoints';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Configure</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='#add-parameters';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Parameters</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-hooks';">
+
+  <div class="workFlowStepNum"> 4</div>
+  <div>Hooks</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-models';">
+
+  <div class="workFlowStepNum"> 5</div>
+  <div>Models</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#configure-bulk';">
+
+  <div class="workFlowStepNum"> 6</div>
+  <div>Bulk</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-endpoints';">
+
+  <div class="workFlowStepNum"> 7</div>
+  <div>Endpoints</div>
+</div>
+
+<p></div>
+</div></p>
+
+<p>Endpoint parameters allow you to pass various properties to the endpoint. Use the endpoint parameters to configure searches, pagination, ids, and required fields. You can configure most required and optional parameters for most endpoints. Cloud Elements provides some default common parameters for each method, except DELETE.</p>
+
+<h4 id="default-parameters-for-each-method">Default Parameters for Each Method</h4>
+
+<table><thead>
+<tr>
+<th style="text-align: left">GET</th>
+<th style="text-align: left">GET {id}</th>
+<th style="text-align: left">POST, PATCH &amp; PUT</th>
+<th style="text-align: left">DELETE</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left"><strong>where</strong>: CEQL search expression.</br>In Vendor Name, keep the default <code>converter: toQueryParameters</code> in most cases. For some API providers that use an OData service you can use <code>converter: toODataFilter</code>. In some cases querying in the API provider cannot be supported by the existing parameters and you should contact Cloud Elements support.</td>
+<td style="text-align: left"><strong>id</strong>: The id of a specific object.</td>
+<td style="text-align: left"><strong>body</strong>: The object payload to create or update.</td>
+<td style="text-align: left">No default, but the id of the deleted object is a common parameter.</td>
+</tr>
+<tr>
+<td style="text-align: left"><strong>page</strong>: The next token or link to get additional results.</td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"><strong>pageSize</strong>: The number of records to return.</td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+</tr>
+</tbody></table>
+
+<p>Map parameters that you send as part of the request from Cloud Elements on the top row to parameters available to the resource at the API provider on the second row.
+<img src="img/resource-parameter.png" alt="Add parameters UI"></p>
+
+<p>To define a parameter :</p>
+
+<ol>
+<li>Select an endpoint, and then click <img src="img/resource-pencil.png" alt="Edit" class="inlineImage">.</li>
+<li>If you need to add a parameter, click <strong>Add New Parameter</strong>.</li>
+<li>In <strong>Parameter Name</strong>, enter the name of the parameter. The name appears in the API documentation in some cases or can be a value passed to the API provider.</li>
+<li>In <strong>Vendor Name</strong> enter the name of the parameter to map to. For example, if you are adding an <code>id</code> parameter, <strong>Vendor Name</strong> should be the unique id field for the resource like <code>dealId</code>.</li>
+<li>In <strong>Parameter Type</strong> select the source of the parameter.</li>
+<li>In <strong>Vendor Type</strong> select how the API provider receives the parameter.</li>
+<li>In <strong>Parameter Datatype</strong> and <strong>Vendor Datatype</strong> select the data type of the parameter.</li>
+<li>If the <strong>Parameter Type</strong> is <code>body</code>, enter the name of an existing model in <strong>Model Name</strong>. See <a href="#add-models">Add Models</a> to create a model for the endpoint.</li>
+<li>If you want to switch the standard workflow where the parameters on the left are part of the request, click <strong>Parameter Source</strong>, and then select <strong>Request</strong>. ID, GET,</li>
+<li>To make the parameter a required part of the request, switch <strong>Required</strong> on.</li>
+<li>In <strong>Parameter Description</strong> enter a brief description of the parameter. If the parameter appears in the API documentation, this description also appears.</li>
+<li>Click <strong>Save</strong>:
+
+<ul>
+<li>If you need to add any more endpoints, continue to <a href="#add-endpoints">Add Endpoints</a>.</li>
+<li>If the resource requires more logic to interact with it, continue to <a href="#add-hooks">Add Hooks</a>.</li>
+<li>if you need to add a model to a POST, PUT, or PATCh request, continue to <a href="#add-models">Add Models</a></li>
+<li>If you need to be able to upload or download bulk data in JSON or CSV format, continue to <a href="#configure-bulk">Configure Bulk</a>.</li>
+</ul></li>
+</ol>
+
+<h4 id="parameters">Parameters</h4>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">Parameter Type</td>
+<td style="text-align: left">Body</td>
+<td style="text-align: left">Body</td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">configuration &mdash; The value of the parameter is the value of the configuration identified by the Configuration Key specified in the Parameter Name. The Parameter Name must match a Configuration Key in the element configuration.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">header &mdash; The value is the request header parameter that matches the Parameter Name.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">path &mdash; The value is the portion of the request path that matches the Parameter Name.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">body &mdash; The value is the part of the request body that matches the Parameter Name.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">query &mdash;  The value is the query parameter that matches the Parameter Name.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">form  &mdash; The value is the value of the key that matches the Parameter Name in the x-www-form-urlencoded body of a request. If a file, then use &quot;file&quot; as the Parameter Name.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">multipart &mdash; The value is the value of the key that matches the Parameter Name in the x-www-form-urlencoded body of a request. If a file, then use &quot;file&quot; as the Parameter Name.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">value  &mdash; The value is the Parameter Name.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">bodyField &mdash;  The value is the value of the field in a request body that matches the Parameter Name.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">prevBody - Cloud Elements parameter type only. If chaining requests, the value is the part of the request body of the previous request in the chain that matches the Parameter Name.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">prevBodyField  - Cloud Elements parameter type only. If chaining requests, the value is the field in the request body of the previous request in the chain that matches the Parameter Name</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">Vendor Type</td>
+<td style="text-align: left">Body</td>
+<td style="text-align: left">Body</td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">configuration &mdash; Requests to the API provider pass the parameter value as part of the configuration.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">header &mdash; Requests to the API provider pass the parameter value in the header.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">path &mdash; Requests to the API provider pass the parameter value in the path.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">body &mdash; Requests to the API provider pass the parameter value in the body.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">query &mdash;  Requests to the API provider pass the parameter value as a query parameter.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">form  &mdash; Requests to the API provider pass the parameter value as part of the x-www-form-urlencoded body of a request.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">multipart &mdash; Requests to the API provider pass the parameter value as part of the x-www-form-urlencoded body of a request.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">value  &mdash; Requests to the API provider pass the parameter value as a value.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">bodyField &mdash; Requests to the API provider pass the parameter value as a body field.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">bodyToken &mdash; Requests to the API provider pass the parameter value as a body token.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">no-op &mdash;  Indicates that the API provider does not need to operate on the parameter. Use no-op if you use the parameter in hooks.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">Parameter Datatype</td>
+<td style="text-align: left">The datatype of the parameter in the request.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">integer &mdash; A 32 bit binary signed integer.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">long &mdash; A 32 bit binary signed integer.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">float &mdash; A specific data type for a number.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">double &mdash; A specific data type for a number.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">string &mdash; A free text string.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">byte &mdash; Base64 encoded characters.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">binatry &mdash; Any sequence of octets.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">boolean &mdash; Any true/false or yes/no data.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">date &mdash; Any true/false or yes/no data.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">dateTime &mdash; As defined by full-date - RFC3339.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">boolean &mdash; As defined by date-time - RFC3339.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">password &mdash; A hint to UIs to obscure input.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">Vendor Datatype</td>
+<td style="text-align: left">The datatype of the parameter as expected by the API provider. See options for Parameter Datatype.</td>
+<td style="text-align: left">Body</td>
+</tr>
+<tr>
+<td style="text-align: left">Parameter Source</td>
+<td style="text-align: left">Identifies the side that represents the source, or left side of the parameter. The default request identifies Cloud Elements as the source. If you choose response, you effectively flip the Cloud Elements and API provider sides.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">Required</td>
+<td style="text-align: left">Identifies whether the parameter is required.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">Parameter Description</td>
+<td style="text-align: left">A free text area to describe the parameter.</td>
+<td style="text-align: left">Y</td>
+</tr>
+</tbody></table>
+
+<h3 id="add-hooks">Add Hooks</h3>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-a-resource';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Add</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#configure-endpoints';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Configure</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-parameters';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Parameters</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='#add-hooks';">
+
+  <div class="workFlowStepNum"> 4</div>
+  <div>Hooks</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-models';">
+
+  <div class="workFlowStepNum"> 5</div>
+  <div>Models</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#configure-bulk';">
+
+  <div class="workFlowStepNum"> 6</div>
+  <div>Bulk</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-endpoints';">
+
+  <div class="workFlowStepNum"> 7</div>
+  <div>Endpoints</div>
+</div>
+
+<p></div>
+</div></p>
+
+<p>You can create  <a href="#" data-toggle="tooltip" data-original-title="">resource hooks</a> to manipulate any part of a request or response or to operate on a configuration. Resource hooks work differently than <a href="#" data-toggle="tooltip" data-original-title="">global hooks</a> because they happen only on requests and responses related to a specific endpoint. <a href="hooks.html">Custom Hooks</a> provides detailed information about using hooks and includes examples.</p>
+
+<p>To create a resource hook:</p>
+
+<ol>
+<li>In the endpoint edit view, click <strong>Add a pre-request hook</strong> or <strong>Add a post-response hook</strong> depending on what you need to manipulate.</li>
+<li>Write the script needed for your use case. See <a href="hooks.html">Custom Hooks</a> for more information about the functions and libraries available to you.</li>
+<li>Save the endpoint.</li>
+</ol>
+
+<h3 id="add-models">Add Models</h3>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-a-resource';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Add</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#configure-endpoints';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Configure</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-parameters';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Parameters</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-hooks';">
+
+  <div class="workFlowStepNum"> 4</div>
+  <div>Hooks</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='#add-models';">
+
+  <div class="workFlowStepNum"> 5</div>
+  <div>Models</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#configure-bulk';">
+
+  <div class="workFlowStepNum"> 6</div>
+  <div>Bulk</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-endpoints';">
+
+  <div class="workFlowStepNum"> 7</div>
+  <div>Endpoints</div>
+</div>
+
+<p></div>
+</div></p>
+
+<p>Depending on the endpoint method, you can add request models and response models. Request models provide an example of how you should structure the JSON body of a POST, PUT, or PATCH request. Response models give you an idea of what the response from the API vendor should look like.</p>
+
+<p>Request models are required for POST, PUT, or PATCH requests, and the model that you set up should match the Model Name in the <strong>body</strong> parameter.</p>
+
+<p>You can add request models in two ways: entering the model schema directly or generating the model schema from a sample payload.</p>
+
+<p>To add a model:</p>
+
+<ol>
+<li>Identify what the request body should look like in the API provider&#39;s documentation or acquire a sample payload.</li>
+<li>Click <strong>Request Model</strong> or <strong>Response Model</strong>.</li>
+<li>Enter a name for the model.</li>
+<li>Depending on how you want to enter the model:
+
+<ul>
+<li>Enter the model as a schema object as defined in the <a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#schemaObject">OpenAPI version 2.0 Specification</a>.</li>
+<li>Or, click <strong>Generate from Sample Payload</strong>, paste the sample payload, and then click <strong>Generate</strong>.
+<img src="img/gen-from-payload.gif" alt="Generate From Payload"></li>
+</ul></li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+
+<h4 id="sample-model">Sample Model</h4>
+
+<p>The following sample model is a request model called postDeals for a <code>deals</code> resource.</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+    </span><span class="s2">"postDeals"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"postDeals"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"deal"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"deal"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"deal"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"deal"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"owner"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"stage"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"contact"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"percent"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"format"</span><span class="p">:</span><span class="w"> </span><span class="s2">"int32"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"integer"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"group"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"format"</span><span class="p">:</span><span class="w"> </span><span class="s2">"int32"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"integer"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre></div>
+<h3 id="configure-bulk">Configure Bulk</h3>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-a-resource';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Add</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#configure-endpoints';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Configure</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-parameters';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Parameters</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-hooks';">
+
+  <div class="workFlowStepNum"> 4</div>
+  <div>Hooks</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-models';">
+
+  <div class="workFlowStepNum"> 5</div>
+  <div>Models</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='#configure-bulk';">
+
+  <div class="workFlowStepNum"> 6</div>
+  <div>Bulk</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-endpoints';">
+
+  <div class="workFlowStepNum"> 7</div>
+  <div>Endpoints</div>
+</div>
+
+<p></div>
+</div></p>
+
+<p>You can set up each resource to be able to upload and download bulk data in either jSON or CSV format.</p>
+
+<p>To configure bulk:</p>
+
+<ol>
+<li>Click the <strong>Bulk</strong> tab.</li>
+<li>Select to enable bulk upload, download, or both.</li>
+<li>In each of the fields, select the format that the endpoint expects.</li>
+<li>Click <strong>Save Bulk Configuration</strong>.</li>
+</ol>
+
+<h3 id="add-endpoints">Add Endpoints</h3>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-a-resource';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Add</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#configure-endpoints';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Configure</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-parameters';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Parameters</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-hooks';">
+
+  <div class="workFlowStepNum"> 4</div>
+  <div>Hooks</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#add-models';">
+
+  <div class="workFlowStepNum"> 5</div>
+  <div>Models</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#configure-bulk';">
+
+  <div class="workFlowStepNum"> 6</div>
+  <div>Bulk</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='#add-endpoints';">
+
+  <div class="workFlowStepNum"> 7</div>
+  <div>Endpoints</div>
+</div>
+
+<p></div>
+</div></p>
+
+<p>You can add a new endpoint for a resource.</p>
+
+<p>To add an endpoint:</p>
+
+<ol>
+<li>Under the last endpoint associated with the resource, click <strong>Add a new endpoint</strong>.</li>
+<li>Select the Method for the new endpoint. The left side represents the Cloud Elements side of the endpoint.</li>
+<li>On the right side, select the vendor method associate with the endpoint, and then enter the URL of that endpoint.</li>
+<li>Click <strong>Go</strong>, and then follow the steps to <a href="#define-new-resources">define the resource</a>.</li>
+</ol>
+
+<h2 id="delete-endpoints">Delete Endpoints</h2>
+
+<p>If you no longer need an endpoint, click <img src="img/resource-trash.png" alt="Delete" class="inlineImage">, and then confirm the deletion. To completely remove a resource, delete all of the endpoints associated with it.</p>
+
+<h2 id="copy-endpoints">Copy Endpoints</h2>
+
+<p>To copy an endpoint, click <img src="img/resource-copy.png" alt="Copy" class="inlineImage">. After you copy and endpoint, cloud Elements creates a new resource and endpoint with the word <strong>_copy</strong> appended to it.</p>
+
+<h2 id="chaining-resources">Chaining Resources</h2>
+
+<p>You can create sequences of requests and perform operations based on the results of earlier requests in a sequence. Data from earlier resources in a chain are available to hooks through the <code>request_previous_response</code> and <code>request_previous_response_headers</code> parameters. Data is also available to parameters in the <code>prevBodyField</code> and <code>prevBody</code> Parameter Types.</p>
+
+<p>To chain requests start with the earliest requests in the chain. While working with the endpoint configuration, select the next resource in the chain from the <strong>Next Resource</strong> list.</p>
+
+    </div>
+
+  </div>
+  <script src="/assets/js/chart.js"></script>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- History.js -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/guides/ground-2-cloud/managing-ground2cloud.html">
+
+  <script src="/api-docs/swagger-ui.js" type="text/javascript"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper">
+      <div markdown="span" class="bs-callout bs-callout-warning" role="alert">
+  <h4>The docs are moving! </h4><p>Find us at our new <a href ="https://docs.cloud-elements.com/">Help Center</a> where we've combined our documentation and knowledgebase articles in one easy-to-search location.</p><p>We aren't updating the Developer Portal anymore, except for the Element Docs &mdash; all updates happen in the <a href ="https://docs.cloud-elements.com/">Help Center</a>. We're retiring the Developer Portal as you know it in:</p><h4 id="demo"></h4>
+  <script>
+  // Set the date we're counting down to
+  var countDownDate = new Date("December 14, 2018 20:00:00").getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+
+      // Get todays date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now an the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Output the result in an element with id="demo"
+      document.getElementById("demo").innerHTML = days + " days " + hours + " hours " + minutes + "m " + seconds + "s ";
+
+      // If the count down is over, write some text
+      if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("demo").innerHTML = "EXPIRED";
+      }
+  }, 1000);
+  </script>
+
+</div>
+
+      <script src="/assets/js/application.js"></script>
+<link href="/assets/css/contentToggle.css" rel="stylesheet">
+
+
+
+      
+      <h1 id="manage-ground2cloud">Manage Ground2Cloud</h1>
+
+<p>After installing Ground2Cloud, you can access the Ground2Cloud GUI through the desktop shortcut (if you created one) or by finding Ground2Cloud in your programs. Use the Ground2Cloud GUI to manage your Ground2Cloud installation and as a valuable source of debug information in case you need to contact Cloud Elements support. Whether the GUI is open or closed, the Ground2Cloud service is always running, so you can access or cluse the Ground2Cloud GUI any time.</p>
+
+<p>The Ground2Cloud GUI includes four tabs Home, Logs, Config, and Manage described in the following sections.</p>
+
+<h2 id="the-home-tab">The Home Tab</h2>
+
+<p><img src="/img/home-tab.png" alt="Cloud Elements Ground2Cloud Managing 1"></p>
+
+<p>The Home tab includes basic information about the application and, most importantly, an indication of the status of your installation. In the image above, the sentence at the bottom indicates &quot;You are up to date.&quot; Your installation should always be up to date because Ground2Cloud updates in the background. If the message is different, you should contact Cloud Elements support.</p>
+
+<h3 id="the-logs-tab">The Logs Tab</h3>
+
+<p><img src="img/logs-tab.png" alt="Cloud Elements Ground2Cloud Managing 2"></p>
+
+<p>The Logs tab shows the latest logs generated by Ground2Cloud. You can view the logs to see how Ground2Cloud Client is performing, or to see if there are any errors that might be the cause of problems. Click <strong>Refresh</strong> to update the page and show the latest logs.</p>
+
+<h3 id="the-config-tab">The Config Tab</h3>
+
+<p><img src="img/config-tab.png" alt="Cloud Elements Ground2Cloud Managing 3"></p>
+
+<p>The Config tab lets you view and edit your Ground2Cloud configuration. You should generally not edit this information yourself unless instructed by Cloud Elements. Clicking refresh reloads the current configuration, and clicking Save will save your new values.</p>
+
+<h3 id="the-manage-tab">The Manage Tab</h3>
+
+<p><img src="img/manage-tab.png" alt="Cloud Elements Ground2Cloud Managing 4"></p>
+
+<p>The Manage tab allows you to stop and start; register and unregister; and link and unlink your Ground2Cloud installation. (Note: not all Ground2Cloud GUIs have link/unlink capabilities). You generally should not use these features unless instructed by a Cloud Elements engineer.</p>
+
+    </div>
+
+  </div>
+  <script src="/assets/js/chart.js"></script>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

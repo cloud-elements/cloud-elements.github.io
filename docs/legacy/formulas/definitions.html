@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/legacy/formulas/definitions.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> Formulas </h2>
+          <!-- <h4> What are Formulas and how do they work? </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/legacy/formulas/?elementId=">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/formulas/definitions.html?elementId=">Definitions</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/formulas/forumulaSteps.html?elementId=">Formula Step Types</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/formulas/firstFormula.html?elementId=">Build Your First Formula</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/formulas/formulaScopes.html?elementId=">Formula Step Scope</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/formulas/examples.html?elementId=">Examples</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/formulas/faqs.html?elementId=">FAQs</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/formulas/api-documentation.html?elementId=">API Documentation</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <div markdown="span" class="bs-callout bs-callout-info">The documentation in this section is for Cloud Elements 1.0. Find Cloud Elements 2.0 documentation at <a href=../../guides/formulasC2/index.html>Building Formulas</a>.</div>
+
+<h1 id="formula-definitions">Formula Definitions</h1>
+
+<p>There are a few different terms you should become familiar with in order to better grasp formulas.</p>
+
+<h2 id="formula-templates">Formula Templates</h2>
+
+<p>Just like there are Elements and then instances of those Elements, our platform supports formulas and then instances of those formulas. Another way to think of a formula is like a template, that you will later create one or more instances of.</p>
+
+<h2 id="formula-instances">Formula Instances</h2>
+
+<p>Once a formula has been created, in order to have that formula begin executing, at least one formula instance will need to be created. When creating a formula instance, you simply give it a name, and populate all of the required &quot;variables&quot;.</p>
+
+<h2 id="variables">Variables</h2>
+
+<p>A variable is something that will be populated when a formula instance is created.  Just like when creating an instance of an Element you may need to provide things like &quot;username&quot; or &quot;password&quot; in order to materialize that Element.  In the same way you can specify what inputs (or variables) are needed in order to create an instance of a formula.  You can then reference those variables in your formula trigger or throughout any of your formula steps.</p>
+
+<p>We currently support the following types of variables:</p>
+
+<ul>
+<li><code>value</code>: Any free text input.</li>
+<li><code>elementInstance</code>: A specific Element Instance.</li>
+</ul>
+
+<p>Defined variables live under the <code>config</code> context and can be accessed via the <code>${config.&lt;var&gt;}</code> syntax, where <code>&lt;var&gt;</code> is replaced with the name of the variable. For example, if a variable named <code>max.count</code> is defined, then it can be accessed using <code>${config.max.count}</code>.</p>
+
+<blockquote>
+<p><strong>PROTIP:</strong> Variables allow you to create generic formulas that are not tied to specific endpoints.  For example, variables would allow you to create one formula, where each of your customers could have their own instance with their own endpoints plugged in.</p>
+</blockquote>
+
+<h2 id="trigger">Trigger</h2>
+
+<p>A trigger is what will cause the formula to begin executing.  We currently support the following types of triggers:</p>
+
+<ul>
+<li><code>event</code>: An event is received for a specific Element Instance.</li>
+<li><code>elementRequest</code>: An API call is made to a specific Element Instance.</li>
+<li><code>scheduled</code>: Runs based on a given cron string.</li>
+<li><code>manual</code>: Is only kicked off manually (via an API call to <code>POST /formulas/instances/:id/executions</code>).</li>
+</ul>
+
+<p>Once the formula is triggered, the sequence of steps will begin executing.  The first step that will be run is whatever step you have defined as the &quot;on success&quot; step in your trigger.</p>
+
+<blockquote>
+<p><strong>NOTE:</strong> Minimum <code>scheduled</code> frequency is 15 minutes.</p>
+
+<p><strong>NOTE:</strong> If you have an <code>event</code> type trigger and that trigger&#39;s Element Instance is setup for polling (as opposed to webhooks) then each object that is found while polling will trigger a separate execution.  So, for example, if the poller finds five changes then you will have five different executions kick off.</p>
+</blockquote>
+
+<h2 id="steps">Steps</h2>
+
+<p>A formula is typically made up of many different types of steps that, when combined, accomplish some specific workflow.  Steps are laid out as a binary tree, with one branch being what step to run upon success and the other branch being what step to run upon failure.  A formula execution comes to an end when no next step is defined.</p>
+
+<p>We currently support the following types of steps:</p>
+
+<ul>
+<li><code>elementRequest</code>: Makes an API call to a specific Element Instance.</li>
+<li><code>request</code>: Makes an API call to one of our platform APIs.</li>
+<li><code>httpRequest</code>: Makes an HTTP/S call to any URL/endpoint.</li>
+<li><code>elementRequestStream</code>: Makes two Element API calls to download data and then stream that to the second API without storing the streamed data in the context. This can be used to move files and make bulk download and upload API calls.</li>
+<li><code>amqpRequest</code>: Makes a call via the AMQP protocol to any supported AMQP server. The currently supported AMQP servers are <code>RabbitMQ</code>.</li>
+<li><code>script</code>: Custom Javascript that <em>must</em> pass a valid JSON object to the <code>done</code> callback.</li>
+<li><code>filter</code>: Custom Javascript that <em>must</em> pass a boolean to the <code>done</code> callback.  If true, the &quot;on success&quot; step will be executed.  Upon false, the &quot;on failure&quot; step will be executed.</li>
+<li><code>notification</code>: Custom Javascript that <em>must</em> pass a boolean to the <code>done</code> callback.  If true, an email will be sent to the registered &quot;notification email&quot; address for the formula instance.</li>
+<li><code>loop</code>: Loops over a list of objects from a previous step or trigger and calls the defined &quot;on success&quot; step for each item in the list.  Once each item has been processed, the &quot;on failure&quot; step is then called to continue executing the formula.</li>
+<li><code>formula</code>: Executes a sub-formula from the current formula.</li>
+<li><code>retryFormulaExecution</code>: Retries a formula instance execution with the same input data. The number of retry attempts can be configured, with a maximum of 5 attempts, and the retry time is set based upon an exponential backoff in minutes. The equation used for the exponential backof is <code>round(e^x)</code> where <code>x</code> is the retry attempt number.</li>
+</ul>
+
+<h2 id="formula-instance-execution">Formula Instance Execution</h2>
+
+<p>An execution is a single time that a formula instance ran.  Each execution has a list of step executions, which represent each individual step in that formula that was executed.  Lastly, each of these step executions will have zero to many step execution values associated with it.  These step execution values are the potential inputs and outputs for each of these steps.</p>
+
+<blockquote>
+<p><strong>PROTIP:</strong> Each execution and step execution have an associated <code>status</code>.  This <code>status</code> for formula step executions can be <code>pending</code>, <code>success</code> or <code>failed</code>, while that for formula instance executions can be one of <code>pending</code>, <code>success</code>, <code>failed</code> or <code>retry</code>.</p>
+
+<p><strong>PROTIP:</strong> The step execution values are what can be referenced throughout your formula in order to chain steps together and reference previous data in your formula.  The step execution values make up, what we call, the formula &quot;context&quot;.</p>
+</blockquote>
+
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

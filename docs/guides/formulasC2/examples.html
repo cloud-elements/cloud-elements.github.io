@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- History.js -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/guides/formulasC2/examples.html">
+
+  <script src="/api-docs/swagger-ui.js" type="text/javascript"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper">
+      <div markdown="span" class="bs-callout bs-callout-warning" role="alert">
+  <h4>The docs are moving! </h4><p>Find us at our new <a href ="https://docs.cloud-elements.com/">Help Center</a> where we've combined our documentation and knowledgebase articles in one easy-to-search location.</p><p>We aren't updating the Developer Portal anymore, except for the Element Docs &mdash; all updates happen in the <a href ="https://docs.cloud-elements.com/">Help Center</a>. We're retiring the Developer Portal as you know it in:</p><h4 id="demo"></h4>
+  <script>
+  // Set the date we're counting down to
+  var countDownDate = new Date("December 14, 2018 20:00:00").getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+
+      // Get todays date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now an the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Output the result in an element with id="demo"
+      document.getElementById("demo").innerHTML = days + " days " + hours + " hours " + minutes + "m " + seconds + "s ";
+
+      // If the count down is over, write some text
+      if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("demo").innerHTML = "EXPIRED";
+      }
+  }, 1000);
+  </script>
+
+</div>
+
+      <script src="/assets/js/application.js"></script>
+<link href="/assets/css/contentToggle.css" rel="stylesheet">
+
+
+
+      
+      <h1 id="formula-template-examples">Formula Template Examples</h1>
+
+<p>The examples in this section show a selection of common use cases for formulas. Each example includes a table that identifies the types of triggers, steps, and variables used in the formula. The table also identifies any prerequisites required, like an element with events. Lastly, each example includes a downloadable JSON file that you can use to create your own version of the example template with the <code>POST /formulas</code> endpoint.</p>
+
+<div markdown="span" class="bs-callout bs-callout-info"><strong>On this page</strong></br><a href=#crm-to-messages>CRM to Messages</a></br><a href=#add-new-contact-created-in-one-system-to-another>Add New Contact Created in One System to Another</a></br><a href=#bulk-transfer-crm-data>Bulk Transfer CRM Data</a></div>
+
+<h2 id="crm-to-messages">CRM to Messages</h2>
+
+<p>This example listens for an event on a CRM element and then sends an email with that event information using a messaging element. This example was tested with the <a href="../../elements/salesforce/">Salesforce Sales Cloud</a> and <a href="../../elements/sendgrid/">SendGrid</a> elements.</p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Trigger</th>
+<th style="text-align: left">Step Types</th>
+<th style="text-align: left">Variable Types</th>
+<th style="text-align: left">Prerequisites</th>
+<th style="text-align: left">Template JSON</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left"><a href="reference.html#event">Event</a></td>
+<td style="text-align: left"><ul><li><a href="reference.html#js-script">JS Script</a></li><li><a href="reference.html#element-api-request">Element API Request</a></li></ul></td>
+<td style="text-align: left"><a href="reference.html#formula-variables">Element Instance</a></td>
+<td style="text-align: left"><ul><li>CRM hub element instance with events</li><li>Messaging hub authenticated element instance</li></ul></td>
+<td style="text-align: left"><a href="https://developers.cloud-elements.com/download/crm-to-message.json">Formula JSON</a></td>
+</tr>
+</tbody></table>
+
+<p>To create a formula that listens for an event and emails a message:</p>
+
+<ol>
+<li><a href="build-template.html#build-a-formula-template">Build a formula template</a> and select <strong>Event</strong> as the trigger.</li>
+<li><p>Because the trigger is a change to a CRM element, add an element instance variable that refers to a CRM element.</p>
+
+<ol>
+<li>Click <img src="img/btn-Add.png" alt="Alt Text" class="inlineImage">.</li>
+<li>Click <strong>Add New Variable</strong>, and then click <strong>Element Instance</strong>.</li>
+<li>Enter a name for your CRM variable. In this example, we&#39;ll use <code>crmElement</code>.</li>
+<li>Click <strong>Save</strong>.</li>
+<li><p>Select the variable that you just created (<code>crmElement</code>), and then click <strong>Save</strong> on the Edit event: &quot;trigger&quot; page.</p>
+
+<p>Your formula visualization should look like the following example:
+<img src="img/viz-trigger.png" alt="Trigger"></p></li>
+</ol></li>
+<li><p>Add another element instance variable for the messaging element.</p>
+
+<ol>
+<li>Click <strong>Variables</strong>.
+<img src="img/variables.png" alt="Variables"></li>
+<li>Click <strong>Element Instance</strong>.</li>
+<li>Enter a name. For this tutorial we&#39;ll call it <code>messagingElement</code>.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol></li>
+<li><p>In the formula visualization, click <img src="img/btn-add-step.gif" alt="Add a Step" class="inlineImage"> to add a step.</p></li>
+<li><p>Create a JS Script step that constructs a message when the trigger happens.</p>
+
+<ol>
+<li>Click <strong>JS Script</strong>.</li>
+<li>Enter a name for the script. We&#39;ll call it <code>constructBody</code>.</li>
+<li><p>Enter a script that constructs a message, such as the example below.</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">done</span><span class="p">(</span> <span class="p">{</span>
+  <span class="s2">"subject"</span><span class="p">:</span> <span class="s2">"CRM Event Occurred"</span><span class="p">,</span>
+  <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"receipient@cloud-elements.com"</span><span class="p">,</span>
+  <span class="s2">"from"</span><span class="p">:</span> <span class="s2">"sender@cloud-elements.com"</span><span class="p">,</span>
+  <span class="s2">"message"</span><span class="p">:</span> <span class="s2">`</span><span class="p">${</span><span class="nx">trigger</span><span class="p">.</span><span class="nx">event</span><span class="p">.</span><span class="nx">objectType</span><span class="p">}</span><span class="s2"> with ID </span><span class="p">${</span><span class="nx">trigger</span><span class="p">.</span><span class="nx">event</span><span class="p">.</span><span class="nx">objectId</span><span class="p">}</span><span class="s2"> was </span><span class="p">${</span><span class="nx">trigger</span><span class="p">.</span><span class="nx">event</span><span class="p">.</span><span class="nx">eventType</span><span class="p">}</span><span class="s2">`</span>
+<span class="p">});</span>
+</code></pre></div></li>
+<li><p>Click <strong>Save</strong>.</p></li>
+</ol></li>
+<li><p>Create an Element API Request step to send the message that you created in the previous step. Click the <strong>constructBody</strong> step, and then click <strong>Add OnSuccess</strong>.</p>
+
+<ol>
+<li>Select <strong>Element API Request</strong>.</li>
+<li>Enter a name for the step. We&#39;ll call it <code>sendEmail</code>.</li>
+<li>In <strong>Element Instance Variable</strong>, click <img src="img/btn-Add.png" alt="Alt Text" class="inlineImage">, and then select the <strong>messagingElement</strong> variable that we created earlier.</li>
+<li>In <strong>Method</strong>, select <strong>POST</strong> because the formula will submit a POST request to the messaging hub to send an email.</li>
+<li>In <strong>API</strong>, enter the API used to send email messages. In this case, enter <code>/messages</code>.</li>
+<li>Click <strong>Show Advanced</strong>.</li>
+<li>Scroll to <strong>Body</strong> and enter the reference to the email that we constructed earlier. In this case, type <code>${steps.constructBody}</code>.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol></li>
+</ol>
+
+<p>Your formula should look like the visualization below. It should include a trigger and two steps: the first constructs an email and the second sends a message.
+<img src="img/viz-crm-messaging.png" alt="Trigger"></p>
+
+<h2 id="add-new-contact-created-in-one-system-to-another">Add New Contact Created in One System to Another</h2>
+
+<p>This example listens for a new contact on one element instance, and then adds the new contact to another element instance.  The trigger for the formula is an Event. When a new contact is created at an element instance that has events set up, the trigger receives a payload with the raw contact information. Because this raw data cannot be used to create the same contact at a different element instance, the formula uses the <code>objectID</code> from the trigger to get the transformed contact instead. The formula then posts the transformed contact to the target element instance.</p>
+
+<p>For this example to work, you must <a href="../../guides/common-resources/?resource=organizations">define a common resource</a> to transform the data received from Salesforce.</p>
+
+<p>This example was tested with the <a href="../../elements/salesforce/">Salesforce Sales Cloud</a> and <a href="../../elements/hubspot-crm/">HubSpot CRM</a> elements.</p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Trigger</th>
+<th style="text-align: left">Step Types</th>
+<th style="text-align: left">Variable Types</th>
+<th style="text-align: left">Prerequisites</th>
+<th style="text-align: left">Template JSON</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left"><a href="reference.html#event">Event</a></td>
+<td style="text-align: left"><ul><li><a href="reference.html#js-filter">JS Filter</a></li><li><a href="reference.html#element-api-request">Element API Request</a></li></ul></td>
+<td style="text-align: left"><a href="reference.html#formula-variables">Element Instance</a></td>
+<td style="text-align: left"><ul><li>CRM hub authenticated element instance with events</li><li>CRM hub authenticated element instance to sync new contact to</li><li>A common resource that transforms contacts</li><li>A common resource mapped to the origin and destination element instances</li></ul></td>
+<td style="text-align: left"><a href="https://developers.cloud-elements.com/download/add-new-contact.json">Formula JSON</a></td>
+</tr>
+</tbody></table>
+
+<p>To create a formula that adds new contacts created in one system to another:</p>
+
+<ol>
+<li><a href="build-template.html#build-a-formula-template">Build a formula template</a> and select <strong>Event</strong> as the trigger.</li>
+<li><p>Because the trigger originates from an element instance configured to listen for events, add an element instance variable.</p>
+
+<ol>
+<li>Click <img src="img/btn-Add.png" alt="Alt Text" class="inlineImage">.</li>
+<li>Click <strong>Add New Variable</strong>, and then click <strong>Element Instance</strong>.</li>
+<li>Enter a name for your CRM variable. In this example, we&#39;ll use <code>originInstance</code>.</li>
+<li>Click <strong>Save</strong>.</li>
+<li><p>Select the variable that you just created (<code>originInstance</code>), and then click <strong>Save</strong>.</p>
+
+<p>Your formula visualization should look like the following example:
+<img src="img/viz-trigger.png" alt="Trigger"></p></li>
+</ol></li>
+<li><p>Add another Element Instance variable to represent the system to update after you create a contact at the <code>originInstance</code>.</p>
+
+<ol>
+<li>Click <strong>Variables</strong>.
+<img src="img/variables.png" alt="Variables"></li>
+<li>Click <strong>Element Instance</strong>.</li>
+<li>Enter a name. For this tutorial we&#39;ll call it <code>destinationInstance</code>.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol></li>
+<li><p>In the formula visualization, click <img src="img/btn-add-step.gif" alt="Add a Step" class="inlineImage"> to add a step.</p></li>
+<li><p>Create a JS Filter step that checks to be sure the event is a created contact, and not an updated or deleted contact.</p>
+
+<ol>
+<li>Click <strong>JS Filter (true/false)</strong>.</li>
+<li>Enter a name for the script. We&#39;ll call it <code>isCreateContact</code>.</li>
+<li>Enter a script that checks to be sure the event was caused by a created object, such as the example below.</li>
+</ol>
+<div class="highlight"><pre><code class="language-js" data-lang="js">  <span class="kd">let</span> <span class="nx">theEvent</span> <span class="o">=</span> <span class="nx">trigger</span><span class="p">.</span><span class="nx">event</span><span class="p">.</span><span class="nx">eventType</span><span class="p">;</span>
+  <span class="kd">let</span> <span class="nx">theObject</span> <span class="o">=</span> <span class="nx">trigger</span><span class="p">.</span><span class="nx">event</span><span class="p">.</span><span class="nx">objectType</span><span class="p">;</span>
+
+  <span class="nx">done</span><span class="p">((</span><span class="nx">theEvent</span> <span class="o">===</span> <span class="s1">'CREATED'</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">theObject</span> <span class="o">===</span> <span class="s1">'Contact'</span> <span class="o">||</span> <span class="nx">theObject</span> <span class="o">===</span> <span class="s1">'contacts'</span><span class="p">));</span>
+</code></pre></div></li>
+<li><p>Create an Element API Request step to retrieve the transformed version of the newly created object based on the <code>objectId</code> in the trigger. Click the <strong>isCreateContact</strong> step, and then click <strong>Add OnSuccess</strong>.</p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> This step uses the <code>objectId</code> from the trigger to retrieve the transformed object. If you just retrieved the information about the object from the event payload in the trigger, it would not be transformed and could not sync with another element. </div>
+
+<ol>
+<li>Select <strong>Element API Request</strong>.</li>
+<li>Enter a name. For this tutorial we&#39;ll call it <code>retrieveOriginalContact</code>.</li>
+<li>In <strong>Element Instance Variable</strong>, click <img src="img/btn-Add.png" alt="Alt Text" class="inlineImage">, and then select the <strong>originInstance</strong> variable that we created earlier.</li>
+<li>In <strong>Method</strong>, select <strong>GET</strong> because the formula will submit a GET request to a common resource.</li>
+<li><p>In <strong>API</strong>, retrieve the transformed newly created contact by entering the endpoint of the common resource and specifying the <code>objectId</code> from the trigger. For this tutorial, the common resource is called <code>myContacts</code>.</p>
+<div class="highlight"><pre><code class="language-" data-lang="">/MyContacts/${trigger.event.objectId}
+</code></pre></div></li>
+<li><p>Click <strong>Save</strong>.</p></li>
+</ol></li>
+<li><p>Create an Element API Request step to add the contact to another element instance. Click the <strong>retrieveContact</strong> step, and then click <strong>Add OnSuccess</strong>.</p>
+
+<ol>
+<li>Select <strong>Element API Request</strong>.</li>
+<li>Enter a name. For this tutorial we&#39;ll call it <code>createContact</code>.</li>
+<li>In <strong>Element Instance Variable</strong>, click <img src="img/btn-Add.png" alt="Alt Text" class="inlineImage">, and then select the <strong>destinationInstance</strong> variable that we created earlier.</li>
+<li>In <strong>Method</strong>, select <strong>POST</strong> because the formula will submit a POST request to sync the contact.</li>
+<li><p>In <strong>API</strong>, enter the API to the common resource. For this tutorial, the common resource is called <code>myContacts</code>.</p>
+<div class="highlight"><pre><code class="language-" data-lang="">/MyContacts
+</code></pre></div></li>
+<li><p>Click <strong>Show Advanced</strong>.</p></li>
+<li><p>Scroll to <strong>Body</strong> and enter the reference to the step with the transformed contact data. In this case, type <code>${steps.retrieveOriginalContact.response.body}</code>. This inserts the body from the <code>retrieveOriginalContact</code> step&mdash;the JSON describing the transformed contact&mdash;in the POST request to the <code>destinationInstance</code>.</p></li>
+<li><p>Click <strong>Save</strong>.</p></li>
+</ol></li>
+</ol>
+
+<p>Your formula is finished and should look like the visualization below. It should include a trigger and three steps: the first checks that an event is a created contact, the second gets the transformed contact data, and the third syncs the contact.
+<img src="img/viz-sync-contacts.png" alt="Trigger"></p>
+
+<h2 id="bulk-transfer-crm-data">Bulk Transfer CRM Data</h2>
+
+<p>Bulk data transfer is a common use case. For example, your first sync between CRM systems or maybe you add many accounts or contacts each day and want a single job to run to sync between systems. This example demonstrates how to use two formulas to complete a bulk transfer.</p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Trigger</th>
+<th style="text-align: left">Step Types</th>
+<th style="text-align: left">Variable Types</th>
+<th style="text-align: left">Prerequisites</th>
+<th style="text-align: left">Template JSON</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left"><ul><li><a href="reference.html#scheduled">Scheduled</a> (Formula 1)</li><li><a href="reference.html#manual">Manual</a> (Formula 2)</li></ul></td>
+<td style="text-align: left"><ul><li><a href="reference.html#js-script">JS Script</a> </li><li><a href="reference.html#element-api-request">Element API Request</a></li><li><a href="reference.html#js-filter">JS Filter</a> (Formula 2)</li><li><a href="reference.html#stream-file">Stream File</a> (Formula 2)</li></ul></td>
+<td style="text-align: left"><ul><li><a href="reference.html#formula-variables">Value</a></li><li><a href="reference.html#formula-variables">Element Instance</a></li></td>
+<td style="text-align: left"><ul><li>CRM hub authenticated element instance with events</li><li>CRM hub authenticated element instance to sync new contact to</li></ul></td>
+<td style="text-align: left"><ul><li><a href="https://developers.cloud-elements.com/download/bulk-formula-1.json">Step 1 Formula JSON</a></li><li><a href="https://developers.cloud-elements.com/download/bulk-formula-2.json">Step 1 Formula JSON</a></li></ul></td>
+</tr>
+</tbody></table>
+
+<h3 id="formula-1">Formula 1</h3>
+
+<p>To create a formula that makes a bulk query and then triggers the second formula that will download and then upload the bulk files:</p>
+
+<ol>
+<li><a href="build-template.html#build-a-formula-template">Build a formula template</a> and select <strong>Scheduled</strong> as the trigger.</li>
+<li><p>Add a cron string to identify when the sync occurs.</p>
+
+<p>This example fires every Monday through Friday at 1:00 a.m..</p>
+<div class="highlight"><pre><code class="language-" data-lang="">0 0 1 ? * MON,TUE,WED,THU,FRI *
+</code></pre></div></li>
+<li><p>Add three variables for the 1) The resource that you want to sync (like <code>account</code> or <code>contact</code>), 2) The element instance that includes the resources that you want to sync and, 3) The formula instance id associated with the second formula (<a href="#formula-2">Formula 2</a>) in this process.</p>
+
+<ol>
+<li>Click <strong>Variables</strong>.
+<img src="img/variables.png" alt="Variables"></li>
+<li>Click <strong>Value</strong>.</li>
+<li>Enter a name for the variable that represents the resource that you want to sync. For this tutorial we&#39;ll call it <code>resourceName</code>.</li>
+<li>Click <strong>Save</strong>.</li>
+<li>Repeat to create a Value variable called <code>stepTwoId</code>.</li>
+<li>Create an Element Instance variable named <code>originInstance</code>.</li>
+</ol></li>
+<li><p>In the formula visualization, click <img src="img/btn-add-step.gif" alt="Add a Step" class="inlineImage"> to add a step.</p></li>
+<li><p>Create a JS Script step that builds the metadata for the bulk query, including the CEQL query that requests a specific resource and the callback URL that will be the formula execution endpoint that executes <a href="#formula-2">Formula 2</a>.</p>
+
+<ol>
+<li>Click <strong>JS Script</strong>.</li>
+<li>Enter a name for the script. We&#39;ll call it <code>buildMetaData</code>.</li>
+</ol>
+<div class="highlight"><pre><code class="language-js" data-lang="js">  <span class="nx">done</span> <span class="p">({</span>
+      <span class="s2">"query"</span><span class="p">:{</span>
+        <span class="s2">"q"</span><span class="p">:</span><span class="s2">"select * from "</span> <span class="o">+</span> <span class="nx">config</span><span class="p">.</span><span class="nx">resourceName</span>
+      <span class="p">},</span>
+      <span class="s2">"headers"</span><span class="p">:{</span>
+        <span class="s2">"Elements-Async-Callback-Url"</span><span class="p">:</span><span class="s2">"/formulas/instances/"</span> <span class="o">+</span> <span class="nx">config</span><span class="p">.</span><span class="nx">stepTwoId</span> <span class="o">+</span> <span class="s2">"/executions"</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+</code></pre></div></li>
+<li><p>Create an Element API Request step to make a bulk download query, referencing the query and callback URL created in <strong>buildMetaData</strong>. Click the <strong>buildMetaData</strong> step, and the click <strong>Add OnSuccess</strong>.</p>
+
+<ol>
+<li>Select <strong>Element API Request</strong>.</li>
+<li>Enter a name. For this tutorial we&#39;ll call it <code>bulkQuery</code>.</li>
+<li>In <strong>Element Instance Variable</strong>, click <img src="img/btn-Add.png" alt="Alt Text" class="inlineImage">, and then select the <strong>originInstance</strong> variable that we created earlier.</li>
+<li>In <strong>Method</strong>, select <strong>POST</strong> because the formula will submit a POST request to the resource.</li>
+<li><p>In <strong>API</strong>, enter the endpoint to make a bulk query.</p>
+<div class="highlight"><pre><code class="language-" data-lang="">/bulk/query
+</code></pre></div></li>
+<li><p>Click <strong>Show Advanced</strong>.</p></li>
+<li><p>In <strong>Headers</strong>, enter the reference to the headers that you built in the script in the <code>buildMetaData</code> step. In this case, type <code>${steps.buildMetaData.headers}</code>.</p></li>
+<li><p>In <strong>Query</strong>, enter the reference to the query that you built in the script in the <code>buildMetaData</code> step. In this case, type <code>${steps.buildMetaData.query}</code>.</p></li>
+<li><p>Click <strong>Save</strong>.</p></li>
+</ol></li>
+</ol>
+
+<p>The first formula should look like the visualization below. It should include a trigger and two steps: the first builds the metadata for a bulk query, and the second makes the bulk query, which includes a callback to the formula execution endpoint of the next formula.
+<img src="img/viz-bulk-transfer-1.png" alt="Trigger"></p>
+
+<h4 id="formula-2">Formula 2</h4>
+
+<p>To create a formula that receives the notification that the job completes, downloads the file from the original element, and posts to the destination:</p>
+
+<ol>
+<li><p><a href="build-template.html#build-a-formula-template">Build a formula template</a> and select <strong>Manual</strong> as the trigger, and then click <strong>Save</strong>.</p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> You do not need to configure anything for the manual trigger, but take note of the endpoint that you will need to trigger the formula: `POST /formulas/instances/:id/executions`</div></li>
+<li><p>Add two element instance variables to represent the element that you are downloading from and the element that you are uploading to, and a variable to represent the resource that you are syncing.</p>
+
+<ol>
+<li>Click <strong>Variables</strong>.
+<img src="img/variables.png" alt="Variables"></li>
+<li>Click <strong>Value</strong>.</li>
+<li>Enter a name for the variable that represents the resource that you want to sync. For this tutorial we&#39;ll call it <code>resourceName</code>.</li>
+<li>Click <strong>Save</strong>.</li>
+<li>Create Element Instance variables to represent the source and target systems to sync. For this example, use <code>originInstance</code> and <code>destinationInstance</code>.</li>
+</ol></li>
+<li><p>In the formula visualization, click <img src="img/btn-add-step.gif" alt="Add a Step" class="inlineImage"> to add a step.</p></li>
+<li><p>Create a JS Filter step that makes sure that the bulk query is completed.</p>
+
+<ol>
+<li>Click <strong>JS Filter (true/false)</strong>.</li>
+<li>Enter a name for the script. We&#39;ll call it <code>isSuccessful</code>.</li>
+<li>Enter a script such as the example below.</li>
+</ol>
+<div class="highlight"><pre><code class="language-js" data-lang="js">  <span class="kd">let</span> <span class="nx">status</span> <span class="o">=</span> <span class="nx">trigger</span><span class="p">.</span><span class="nx">args</span><span class="p">.</span><span class="nx">status</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">status</span> <span class="o">&amp;&amp;</span> <span class="nx">status</span> <span class="o">===</span> <span class="s2">"COMPLETED"</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">done</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">done</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+  <span class="p">}</span>
+</code></pre></div></li>
+<li><p>Create a JS Script step that defines an identifier field, which is the unique key for an upsert operation. It also specifies the content type as <strong>csv</strong>. Click the <strong>isSuccessful</strong> step, and then click <strong>Add OnSuccess</strong> .</p>
+
+<ol>
+<li>Click <strong>JS Script</strong>.</li>
+<li>Enter a name for the script. We&#39;ll call it <code>buildMetaData</code>.</li>
+<li>Enter a script like the following example:</li>
+</ol>
+<div class="highlight"><pre><code class="language-js" data-lang="js">  <span class="kd">const</span> <span class="nx">metaData</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"identifierFieldName"</span><span class="p">:</span><span class="s2">"email"</span>
+  <span class="p">}</span>
+
+  <span class="kd">const</span> <span class="nx">downloadHeaders</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"Accept"</span><span class="p">:</span><span class="s2">"text/csv"</span>
+  <span class="p">};</span>
+
+  <span class="nx">done</span><span class="p">({</span>
+    <span class="s2">"metaData"</span><span class="p">:</span> <span class="nx">metaData</span><span class="p">,</span>
+    <span class="s2">"downloadHeaders"</span><span class="p">:</span> <span class="nx">downloadHeaders</span>
+  <span class="p">});</span>
+</code></pre></div></li>
+<li><p>Create an Element Stream step to move the files downloaded from the origin instance to the destination instance. Click the <strong>buildMetaData</strong> step, and then click <strong>Add OnSuccess</strong> .</p>
+
+<ol>
+<li>Select <strong>Stream File</strong>.</li>
+<li>Enter a name. For this example we&#39;ll call it <code>bulkStream</code>.</li>
+<li>In <strong>Download Element Instance Variable</strong>, click <img src="img/btn-Add.png" alt="Alt Text" class="inlineImage">, and then select the <strong>originInstance</strong> variable that we created earlier.</li>
+<li>In <strong>Download Method</strong>, enter <code>GET</code>.</li>
+<li>In <strong>Download API</strong>, enter <code>/bulk/${trigger.args.id}/${config.resourceName}</code>. <code>${trigger.args.id}</code> gets the id from the payload sent to the trigger by <a href="#formula-1">Formula 1</a>. <code>${config.resourceName}</code> refers to the resourceName variable that identifies the resource that you want to sync.</li>
+<li>In <strong>Upload Element Instance Variable</strong>, click <img src="img/btn-Add.png" alt="Alt Text" class="inlineImage">, and then select the <strong>destinationInstance</strong> variable that we created earlier.</li>
+<li>In <strong>Upload Method</strong>, enter <code>POST</code>.</li>
+<li>In <strong>Upload API</strong>, enter <code>/bulk/${config.resourceName}</code>. <code>${trigger.args.id}</code>.</li>
+<li>Click <strong>Show Advanced</strong>.</li>
+<li>In <strong>Download Headers</strong>, enter the reference to the download headers that you built in the script in the <code>buildMetaData</code> step. In this case, type <code>${steps.buildMetaData.downloadHeaders}</code>.</li>
+<li>In <strong>Upload Query</strong>, enter the reference to the upload query that you built in the script in the <code>buildMetaData</code> step. In this case, type <code>${steps.buildMetaData.metaData}</code>.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol></li>
+</ol>
+
+<p>The second formula should look like the visualization below.
+<img src="img/viz-bulk-transfer-2.png" alt="Trigger"></p>
+
+    </div>
+
+  </div>
+  <script src="/assets/js/chart.js"></script>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

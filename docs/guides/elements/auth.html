@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- History.js -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/guides/elements/auth.html">
+
+  <script src="/api-docs/swagger-ui.js" type="text/javascript"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper">
+      <div markdown="span" class="bs-callout bs-callout-warning" role="alert">
+  <h4>The docs are moving! </h4><p>Find us at our new <a href ="https://docs.cloud-elements.com/">Help Center</a> where we've combined our documentation and knowledgebase articles in one easy-to-search location.</p><p>We aren't updating the Developer Portal anymore, except for the Element Docs &mdash; all updates happen in the <a href ="https://docs.cloud-elements.com/">Help Center</a>. We're retiring the Developer Portal as you know it in:</p><h4 id="demo"></h4>
+  <script>
+  // Set the date we're counting down to
+  var countDownDate = new Date("December 14, 2018 20:00:00").getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+
+      // Get todays date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now an the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Output the result in an element with id="demo"
+      document.getElementById("demo").innerHTML = days + " days " + hours + " hours " + minutes + "m " + seconds + "s ";
+
+      // If the count down is over, write some text
+      if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("demo").innerHTML = "EXPIRED";
+      }
+  }, 1000);
+  </script>
+
+</div>
+
+      <script src="/assets/js/application.js"></script>
+<link href="/assets/css/contentToggle.css" rel="stylesheet">
+
+
+
+      
+      <h1 id="element-builder-authentication-setup">Element Builder Authentication Setup</h1>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='define-info.html';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Info</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='properties.html';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Properties</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='auth.html';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Authentication</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='config.html';">
+
+  <div class="workFlowStepNum"> 4</div>
+  <div>Config & Parameters</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='hooks.html';">
+
+  <div class="workFlowStepNum"> 5</div>
+  <div>Hooks</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='events.html';">
+
+  <div class="workFlowStepNum"> 6</div>
+  <div>Events</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='resources.html';">
+
+  <div class="workFlowStepNum"> 7</div>
+  <div>Resources</div>
+</div>
+
+<p></div>
+</div></p>
+
+<p>The information that you need to enter to set up authentication with the API provider differs depending on the authentication type. If the API provider requires complex authentication you can override the default information with configurations, parameters , and hooks.</p>
+
+<p>Click the authentication type that you selected to see configuration instructions. If you selected Custom, you can skip directly to <a href="config.html">Configuration and Parameters</a>.</p>
+
+<div markdown="span" class="bs-callout bs-callout-info"><strong>On this page</strong></br><a href=#configure-oauth-2-0>Configure OAuth 2.0</a></br><a href=#configure-oauth-1-0>Configure OAuth 1.0</a></br><a href=#configure-basic-authentication>Configure Basic Authentication</a></br><a href=#configure-custom-authentication>Configure Custom Authentication</a></br><a href=#configure-aws-authentication>Configure AWS Authentication</a></br><a href=#change-the-authentication-type>Change the Authentication Type</a></br><a href=#test-authentication>Test Authentication</a></br><a href=#about-oauth-authentication> About OAuth Authentication</a><br><a href=#override-standard-oauth-2-0-flow>Override Standard OAuth 2.0 Flow</a></div>
+
+<h2 id="configure-oauth-2-0">Configure OAuth 2.0</h2>
+
+<p><img src="img/oauth2.png" alt="OAuth 2.0 Authentication"></p>
+
+<p>Cloud Elements provides the <a href="#oauth-2-0-parameters">properties</a> needed to support a standard OAuth 2.0 flow. Each API provider implements OAuth 2.0 differently so you might need to supplement the parameters with additional configuration. Before setting up the OAuth 2.0 information, you need to create a Cloud Elements app at the API provider. Use the default information from that app. When users authenticate through Cloud Elements, they will connect with that app.</p>
+
+<p>The <a href="#oauth-2-0">OAuth 2.0</a> entry in the <a href="#about-oauth-authentication">About OAuth Authentication</a> section includes more details about the most common OAuth 2.0 authentication flow.</p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Each of the parameters contributes to the configuration of the element. You can use the configurations in parameters and hooks by referring to the Configuration Key shown in the table below.  </div>
+
+<p>To configure OAuth 2.0 elements:</p>
+
+<ol>
+<li>Click <strong>Authentication</strong>.</li>
+<li>Complete the fields needed to enable users to grant Cloud Elements access to their account on behalf of your application:
+
+<ul>
+<li>OAuth API Key</li>
+<li>OAuth API Secret</li>
+<li>OAuth Callback URL</li>
+<li>OAuth Authorization URL</li>
+<li>OAuth Scope</li>
+</ul></li>
+<li>In <strong>OAuth Token URL</strong> enter the URL where Cloud Elements exchanges the grant code from the API provider for an access token.</li>
+<li>If the API provider expires tokens, complete the following fields:
+
+<ul>
+<li>OAuth Refresh Interval (s)</li>
+<li>OAuth Token Refresh URL</li>
+<li>OAuth Revoke Token URL</li>
+</ul></li>
+<li>Unless you need to perform additional configuration, authenticate a test instance by clicking <strong>Try it Out</strong>.</li>
+</ol>
+
+<h3 id="oauth-2-0-parameters">OAuth 2.0 Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Name</th>
+<th style="text-align: left">Key</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">OAuth API Key</td>
+<td style="text-align: left">oauth.api.key</td>
+<td style="text-align: left">The default API Key used to authenticate with the API provider. Most API providers call this some variation of key or id, such as Key, API Key, or Client ID.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">OAuth API Secret</td>
+<td style="text-align: left">oauth.api.secret</td>
+<td style="text-align: left">The default API Secret used to authenticate with the API provider. Most API providers call this some variation of secret, such as Secret , API Secret, or Client Secret.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">OAuth Callback URL</td>
+<td style="text-align: left">oauth.callback.url</td>
+<td style="text-align: left">The URL that will receive the authorization code from the API provider used to authenticate an element instance. For authentication through Cloud Elements, use <code>https://auth.cloudelements.io/oauth</code>.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">OAuth Authorization URL</td>
+<td style="text-align: left">oauth.authorization.url</td>
+<td style="text-align: left">The URL where a user authorizes the application to access their information at the API provider.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">OAuth Token URL</td>
+<td style="text-align: left">oauth.token.url</td>
+<td style="text-align: left">The URL where the application exchanges the authorization grant code or request token for an access token.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">OAuth Scope</td>
+<td style="text-align: left">oauth.scope</td>
+<td style="text-align: left">A comma separated list of the permissions that the user will authorize your integration to have.</td>
+<td style="text-align: left">N</td>
+</tr>
+<tr>
+<td style="text-align: left">OAuth Refresh Interval (s)</td>
+<td style="text-align: left">oauth.user.refresh_interval</td>
+<td style="text-align: left">If the access token expires, the time frame in seconds when Cloud Elements sends a request to the OAuth Token Refresh URL. The default is 3600, which is one hour.</td>
+<td style="text-align: left">N</td>
+</tr>
+<tr>
+<td style="text-align: left">OAuth Token Refresh URL</td>
+<td style="text-align: left">oauth.token.refresh_url</td>
+<td style="text-align: left">The URL to send a refresh request.</td>
+<td style="text-align: left">N</td>
+</tr>
+<tr>
+<td style="text-align: left">OAuth Revoke Token URL</td>
+<td style="text-align: left">oauth.token.revoke_url</td>
+<td style="text-align: left">The URL to send requests to revoke refresh or access tokens.</td>
+<td style="text-align: left">N</td>
+</tr>
+</tbody></table>
+
+<h2 id="configure-oauth-1-0">Configure OAuth 1.0</h2>
+
+<p><img src="img/oauth1.png" alt="OAuth 1.0 Authentication"></p>
+
+<p>Cloud Elements provides the <a href="#oauth-1-0-parameters">parameters</a> required to support a standard OAuth 1.0 flow. Each API provider implements OAuth 1.0 differently so you might need to supplement the parameters with additional configuration.</p>
+
+<p>The <a href="#oauth-1-0">OAuth 1.0</a> entry in the <a href="#about-oauth-authentication">About Authentication</a> section includes more details about the most common OAuth 2.0 authentication flow.</p>
+
+<p>To configure OAuth 1.0 elements:</p>
+
+<ol>
+<li>Click <strong>Authentication</strong>.</li>
+<li>Complete the fields needed to get an OAuth Request Token to request user authorization
+
+<ul>
+<li>OAuth API Key</li>
+<li>OAuth API Secret</li>
+<li>OAuth Request URL</li>
+<li>OAuth Callback URL</li>
+</ul></li>
+<li>In <strong>OAuth Authorization URL</strong> enter the URL where Cloud Elements redirects the user to authorize access.</li>
+<li>In <strong>OAuth Token URL</strong> enter the URL where Cloud Elements fetches an access token.</li>
+<li>In <strong>OAuth Authorization Type (Header or Query)</strong> select how the request passes authorization information to the API provider.</li>
+<li>In <strong>OAuth Scope</strong> enter a comma separated list of the permissions that the user will authorize your integration to have.</li>
+<li>In <strong>OAuth User Secret</strong> enter</li>
+<li>Unless you need to perform additional configuration, authenticate a test instance by clicking <strong>Try it Out</strong>.</li>
+</ol>
+
+<h3 id="oauth-1-0-parameters">OAuth 1.0 Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Name</th>
+<th style="text-align: left">Key</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">OAuth Request URL</td>
+<td style="text-align: left">oauth.request.url</td>
+<td style="text-align: left">The URL used to get an unauthorized request token.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">OAuth Callback URL</td>
+<td style="text-align: left">oauth.callback.url</td>
+<td style="text-align: left">The URL that will receive the authorization code from the API provider used to authenticate an element instance.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">OAuth API Key</td>
+<td style="text-align: left">oauth.api.key</td>
+<td style="text-align: left">The default API Key used to authenticate with the API provider. Most API providers call this some variation of key or id, such as Key, API Key, or Client ID.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">OAuth API Secret</td>
+<td style="text-align: left">oauth.api.secret</td>
+<td style="text-align: left">The default API Secret used to authenticate with the API provider. Most API providers call this some variation of secret, such as Secret , API Secret, or Client Secret.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">OAuth Authorization URL</td>
+<td style="text-align: left">oauth.authorization.url</td>
+<td style="text-align: left">The URL where a user authorizes the application to access their information at the API provider.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">OAuth Token URL</td>
+<td style="text-align: left">oauth.token.url</td>
+<td style="text-align: left">The URL where the application exchanges the authorization grant code or request token for an access token.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">OAuth Authorization Type (Header or Query)</td>
+<td style="text-align: left">oauth.request.authorization.type</td>
+<td style="text-align: left">How the API provider receives authentication information, either in the header or as a query parameter.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">OAuth Scope</td>
+<td style="text-align: left">oauth.scope</td>
+<td style="text-align: left">A comma separated list of the permissions that the user will authorize your integration to have.</td>
+<td style="text-align: left">N</td>
+</tr>
+<tr>
+<td style="text-align: left">OAuth User Secret</td>
+<td style="text-align: left">oauth.user.token.secret</td>
+<td style="text-align: left">The user secret associated with the application authenticating with the API provider.</td>
+<td style="text-align: left">N</td>
+</tr>
+</tbody></table>
+
+<h2 id="configure-basic-authentication">Configure Basic Authentication</h2>
+
+<p><img src="img/basic.png" alt="Basic Authentication"></p>
+
+<p>In Basic access authentication, you typically provide a user name and password. In some cases you also provide an API Key. When setting up an element with Basic authentication we start you off with <strong>Username</strong> (key:<code>username</code>) and <strong>Password</strong>(key:<code>password</code>) configurations. If you need to add any other configurations like an API Key, do so in the Configuration step. API providers typically do not vary from the standard Basic authentication, so you should keep the default properties. If you do need to make changes, you can update the properties or delete unneeded configurations.</p>
+
+<h3 id="basic-authentication-parameters">Basic Authentication Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">Name</td>
+<td style="text-align: left">The visible name of the configuration as it appears in the Cloud Elements UI.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">Key</td>
+<td style="text-align: left">The internal unique identifier for the configuration. The configuration key value appears in the authentication JSON. You also refer to the configuration by configuration key in parameters and hooks.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">Type</td>
+<td style="text-align: left">The type of configuration, which can be any of the following:</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">Text Area, Text Text 32, Text 64, Text 100, Text 128 &mdash; Identifies configurations that accept free text strings.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">true/false and yes/no &mdash; Identifies configurations that accept boolean inputs.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">password &mdash; Identifies configurations intended to collect passwords. Passwords are masked in Cloud Elements.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">Required</td>
+<td style="text-align: left">Identifies whether the configuration is required. Switch on to force a user to provide data when authenticating. Configurations not required, but that show in Cloud Elements appear under Show Optional Fields.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">Hide on UI</td>
+<td style="text-align: left">Identifies whether the configuration appears in Cloud Elements. Switch on to show the configuration in Cloud Elements. The configuration appears to the user with the configuration name and the description as hover help text.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">Configuration Description</td>
+<td style="text-align: left">The description appears as hover help text. The text space available is limited, so write brief but useful descriptions.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">Default Value</td>
+<td style="text-align: left">The default value of the configuration.</td>
+<td style="text-align: left">N</td>
+</tr>
+</tbody></table>
+
+<h2 id="configure-custom-authentication">Configure Custom Authentication</h2>
+
+<p>To configure custom authentication information, use the <a href="config.html#set-up-element-configuration">Configuration</a>, <a href="config.html#set-up-element-parameters">Parameters</a>, and, if necessary, <a href="hooks.html">Hooks</a> sections to construct the authentication information required by the API provider.</p>
+
+<h2 id="configure-aws-authentication">Configure AWS Authentication</h2>
+
+<p><img src="img/awsv4.png" alt="AWSv4 Authentication"></p>
+
+<p>Cloud Elements provides default authentication fields for API providers that use <a href="http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Amazon Web Services Signature Version 4</a> and <a href="http://docs.aws.amazon.com/general/latest/gr/signature-version-2.html">Version 2</a>. API providers typically do not vary from the standard AWS authentications, so you should keep the default properties. If you do need to make changes, you can update the properties or delete unneeded configurations.</p>
+
+<h3 id="aws-authentication-parameters">AWS Authentication Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Name</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">AWS Access Key ID</td>
+<td style="text-align: left">The ID associated with your AWS access key.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">AWS Secret Access Key</td>
+<td style="text-align: left">The secret key used in the Signature Version 2 signing process</td>
+<td style="text-align: left">Yes for version 2 only</td>
+</tr>
+<tr>
+<td style="text-align: left">AWS Region Name, e.g., us-west-2</td>
+<td style="text-align: left">The <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#apigateway_region">Amazon API Gateway</a> region name.</td>
+<td style="text-align: left">Yes for version 4 only</td>
+</tr>
+</tbody></table>
+
+<h2 id="change-the-authentication-type">Change the Authentication Type</h2>
+
+<p>If you selected the incorrect authentication type, or find that you need to change the authentication, select another authentication type from the <strong>type</strong> list in the Authentication heading.</p>
+
+<p>Continue to the next step, <a href="config.html">Custom Configuration and Parameters</a>.</p>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='define-info.html';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Info</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='properties.html';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Properties</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='auth.html';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Authentication</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='config.html';">
+
+  <div class="workFlowStepNum"> 4</div>
+  <div>Config & Parameters</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='hooks.html';">
+
+  <div class="workFlowStepNum"> 5</div>
+  <div>Hooks</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='events.html';">
+
+  <div class="workFlowStepNum"> 6</div>
+  <div>Events</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='resources.html';">
+
+  <div class="workFlowStepNum"> 7</div>
+  <div>Resources</div>
+</div>
+
+<p></div>
+</div></p>
+
+<h2 id="test-authentication">Test Authentication</h2>
+
+<p>After you set up authentication you can authenticate an element instance to see if you can create a connection. If you chose Custom authentication or need to add additional configurations and parameters, you should set those up before testing authentication.</p>
+
+<p>To test your authentication:</p>
+
+<ol>
+<li>Navigate to <strong>Configuration</strong>, and then click <strong>Try it Out</strong>.</li>
+<li>On the authentication page, enter a name, and then complete any required configuration fields. These are the fields that you chose to appear on the UI.</li>
+<li>Click <strong>Create Instance</strong>.</li>
+</ol>
+
+<p>If the authentication succeeds, Cloud Elements creates an authenticated instance which you can use to test your authentication. You can also use it later when you test resources.</p>
+
+<h2 id="about-oauth-authentication">About OAuth Authentication</h2>
+
+<p>OAuth is a common authentication protocol for REST APIs and Cloud Elements supports both <a href="#oauth-2-0">OAuth 2.0</a> and <a href="#oauth-1-0">OAuth 1.0</a>. You need to set up more information for OAuth elements than other authentication types. This section provides more details about how these authentication types work and how Cloud Elements uses the information you provide when building custom elements.</p>
+
+<h3 id="oauth-2-0">OAuth 2.0</h3>
+
+<p>The OAuth 2.0 protocol lets external applications &mdash; your application or Cloud Elements &mdash; request authorization to access and update a users data without asking users for sensitive user names and passwords. OAuth 2.0 is flexible, but that also means that each API provider implements it differently.</p>
+
+<p>This section describes how Cloud Elements supports the <a href="https://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.1">Authorization Code Grant workflow</a> authentication flow. Other flows such as <a href="https://tools.ietf.org/html/rfc6749#section-4.2">Implicit Grant</a> and <a href="https://tools.ietf.org/html/rfc6749#section-4.4">Client Credentials Grant</a> offer variations that we also support. The Authorization Code Grant flow is sometimes called a three-legged authentication process:</p>
+
+<ol>
+<li>Cloud Elements requests an API provider to have a user log in and grant access.</li>
+<li>After the user logs in and grants permission, the API provider returns an authorization grant code.</li>
+<li>Cloud Elements exchanges the authorization grant code for an access token.</li>
+</ol>
+
+<h4 id="cloud-elements-authorization-code-grant-oauth-2-0-flow">Cloud Elements Authorization Code Grant OAuth 2.0 Flow</h4>
+
+<p><img src="img/OAuth-2-flow.png" alt="OAuth 2 Flow"></p>
+
+<p>The typical Authorization Code Grant flow as supported by Cloud Elements includes the following steps:</p>
+
+<ol>
+<li>Cloud Elements requests authorization on behalf of your app by redirecting a user to the API provider&#39;s <strong>Authorization URL</strong>. Cloud Elements includes the following parameters as part of the request:
+
+<ul>
+<li><strong>OAuth API Key</strong></li>
+<li><strong>OAuth API Secret</strong></li>
+<li><strong>OAuth Callback URL</strong></li>
+<li><strong>OAuth Scope</strong> if required</li>
+</ul></li>
+<li>The user logs in and grants access. If the request included <strong>OAuth Scope</strong>, the user must grant access to all scopes or none.</li>
+<li><p>The API provider redirects the user back to the <strong>OAuth Callback URL</strong> with the following parameters:</p>
+
+<ul>
+<li>A time-limited authorization grant <code>code</code>.</li>
+<li><p>A <code>state</code> parameter that is typically the element key.</p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> If the user denies authentication, the  API provider returns <code>error</code> instead of the <code>code</code> parameter. </div></li>
+</ul></li>
+<li><p>Cloud Elements makes a backchannel request to redeem the authorization grant code for an access token.</p></li>
+<li><p>The API provider authenticates the element instance and issues an access token. Some API providers also provide a refresh token and information about when the token expires.</p></li>
+<li><p>Cloud Elements associates an element instance token with the access token. You will use that element instance token in future requests.</p></li>
+<li><p>If the tokens expire, Cloud Elements sends the refresh token to the <strong>OAuth Token Refresh URL</strong> at the specified <strong>OAuth Refresh Interval (s)</strong>.</p></li>
+<li><p>The API provider responds with a new access token and refresh token to be used at the next refresh.</p></li>
+</ol>
+
+<h4 id="oauth-2-0-prerequisites">OAuth 2.0 Prerequisites</h4>
+
+<p>Before you can authenticate an element instance, you must register your application with the API provider. Each registration is assigned some form of an API key (client id, client key, etc.) and secret. In Cloud Elements, these are the <strong>OAuth API Key</strong> and <strong>OAuth API Secret</strong>. You also usually need to provide a redirect URI which should match what you include in the <strong>OAuth Callback URL</strong>. If you want users to authenticate through Cloud Elements as opposed to programmatically through APIs in your application, use <code>https://auth.cloudelements.io/oauth</code>.</p>
+
+<p>Some API provider require scopes let you limit the authorization to a subset of the data. When users grant authorization, they are shown the scopes and acknowledge that they grant access to them. The user must allow access to all or to none. The scopes that you set up in the application should match the <strong>OAuth Scope</strong>.</p>
+
+<h4 id="oauth-2-0-authentication-json">OAuth 2.0 Authentication JSON</h4>
+
+<p>The JSON used to authenticate an element instance looks like this:</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"element"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;The Element Key&gt;"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"providerData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;AUTHORIZATION_GRANT_CODE&gt;"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"configuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"oauth.callback.url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;CALLBACK_URL&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.api.key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;CONSUMER_KEY&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.api.secret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;CONSUMER_SECRET&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;COMMA_SEPARATED_LIST&gt;"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"&lt;Add_Your_Tag&gt;"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;INSTANCE_NAME&gt;"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<h3 id="oauth-1-0">OAuth 1.0</h3>
+
+<p>OAuth 1.0 is an older version of the OAuth protocol. Like OAuth 2.0, the OAuth 1.0 protocol lets external applications &mdash; your application or Cloud Elements &mdash; request authorization to access and update a users data without asking users for sensitive user names and passwords. OAuth 1.0 is also flexible with multiple different ways to implement it.</p>
+
+<p>This section describes how Cloud Elements supports the <a href="https://oauth.net/core/1.0a/">OAuth Core 1.0 Revision A</a> authentication flow. The typical OAuth 1.0 authorization flow is a three-legged authentication process:</p>
+
+<ol>
+<li>Request temporary credentials. Cloud Elements requests temporary credentials in the form of a Request Token from the API provider.</li>
+<li>Authorize. The user logs in to the API provider and grants the temporary Request Token access.</li>
+<li>Token exchange. Cloud Elements exchanges the temporary Request Token for a more long-term access token.</li>
+</ol>
+
+<h4 id="cloud-elements-oauth-1-0-flow">Cloud Elements OAuth 1.0 Flow</h4>
+
+<p><img src="img/OAuth-1-flow.png" alt="OAuth 1 Flow"></p>
+
+<p>The typical OAuth 1.0 flow as supported by Cloud Elements includes the following steps:</p>
+
+<ol>
+<li>Cloud Elements sends a request to the API provider&#39;s <strong>OAuth Request URL</strong> for a Request Token. Cloud Elements includes the following parameters as part of the request:
+
+<ul>
+<li><strong>OAuth API Key</strong></li>
+<li><strong>OAuth API Secret</strong></li>
+<li><strong>OAuth Callback URL</strong></li>
+</ul></li>
+<li>The API provider returns the temporary Request Token and a secret associated with the token.</li>
+<li>Cloud Elements directs the user to the <strong>OAuth Authorization URL</strong> where they log in and grant access. If the request included <strong>OAuth Scope</strong>, the user must grant access to all scopes or none.</li>
+<li>The API provider authorizes the temporary Request Token and redirects the user back to the <strong>OAuth Callback URL</strong> with the authorized Request Token and an OAuth verifier.</li>
+<li>Cloud Elements sends a request to the <strong>OAuth Token URL</strong> and exchanges the authorized Request Token for a long-term Access Token.</li>
+<li>Cloud Elements associates an element instance token with the Access Token. You will use that element instance token in future requests.</li>
+</ol>
+
+<h4 id="oauth-1-0-prerequisites">OAuth 1.0 Prerequisites</h4>
+
+<p>Before you can authenticate an element instance, you must register your application with the API provider. Each registration is assigned some form of an API key (client id, client key, etc.) and secret. In Cloud Elements, these are the <strong>OAuth API Key</strong> and <strong>OAuth API Secret</strong>. You also usually need to provide a redirect URI which should match what you include in the <strong>OAuth Callback URL</strong>. If you want users to authenticate through Cloud Elements as opposed to programmatically through APIs in your application, use <code>https://auth.cloudelements.io/oauth</code>.</p>
+
+<h4 id="oauth-1-0-authentication-json">OAuth 1.0 Authentication JSON</h4>
+
+<p>The JSON used to authenticate an element instance looks like:</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"element"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"twitter"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"providerData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"oauth_token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;OAUTH_TOKEN_RETURNED_IN_OAUTH_EXCHANGE&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth_verifier"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;OAUTH_VERIFIER_RETURNED_IN_OAUTH_EXCHANGE&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"secret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;SECRET_RETURNED_IN_OAUTH_EXCHANGE&gt;"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"configuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"oauth.api.key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;INSERT_QUICKBOOKS_API_KEY&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.api.secret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;INSERT_QUICKBOOKS_API_SECRET&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.callback.url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;SAME CALLBACK URL USED IN STEP 2&gt;"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"&lt;INSERT_TAGS&gt;"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;INSERT_INSTANCE_NAME&gt;"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<h2 id="override-standard-oauth-2-0-flow">Override Standard OAuth 2.0 Flow</h2>
+
+<p>Many API providers implement OAuth 2.0 in unique ways. When you create an element and need to deviate from the standard <a href="#cloud-elements-authorization-code-grant-oauth-2-0-flow">Cloud Elements OAuth 2.0 Flow</a>, you can use specific endpoints to override each step in the flow. In each endpoint, use a combination of configurations, parameters, and hooks to override the standard OAuth 2.0 flow.</p>
+
+<p>The resources available to override OAuth 2.0 flows are:</p>
+
+<ul>
+<li><code>GET/oauth-authorize</code> &mdash; Overrides the first step in the OAuth 2.0 flow where Cloud Elements requests authorization on behalf of your app by redirecting a user to the API provider&#39;s Authorization URL.</li>
+<li><code>POST/oauth-token-exchange</code> &mdash; Overrides the second step in the flow where Cloud Elements exchanges the code returned from the API provider for an access token.</li>
+<li><code>POST/oauth-token-refresh</code> &mdash; Overrides the refresh step where Cloud Elements exchanges a refresh token for an updated access token.</li>
+</ul>
+
+<p>Overriding the OAuth 2.0 flow is a complex task and the number of ways to perform the overrides are limited only to your imagination and ability to write JavaScript code. The steps below do not provide details of how to override specific steps, but serve as a guide to get you started. See <a href="resources.html#add-resources-to-an-existing-element">Custom Resources</a> for general steps to add a resource to an element.</p>
+
+<p>To add the <code>GET/oauth-authorize</code> resource:</p>
+
+<ol>
+<li>Click <strong>Add a new resource</strong> at the top of the page.</li>
+<li>In <strong>Cloud Elements Resource Name</strong> enter <code>/oauth-authorize</code>.</li>
+<li>Do not enter anything in <strong>Vendor Resource Name</strong>.</li>
+<li><p>Select only the <strong>GET</strong> method.</p>
+
+<p>Your new resource should like:
+<img src="img/oauth-authorize.png" alt="oauth-authorize Resource"></p></li>
+<li><p>Click <strong>Go</strong>.</p></li>
+<li><p>Find the endpoint, and then click <img src="img/resource-pencil.png" alt="Edit" class="inlineImage">.</p></li>
+<li><p>Change the description to something like: &quot;Overriding the OAuth 2.0 authorization&quot;.</p></li>
+<li><p>From <strong>Resource Type</strong>, select <strong>OAUTH ON AUTHORIZE URL</strong>.</p></li>
+<li><p>Some common configurations that you can use in the parameters of the endpoint or in the hooks to manipulate the request include:</p>
+
+<ul>
+<li>OAuth API Key (<code>oauth.api.key</code>)</li>
+<li>OAuth API Secret (<code>oauth.api.secret</code>)</li>
+<li>OAuth Callback URL (<code>oauth.callback.url</code>)</li>
+<li>OAuth Authorization URL (<code>oauth.authorization.url</code>)</li>
+<li>OAuth Scope (<code>oauth.scope</code>)</li>
+</ul></li>
+</ol>
+
+<p>To add the <code>POST/oauth-token-exchange</code> resource:</p>
+
+<ol>
+<li>Click <strong>Add a new resource</strong> at the top of the page.</li>
+<li>In <strong>Cloud Elements Resource Name</strong> enter <code>/oauth-authorize</code>.</li>
+<li>Do not enter anything in <strong>Vendor Resource Name</strong>.</li>
+<li><p>Select only the <strong>POST</strong> method.</p>
+
+<p>Your new resource should like:
+  <img src="img//oauth-token-exchange.png" alt="oauth-authorize Resource"></p></li>
+<li><p>Click <strong>Go</strong>.</p></li>
+<li><p>Find the endpoint, and then click <img src="img/resource-pencil.png" alt="Edit" class="inlineImage">.</p></li>
+<li><p>Change the description to something like: &quot;Overriding the OAuth 2.0 token exchange&quot;.</p></li>
+<li><p>From <strong>Resource Type</strong>, select <strong>OAUTH ON TOKEN EXCHANGE</strong>.</p></li>
+<li><p>Some common configurations that you can use in the parameters of the endpoint or in the hooks to manipulate the request and response include:</p>
+
+<ul>
+<li>OAuth Callback URL (<code>oauth.callback.url</code>)</li>
+<li><code>oauth.user.refresh_token</code> (from the response)</li>
+<li><code>oauth.user.token</code> (from the response)</li>
+<li>OAuth Refresh Interval (s) (<code>oauth.user.refresh_interval</code>)</li>
+<li>The authorization code from the response</li>
+</ul></li>
+</ol>
+
+<p>To add the <code>POST/oauth-token-refresh</code> resource:</p>
+
+<ol>
+<li>Click <strong>Add a new resource</strong> at the top of the page.</li>
+<li>In <strong>Cloud Elements Resource Name</strong> enter <code>/oauth-authorize</code>.</li>
+<li>Do not enter anything in <strong>Vendor Resource Name</strong>.</li>
+<li><p>Select only the <strong>POST</strong> method.</p>
+
+<p>Your new resource should like:
+<img src="img/oauth-token-refresh.png" alt="oauth-authorize Resource"></p></li>
+<li><p>Click <strong>Go</strong>.</p></li>
+<li><p>Find the endpoint, and then click <img src="img/resource-pencil.png" alt="Edit" class="inlineImage">.</p></li>
+<li><p>Change the description to something like: &quot;Overriding the OAuth 2.0 token refresh&quot;.</p></li>
+<li><p>From <strong>Resource Type</strong>, select <strong>OAUTH ON TOKEN REFRESH</strong>.</p></li>
+<li><p>Some common configurations that you can use in the parameters of the endpoint or in the hooks to manipulate the request and response include:</p>
+
+<ul>
+<li>OAuth Token Refresh URL (<code>oauth.token.refresh_url</code>)</li>
+<li>OAuth Revoke Token URL (<code>oauth.token.revoke_url</code>)</li>
+<li>OAuth Refresh Interval (s) (<code>oauth.user.refresh_interval</code>)</li>
+<li>OAuth Token URL (<code>oauth.token.url</code>)</li>
+<li>The refresh token code from the response</li>
+<li><code>oauth.user.token</code> (from the response)</li>
+</ul></li>
+</ol>
+
+    </div>
+
+  </div>
+  <script src="/assets/js/chart.js"></script>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

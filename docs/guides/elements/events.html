@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- History.js -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/guides/elements/events.html">
+
+  <script src="/api-docs/swagger-ui.js" type="text/javascript"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper">
+      <div markdown="span" class="bs-callout bs-callout-warning" role="alert">
+  <h4>The docs are moving! </h4><p>Find us at our new <a href ="https://docs.cloud-elements.com/">Help Center</a> where we've combined our documentation and knowledgebase articles in one easy-to-search location.</p><p>We aren't updating the Developer Portal anymore, except for the Element Docs &mdash; all updates happen in the <a href ="https://docs.cloud-elements.com/">Help Center</a>. We're retiring the Developer Portal as you know it in:</p><h4 id="demo"></h4>
+  <script>
+  // Set the date we're counting down to
+  var countDownDate = new Date("December 14, 2018 20:00:00").getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+
+      // Get todays date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now an the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Output the result in an element with id="demo"
+      document.getElementById("demo").innerHTML = days + " days " + hours + " hours " + minutes + "m " + seconds + "s ";
+
+      // If the count down is over, write some text
+      if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("demo").innerHTML = "EXPIRED";
+      }
+  }, 1000);
+  </script>
+
+</div>
+
+      <script src="/assets/js/application.js"></script>
+<link href="/assets/css/contentToggle.css" rel="stylesheet">
+
+
+
+      
+      <h1 id="element-builder-events">Element Builder Events</h1>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='define-info.html';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Info</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='auth.html';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Authentication</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='config.html';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Config & Parameters</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='hooks.html';">
+
+  <div class="workFlowStepNum"> 4</div>
+  <div>Hooks</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='events.html';">
+
+  <div class="workFlowStepNum"> 5</div>
+  <div>Events</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='resources.html';">
+
+  <div class="workFlowStepNum"> 6</div>
+  <div>Resources</div>
+</div>
+
+<p></div>
+</div></p>
+
+<p>In many cases you want your element to be updated when an event occurs at an API provider. For example, when a user uploads a file to a Dropbox account or when a new contact is added to a CRM element. Cloud Elements supports two types of events: polling and webhooks. With polling, Cloud Elements pings the API provider at configurable intervals to see if a change has occurred. With webhooks, the API provider notifies Cloud Elements when changes occur. You can set up an element to support polling events or webhooks. If your use case requires both event types, contact Cloud Elements for help.</p>
+
+<div markdown="span" class="bs-callout bs-callout-info"><strong>On this page</strong></br><a href=#configure-webhook-events>Configure Webhook Events</a></br><a href=#configure-polling-events>Configure Polling Events</a></br><a href=#advanced-polling>Advance Polling</a></br><a href=#polling-parameters>Polling Parameters</a></br><a href=#dates-in-polling>Dates in Polling</a></br><a href=#polling-tips>Polling Tips</a></br></div>
+
+<h2 id="configure-webhook-events">Configure Webhook Events</h2>
+
+<p>To see if the API provider provides webhooks, review the API documentation. Webhooks often require specific setup steps at the API provider. We receive the webhooks from an API provider and must translate the response to the normalized format that we expect. To do so, you must use JavaScript in an <a href="hooks.html">event hook</a> to manipulate an API provider&#39;s response in an event hook. See an example in <a href="hooks.html#reading-event-webhooks">Custom Hooks</a>.</p>
+
+<p>To set up webhooks:</p>
+
+<ol>
+<li>On the Setup page, open <strong>Events</strong>.</li>
+<li>Switch <strong>Enable Events</strong> on.</li>
+<li>From <strong>Event Types</strong>, select <strong>Webhooks</strong>.</li>
+<li>Click <strong>Add an Event Hook</strong> and use JavaScript to write an event hook to make sure that the information we receive from the webhook is in the format that we expect, as shown in the function reference.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+
+<h2 id="configure-polling-events">Configure Polling Events</h2>
+
+<p>Even if the API provider does not explicitly support events, you can set up polling on any resource that include <code>created</code> and <code>updated</code> data. With polling, Cloud Elements checks for updates to a resource at specified intervals. Set up polling for one resource at a time by defining a GET request that filters out records that have not changed. Define what makes each record unique and how the API provider formats dates for updated and created records.</p>
+
+<p>The information that you include about the updated and created date fields helps Cloud Elements make decisions about records. For example, if the times in the <strong>Updated date field</strong> and <strong>Created date field</strong> are the same, we know the record was created, not updated. If the time in the <strong>Created date field</strong> is earlier than the  <strong>Updated date field</strong>, we know the record changed since it was created. If the <strong>Updated date field</strong> is not later than the last polling time, we ignore the record.</p>
+
+<p>When users authenticate an element instance, they can customize the polling configuration. Changing polling resource configuration is recommended only for the most technical users, but updating a polling interval can be done by anyone.</p>
+
+<p>The steps outlined below assume that the resource meets two prerequisites. First, the resource supports filtering through a where clause in the request. Second, the resource metadata includes an identifier field (such as <code>id</code>, <code>internalID</code>, or <code>resourceId</code>) and date fields that distinguish between updated and created dates (such as <code>modifiedDate</code>, <code>updatedDate</code>, or <code>createdDate</code>). You can still poll resources that do not meet the prerequisites, but you need to set up additional configurations. See <a href="#advanced-polling">Advanced Polling</a> and <a href="#polling-tips">Polling Tips</a>.</p>
+
+<p>To set up polling:</p>
+
+<ol>
+<li>On the Setup page, open <strong>Events</strong>.</li>
+<li>Switch <strong>Enable Events</strong> on.</li>
+<li>From <strong>Event Types</strong>, select <strong>Polling</strong>.</li>
+<li>Use the <strong>Default Interval Polling Time (in minutes)</strong> slider or enter a number in minutes to specify how often Cloud Elements should poll for changes.</li>
+<li>In <strong>resource name</strong>, enter the name of a resource that contains acceptable polling data (<code>created</code> and <code>updated</code> data).</li>
+<li>Click <strong>Add Polling Resource</strong>.</li>
+<li>Complete the resource properties (see <a href="#polling-parameters">Polling Parameters</a> for details):
+<img src="img/polling-info.png" alt="Resource Properties">
+
+<ul>
+<li><strong>URL</strong> &mdash; Enter the hub url with any query parameters needed to identify that the resource is updated. For example: <code>/hubs/finance/customers?where=lastModifiedDate&gt;=&#39;${date:yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;}&#39;</code>. See <a href="#resource-url-date-format">Resource URL Date Format</a> for details about how to format the date portion of the where clause.</li>
+<li><strong>ID Field</strong> &mdash; Enter the unique identifier of the resource that you want to monitor.</li>
+</ul></li>
+<li>Complete the updated date properties (see <a href="#polling-parameters">Polling Parameters</a> for details):
+<img src="img/polling-updated.png" alt="Updated Date Properties">
+
+<ul>
+<li><strong>Updated date field</strong> &mdash; Enter the name of the parameter in the resource that identifies when a record was updated.</li>
+<li><strong>Updated date format</strong> &mdash; Select the date and time format of the <strong>Updated date field</strong>. See <a href="#polling-date-formats">Polling Date Formats</a> for more information. If the date format used by the API provider is not available, you can type it and we&#39;ll save it for future use.</li>
+<li><strong>Updated date timezone</strong> &mdash; Select the time zone associated with the updated date field.</li>
+</ul></li>
+<li>Complete the created date properties (see <a href="#polling-parameters">Polling Parameters</a> for details):
+<img src="img/polling-created.png" alt="Created Date Properties">
+
+<ul>
+<li><strong>Created date field</strong> &mdash; Enter the name of the parameter in the resource that identifies when a record was created.</li>
+<li><strong>Created date format</strong> &mdash; Select the date and time format of the <strong>Created date field</strong>. See <a href="#polling-date-formats">Polling Date Formats</a> for more information. If the date format used by the API provider is not available, you can type it and we&#39;ll save it for future use.</li>
+<li><strong>Created date timezone</strong> &mdash; Select the time zone associated with the updated date field.</li>
+</ul></li>
+<li>Add more resources as needed: Enter a resource name, click <strong>Add Polling Resource</strong>, and then complete the resource properties.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+
+<h2 id="advanced-polling">Advanced Polling</h2>
+
+<p>While you can configure polling for most cases in Cloud Elements, you need to get into the element&#39;s configuration code and use to solve advanced polling problems. You can access the element configuration using the Element Builder API.</p>
+
+<p>To access the element configuration:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">GET /elements/{keyOrId}/configuration
+</code></pre></div>
+<p>where <code>{keyOrId}</code> is your element key or element ID.</p>
+
+<p>Within the element configuration, look for the Event Poller Resources Configuration, or <code>event.poller.configuration</code>.</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">66749</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Event Poller Resources Configuration"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"event.poller.configuration"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ActiveCampaign2 Event Poller Resources Configuration"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"defaultValue"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{</span><span class="se">\"</span><span class="s2">deals</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">url</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">/hubs/marketing/deals?where=mdate&gt;=2017-02-28T16:11:29-06:00</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">idField</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">id</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">datesConfiguration</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">updatedDateField</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">mdate</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">updatedDateFormat</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">yyyy-MM-dd'T'HH:mm:ssXXX</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">createdDateField</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">cdate</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">createdDateFormat</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">yyyy-MM-dd'T'HH:mm:ssXXX</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">createdDateTimezone</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"\"</span><span class="s2">}}}"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"resellerConfig"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"companyConfig"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"internal"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"groupControl"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"displayOrder"</span><span class="p">:</span><span class="w"> </span><span class="mi">104</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TEXTAREA"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"hideFromConsole"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"required"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>In <code>defaultValue</code>, you see the entries you made in Cloud Elements. However, the default value section &mdash; also known as polling configuration &mdash; can include additional parameters. Here is a cleaned up version of the JSON with all possible polling configuration parameters. You can use this JSON body to authenticate an element instance with events:</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"deals"</span><span class="p">:{</span><span class="w">
+    </span><span class="s2">"url"</span><span class="p">:</span><span class="s2">"/hubs/marketing/deals?where=mdate&gt;=2017-02-28T16:11:29-06:00"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"idField"</span><span class="p">:</span><span class="s2">"id"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"filterByUpdatedDate"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"datesConfiguration"</span><span class="p">:{</span><span class="w">
+      </span><span class="s2">"updatedDateField"</span><span class="p">:</span><span class="s2">"mdate"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"updatedDateFormat"</span><span class="p">:</span><span class="s2">"yyyy-MM-dd'T'HH:mm:ssXXX"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"updatedDateTimezone"</span><span class="p">:</span><span class="s2">"GMT"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"createdDateField"</span><span class="p">:</span><span class="s2">"cdate"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"createdDateFormat"</span><span class="p">:</span><span class="s2">"yyyy-MM-dd'T'HH:mm:ssXXX'"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"createdDateTimezone"</span><span class="p">:</span><span class="s2">"GMT"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"createdCheckTolerance"</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"pageSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"pollDelay"</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>You can use the additional configuration parameters to solve various challenges that the API provider presents in their code. For example, if you set <code>filterByUpdatedDate</code> to <code>false</code>, you can manage a situation where the API provider does not distinguish between updated and created dates. Or, if the API provider&#39;s data shows a minor variation between the times of created and updated date fields on created records, you can account for that by setting <code>createdCheckTolerance</code>. See <a href="#polling-parameters">Polling Parameters</a> for definitions and details.</p>
+
+<h2 id="polling-parameters">Polling Parameters</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Required</th>
+<th style="text-align: left">Code Only</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">Default Interval Polling Time </br><code>event.poller.refresh_interval</code></td>
+<td style="text-align: left">The number in minutes that specifies how often the poller should check for changes.</td>
+<td style="text-align: left">Y</td>
+<td style="text-align: left">N</td>
+</tr>
+<tr>
+<td style="text-align: left">Resource Name </br><code>name</code></td>
+<td style="text-align: left">The name of the resource that you want to monitor at the API provider.</td>
+<td style="text-align: left">Y</td>
+<td style="text-align: left">N</td>
+</tr>
+<tr>
+<td style="text-align: left">URL </br> <code>url</code></td>
+<td style="text-align: left">The URL used to fetch records for the resource. Include a where clause to fetch the records since the last time that Cloud Elements checked for changes. Specify the date format within <code>${dateFieldDescriptor:dateFieldFormat}</code> to ensure that we correctly compare the updated date and time to the last polled date time. For example: <code>/hubs/finance/customers?where=lastModifiedDate&gt;=&#39;${gmtDate:yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;}&#39;</code>. </br>See <a href="#resource-url-date-format">Resource URL Date Format</a> for details about how to format the date portion of the where clause.</td>
+<td style="text-align: left">Y</td>
+<td style="text-align: left">N</td>
+</tr>
+<tr>
+<td style="text-align: left">ID Field </br><code>idField</code></td>
+<td style="text-align: left">The unique identifier of the resource that you want to monitor.</td>
+<td style="text-align: left">Y</td>
+<td style="text-align: left">N</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>filterByUpdatedDate</code></td>
+<td style="text-align: left">Identifies the parameter used to determine if a record is updated. <br><strong>Default:</strong> <code>true</code></td>
+<td style="text-align: left">N</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">Updated date field </br><code>updatedDateField</code></td>
+<td style="text-align: left">The parameter in the resource that identifies when a record was updated.</td>
+<td style="text-align: left">Y</td>
+<td style="text-align: left">N</td>
+</tr>
+<tr>
+<td style="text-align: left">Updated date format </br><code>updatedDateFormat</code></td>
+<td style="text-align: left">The date and time format of the <strong>Updated date field</strong>. See <a href="#polling-date-formats">Polling Date Formats</a> for more information.</td>
+<td style="text-align: left">Y</td>
+<td style="text-align: left">N</td>
+</tr>
+<tr>
+<td style="text-align: left">Updated date timezone </br><code>updatedDateTimezone</code></td>
+<td style="text-align: left">The time zone associated with the updated date field. Match the time zone to the one used by the API provider.</td>
+<td style="text-align: left">N</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">Created date field </br><code>createdDateField</code></td>
+<td style="text-align: left">The parameter in the resource that identifies when a record was created.</td>
+<td style="text-align: left">Y</td>
+<td style="text-align: left">N</td>
+</tr>
+<tr>
+<td style="text-align: left">Created date format </br><code>createdDateFormat</code></td>
+<td style="text-align: left">The date and time format of the <strong>Created date field</strong>. See <a href="#polling-date-formats">Polling Date Formats</a> for more information.</td>
+<td style="text-align: left">Y</td>
+<td style="text-align: left">N</td>
+</tr>
+<tr>
+<td style="text-align: left">Created date timezone </br><code>createdDateTimezone</code></td>
+<td style="text-align: left">The time zone associated with the created date field. Match the time zone to the one used by the API provider.</td>
+<td style="text-align: left">N</td>
+<td style="text-align: left">N</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>createdCheckTolerance</code></td>
+<td style="text-align: left">An integer indicating the number of seconds to use as a tolerance for the comparison between created and updated date to determine if the record was created or updated.</td>
+<td style="text-align: left">N</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>pageSize</code></td>
+<td style="text-align: left">The number of records to retrieve per page. If you don&#39;t specify, we use the default page size.</td>
+<td style="text-align: left">N</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>pollDelay</code></td>
+<td style="text-align: left">The number of seconds to subtract from the last poll date to ensure that records created, but not yet available for search, are also included in the poller search run. </br><strong>Default:</strong> <code>0</code></td>
+<td style="text-align: left">N</td>
+<td style="text-align: left">Y</td>
+</tr>
+</tbody></table>
+
+<p>See below for details about date formats in polling and tips to handle various situations, or continue to the next step, <a href="resources.html">Custom Resources</a>.</p>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='define-info.html';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Info</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='auth.html';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Authentication</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='config.html';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Config & Parameters</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='hooks.html';">
+
+  <div class="workFlowStepNum"> 4</div>
+  <div>Hooks</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='events.html';">
+
+  <div class="workFlowStepNum"> 5</div>
+  <div>Events</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='resources.html';">
+
+  <div class="workFlowStepNum"> 6</div>
+  <div>Resources</div>
+</div>
+
+<p></div>
+</div></p>
+
+<h2 id="dates-in-polling">Dates in Polling</h2>
+
+<p>When configuring polling you enter dates as part of the where clause in the URL that filters the information returned by the resource. You also use dates to set up the date formats for the updated and created date fields. In <a href="#resource-url-date-format">Resource URL Date Format</a> see how to configure the date portion of the where clause in the resource URL. In <a href="#polling-date-formats">Polling Date Formats</a> see how to select or enter date formats for created and updated date fields.</p>
+
+<h3 id="resource-url-date-format">Resource URL Date Format</h3>
+
+<p>Use the following pattern to specify a date format in the URL:<code>&#39;${dateFieldDescriptor:dateFieldFormat}&#39;</code>.</p>
+
+<p>For example:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">/hubs/finance/customers?where=lastModifiedDate&gt;='${gmtDate:yyyy-MM-dd'T'HH:mm:ssXXX}'
+</code></pre></div>
+<p>The <code>dateFieldDescriptor</code> helps to describe the <code>dateFieldFormat</code> to ensure that Cloud Elements knows what time zone is associated with the dates in the API vendor&#39;s response. Our servers run on GMT so specifying that an API provider&#39;s date format is also GMT is easy &mdash; no need to specify any time zones. However, some API providers send their data in a specific time zone or use UNIX epochs. When this is the case, use the <code>dateFieldDescriptor</code> to get specific.</p>
+
+<p>Cloud Elements supports the following <code>dateFieldDescriptor</code>s:</p>
+
+<ul>
+<li><code>gmtDate</code> &mdash; Specifies that the time of each polling request is sent at GMT time and that <code>dateFieldFormat</code> is a simple</li>
+<li><code>date</code> &mdash; Specifies that the time of each polling request is sent at the time zone of the server hosting Cloud Elements and that <code>dateFieldFormat</code> is a simple date.</li>
+</ul>
+
+<div markdown="span" class="alert alert-success" role="alert"><i class="fa fa-check-square-o"></i> <b>Tip:</b> <strong>Should I use <code>gmtDate</code> or <code>date</code>?</strong>We recommend that you use <code>gmtDate</code> because it will avoid time zone issues more often than <code>date</code>. Because <code>date</code> refers to the time zone of the machine where it is running, and it is almost always running on the Cloud Elements servers, it is usually the equivalent of gmtDate. But if you have Cloud Elements debug an element, we might run it locally where time zone errors could occur.  </div>
+
+<ul>
+<li><code>dateTimeZone:{zone}</code> Specifies that the time of each polling request is sent in the specified time zone and that  <code>dateFieldFormat</code> is a simple date.  You can use <a href="https://www.timeanddate.com/time/zones/">common abbreviations or offsets</a>  like MST, EST, -6:00, or +6:00. For example, <code>dateTimeZone:PST</code> and <code>dateTimeZone:-8:00</code> identify the time zone as Pacific Standard time.</li>
+<li><code>epoch</code> &mdash; Specifies that the API provider returns the date in a UNIX time format. If using epochs, do not enter a <code>dateFieldFormat</code>. Enter only <code>${epoch}</code>, which describes the time to the millisecond (such as 1506544512258). If the API provider calculates epochs to the second use <code>epoch:s</code>, or if calculated to the microsecond use <code>epoch:us</code>.</li>
+</ul>
+
+<h3 id="polling-date-formats">Polling Date Formats</h3>
+
+<p>Cloud Elements can handle almost any date format used by API providers. Use the date formats in the URL, Updated date format (<code>updatedDateFormat</code>), and Created date format (<code>createdDateFormat</code>). Use the following table to help understand some of the date formats that you can use.</p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Format</th>
+<th style="text-align: left">Example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">yyyy-MM-dd&#39;T&#39;HH:mm:ssXXX</td>
+<td style="text-align: left">2017-08-30 13:19:29-6:00</td>
+</tr>
+<tr>
+<td style="text-align: left">yyyy-MM-dd&#39;T&#39;HH:mm:ssZ</td>
+<td style="text-align: left">2017-08-30 13:19:29+0:00</td>
+</tr>
+<tr>
+<td style="text-align: left">yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</td>
+<td style="text-align: left">2017-08-30 13:19:29&#39;Z&#39;</td>
+</tr>
+<tr>
+<td style="text-align: left">yyyy-MM-dd</td>
+<td style="text-align: left">2017-08-30</td>
+</tr>
+<tr>
+<td style="text-align: left">yyyy/MM/dd HH:mm:ss</td>
+<td style="text-align: left">2017-08-30 13:19:29</td>
+</tr>
+<tr>
+<td style="text-align: left">MM/dd/yyyy&#39;T&#39;HH:mm:ssXXX</td>
+<td style="text-align: left">08-30-2017 13:19:29-6:00</td>
+</tr>
+<tr>
+<td style="text-align: left">MM/dd/yyyy</td>
+<td style="text-align: left">08-30-2017</td>
+</tr>
+<tr>
+<td style="text-align: left">dd/MM/yyyy&#39;T&#39;HH:mm:ssXXX</td>
+<td style="text-align: left">30-08-2017 13:19:29-6:00</td>
+</tr>
+<tr>
+<td style="text-align: left">dd/MM/yyyy</td>
+<td style="text-align: left">30-08-2017</td>
+</tr>
+<tr>
+<td style="text-align: left">EEE, dd MMM yyyy HH:mm:ss Z</td>
+<td style="text-align: left">Saturday, 30-08-2017 13:19:29+0</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li>&#39;T&#39; separates date and time. If you include &#39;T&#39;, we expect a literal &#39;T&#39; in the API provider&#39;s format. Some API providers use a space between date and time instead.</li>
+<li>Z indicates a time zone in any accepted format. If you use &#39;Z&#39;, we expect a literal &#39;Z&#39; in the API Provider&#39;s format</li>
+<li>XXX defines a specific time zone, where each X represents a part of the offset. For example, <code>XXX</code> would by EST, or <code>XXXXXX</code> would be +06:00.
+
+<ul>
+<li>Time zone can be a text string like EDT, MST, or UTC.</li>
+<li>If using offset, the format should be <code>(+or-)hour:minutes</code> or <code>(+or-)hourminutes</code>.</li>
+<li>Hour can be one or two digits if separating hour and minutes with a colon. If you do not se a colon, hours must be two digit. Hours can only be between 0 (or 00) and 23.</li>
+<li>Minutes can be only two digits between 00 and 59.</li>
+</ul></li>
+</ul>
+
+<h2 id="polling-tips">Polling Tips</h2>
+
+<ul>
+<li>The resource does not support querying for dates.
+
+<ul>
+<li>Enter the URL without a where clause. Cloud Elements will check the response 20 records at a time, and look for records updated after the last polling time.</li>
+</ul></li>
+<li>The resource does not distinguish between created and modified dates.
+
+<ul>
+<li>Enter the same date field as both the created and updated dates and change <code>filterByUpdatedDate</code> to <code>false</code>. Cloud Elements will filter by the Created Date and compare that to the last polling date.</li>
+</ul></li>
+<li>The API provider does not support greater than or less than symbols.
+
+<ul>
+<li>See the API provider&#39;s modified fields in the response and use build a query with keywords like <code>since modifiedField</code> to imply greater than, or <code>before modifiedField</code> to imply less than.</li>
+<li>To optimize the query, look for a sort order and try to get the latest modified fields first. Cloud Elements pages through the response until it reaches the last polling date instead of getting all data.</li>
+</ul></li>
+</ul>
+
+    </div>
+
+  </div>
+  <script src="/assets/js/chart.js"></script>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

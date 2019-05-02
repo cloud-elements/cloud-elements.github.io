@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/elements/brighttalk/brighttalk-create-instance.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> BrightTALK </h2>
+          <!-- <h4> Create Instance </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/elements/brighttalk/?elementId=184">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/brighttalk/brighttalk-create-instance.html?elementId=184">Create Instance</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/brighttalk/transformations.html?elementId=184">Transform Data</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/brighttalk/bulk.html?elementId=184">Bulk APIs</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/brighttalk/error-codes.html?elementId=184">Error Codes</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/brighttalk/ceql.html?elementId=184">Cloud Elements Query Language</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/brighttalk/api-documentation.html?elementId=184">API Docs</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <h2 id="create-instance">Create Instance</h2>
+
+<p>You can provision instances through Cloud Elements or through APIs. This section describes both methods and includes parameter details, a request sample, and a response sample.</p>
+
+<p><a href="#provision-an-instance-in-cloud-elements">Provision an Instance in Cloud Elements</a></p>
+
+<p><a href="#provision-an-instance-via-api">Provision an Instance via API</a></p>
+
+<p><a href="#parameters">Parameters</a></p>
+
+<p><a href="#request-body">Request Body</a></p>
+
+<p><a href="#sample-response">Sample Response</a></p>
+
+<h3 id="provision-an-instance-in-cloud-elements">Provision an Instance in Cloud Elements</h3>
+
+<p>Use <a href="#" data-toggle="tooltip" data-original-title="The Cloud Elements user interface that provides access to the features and APIs avalable with Cloud Elements.">Cloud Elements</a> to provision an instance using our user interface. We provide a Provision Instance workflow that includes two steps: Provision it and Tag it.</p>
+
+<ol>
+<li>Sign in, and then search for the element in our Elements Catalog.
+<img src="/assets/img/elements/element-search.png" alt="Search"></li>
+<li>Click <strong>Add Instance</strong>.</li>
+<li>Enter your <strong>Instance Name</strong>.</li>
+<li>Complete the Instance Configuration parameters. See <a href="#parameters">Parameters</a> or hover over the information icon for information about each parameter.</li>
+<li>Click <strong>Next</strong>.</li>
+<li>On the Tag It page, enter any tags that might help further define the instance.
+
+<ul>
+<li>To add more than one tag, click <strong>Add</strong> after each tag.
+<img src="/assets/img/elements/add-tag.png" alt="Add tag"></li>
+</ul></li>
+<li>Click <strong>Done</strong>.</li>
+<li>Take a look at the documentation for the element resources now available to you.
+<img src="img/Element-Instance.png" alt="Documentation Tab"></li>
+</ol>
+
+<h3 id="provision-an-instance-via-api">Provision an Instance via API</h3>
+
+<p>To provision your BrightTALK Element, use the /instances API.</p>
+
+<p><strong>Note</strong>: An Element token is returned upon successful execution of this API. Retain the token for all subsequent requests involving this element instance.</p>
+
+<p>The provisioning API call includes:</p>
+
+<ul>
+<li><strong>HTTP Headers</strong>: Authorization- User <user secret>, Organization <organization secret></li>
+<li><strong>HTTP Verb</strong>: POST</li>
+<li><strong>Request URL</strong>: /instances</li>
+<li><strong>Request Body</strong>: Required – see below</li>
+<li><strong>Query Parameters</strong>: none</li>
+</ul>
+
+<h4 id="request-body">Request Body</h4>
+
+<p>You must include an instance.json file with your instance request.  See <a href="#parameters">Parameters</a> for information about each parameter. The Boolean parameters show default values.</p>
+
+<p><strong>Note</strong>: If you don&#39;t specify a required parameter, your response results in an error.</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+  "element": {
+    "key": "brighttalk"
+  },
+  "configuration": {
+    "brighttalk.api.key":  "&lt;INSERT_BrightTALK_KEY&gt;",
+    "brighttalk.api.secret": "&lt;INSERT_BrightTALK_SECRET&gt;",
+    "brighttalk.isstaging": false,
+    "brighttalk.bulkignore.emailnotpresent": true,
+    "filter.response.nulls": true
+  },
+  "tags": [
+    "&lt;INSERT_TAGS&gt;"
+  ],
+  "name": "&lt;INSERT_INSTANCE_NAME&gt;"
+}
+</code></pre></div>
+<p><strong>Note</strong>:  Make sure that you use straight quotes in your JSON files and cURL commands.  Use plain text formatting in your code and ensure that you do not include spaces in the cURL command.</p>
+
+<h3 id="parameters">Parameters</h3>
+
+<p>The following table shows the parameters used to provision an instance. We noted optional parameters in the table, but if you do  not specify values, the element will be provisioned with default values for the optional parameters.</p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Data Type</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">Instance Name </br><code>name</code></td>
+<td style="text-align: left">The name for the instance created during provisioning.</td>
+<td style="text-align: left">String</td>
+</tr>
+<tr>
+<td style="text-align: left">API Key </br><code>brighttalk.api.key</code></td>
+<td style="text-align: left">The code that identifies the calling Element Instance to BrightTALK</td>
+<td style="text-align: left">String</td>
+</tr>
+<tr>
+<td style="text-align: left">API Secret </br><code>brighttalk.api.secret</code></td>
+<td style="text-align: left">The secret associated with the API Key that identifies the calling Element Instance to BrightTALK</td>
+<td style="text-align: left">String</td>
+</tr>
+<tr>
+<td style="text-align: left">Staging </br><code>brighttalk.isstaging</code></td>
+<td style="text-align: left"><em>Optional</em>. Indicates whether the instance should connect to a production or staging environment. No or <code>false</code> indicates production. </br>Default: <code>false</code></td>
+<td style="text-align: left">Boolean</td>
+</tr>
+<tr>
+<td style="text-align: left">Bulk ignore if email not present </br><code>brighttalk.bulkignore.emailnotpresent</code></td>
+<td style="text-align: left"><em>Optional</em>. Specifies what to do with a record during bulk download if it is missing an email . Set to Yes or <code>true</code> to ignore the record during download.</br>Default: <code>true</code></td>
+<td style="text-align: left">Boolean</td>
+</tr>
+<tr>
+<td style="text-align: left">Filter null values from the response </br><code>filter.response.nulls</code></td>
+<td style="text-align: left"><em>Optional</em>. Determines if null values in the response JSON should be filtered from the response. Yes or <code>true</code> indicates that Cloud Elements will filter null values. </br>Default: <code>true</code></td>
+<td style="text-align: left">Boolean</td>
+</tr>
+<tr>
+<td style="text-align: left">Tags</td>
+<td style="text-align: left"><em>Optional</em>. User-defined tags to further identify the instance.</td>
+<td style="text-align: left">object</td>
+</tr>
+</tbody></table>
+
+<h3 id="sample-request">Sample Request</h3>
+
+<p>Below is an example cURL request:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">curl -X POST -H "Content-Type: application/json" -H "Authorization: User rapG956KSQJ/lZo20kdg2uurkG+wYU836miX1uQQT4k=, Organization 976c3406ee321baf50acfe6cf5eac1ac" -H "Cache-Control: no-cache" -H "Postman-Token: 5b56f6d5-e58e-d53f-a757-671f7cab58fa" -d '{
+  "element": {
+    "key": "brighttalk"
+  },
+  "configuration": {
+    "brighttalk.api.key": "xxxxxx",
+    "brighttalk.api.secret": "xxxxxxxxxxxxxxxxxxxxxxx",
+    "brighttalk.isstaging": false,
+    "brighttalk.bulkignore.emailnotpresent": true,
+    "filter.response.nulls": true
+  },
+  "tags": [
+    "Docs"
+  ],
+  "name": "BrightTalkforDocs"
+}
+' "https://api.cloud-elements.com/elements/api-v2/instances"
+</code></pre></div>
+<h3 id="sample-response">Sample Response</h3>
+
+<p>Below is an abridged successful JSON response:</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">411183</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BrightTalkforDocs"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"createdDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-03-14T19:20:16Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"xxxxxxxxxxxxxxxxxxxxxxx="</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"element"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">184</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BrightTALK"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"hookName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BrightTALK"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"brighttalk"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Add an BrightTALK Instance to connect your existing BrightTALK account to the Marketing Hub, allowing you to manage your channels, subscribers, activities, etc. You will need your BrightTALK account information to add an instance."</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.brighttalk.com/resources/images/logo_b.png?v=97373"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"deleted"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"typeOauth"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"trialAccount"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"signupURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://www.brighttalk.com"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"defaultTransformations"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"configuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+   </span><span class="s2">"brighttalk.api.secret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"xxxxxxxxxxxxxxxxxxxxxxx"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"filter.response.nulls"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"brighttalk.bulkignore.emailnotpresent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"brighttalk.isstaging"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"brighttalk.api.key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"xxxxxxxxxxxxxxxxxxxxxxx"</span><span class="w">
+ </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

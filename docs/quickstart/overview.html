@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- History.js -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/quickstart/overview.html">
+
+  <script src="/api-docs/swagger-ui.js" type="text/javascript"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper">
+      <div markdown="span" class="bs-callout bs-callout-warning" role="alert">
+  <h4>The docs are moving! </h4><p>Find us at our new <a href ="https://docs.cloud-elements.com/">Help Center</a> where we've combined our documentation and knowledgebase articles in one easy-to-search location.</p><p>We aren't updating the Developer Portal anymore, except for the Element Docs &mdash; all updates happen in the <a href ="https://docs.cloud-elements.com/">Help Center</a>. We're retiring the Developer Portal as you know it in:</p><h4 id="demo"></h4>
+  <script>
+  // Set the date we're counting down to
+  var countDownDate = new Date("December 14, 2018 20:00:00").getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+
+      // Get todays date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now an the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Output the result in an element with id="demo"
+      document.getElementById("demo").innerHTML = days + " days " + hours + " hours " + minutes + "m " + seconds + "s ";
+
+      // If the count down is over, write some text
+      if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("demo").innerHTML = "EXPIRED";
+      }
+  }, 1000);
+  </script>
+
+</div>
+
+      <script src="/assets/js/application.js"></script>
+<link href="/assets/css/contentToggle.css" rel="stylesheet">
+
+
+
+      
+      <h1 id="getting-started">Getting Started</h1>
+
+<p>We&#39;re glad that you&#39;re trying out Cloud Elements and hope you use this section to get familiar with the application. In this section, we&#39;ll give you some basic information to acquaint you with Cloud Elements, and then show you how to integrate the Salesforce and Shopify elements so you can sync your contacts between the two.</p>
+
+<div markdown="span" class="bs-callout bs-callout-info"><strong>On this page</strong></br><a href=#documentation-and-resources>Documentation and Resources</a></br><a href=#definitions>Definitions</a></div>
+
+<h2 id="documentation-and-resources">Documentation and Resources</h2>
+
+<p>If you have found your way to this page, you&#39;re at least familiar with our documentation. We have many resources available to help you create integrations. Here in the Developer Portal, you can find API reference documentation, guides that provide detailed instructions, a link to Cloud Elements University, and documentation about each of our elements &mdash; A prebuilt API integration that enables a connection into a specific cloud application or cloud service endpoint (such as Box or Salesforce.com). We organize our Elements into categories called ‘Hubs’, which allow you to integrate an entire category through a single, uniform API.</p>
+
+<p>Use <strong>Search the docs</strong> at the top of the page to find information anywhere in the Developer Portal. As you type, matching topics appear with your search term in context. Just click one to jump right to the topic.
+<img src="img/search-docs.png" alt="Search Developer Portal"></p>
+
+<p>As you use the Developer Portal, and especially as you work through the Getting Started guide, we encourage you to provide feedback via the <strong>Docs Feedback</strong> button, or just email us at <a href="mailto:documentation@cloud-elements.com">documentation@cloud-elements.com</a>.</p>
+
+<h2 id="definitions">Definitions</h2>
+
+<h3 id="api-hub">API Hub</h3>
+
+<p>An API Hub (Hub) provides uniform APIs to access a collection of resources enabling one-to-many API access to multiple API providers. For example, the CRM hub provides normalized access to multiple CRM application services including Salesforce, Microsoft Dynamics, Netsuite CRM, Sugar CRM, Zoho CRM, and Autotask (we call a connection to each service an Element). Your application can write to the “One” uniform API and get access to “Many” application services in that category. Within the CRM Hub, Cloud Elements has normalized the API calls to multiple resources such as Accounts, Contacts, Leads, Opportunities and more. Hubs represent the intersection of resources across the Elements within that category of application services.</p>
+
+<p>We normalize our API calls for all endpoints, to enable calls between services e.g., Salesforce to HubSpot. However, with this feature, certain endpoint resources cannot be mapped for each hub.</p>
+
+<ul>
+<li>Hubs provide uniform APIs to access any collection of elements or a set of resources.</li>
+<li>Hubs enable “One-to-Many” access to an entire category of services.</li>
+<li>Hubs are accessed using a consistent RESTful API with a JSON payload regardless of the technology used at the endpoint.</li>
+<li>Hubs rapidly translate calls into the semantic and data structure required by each endpoint.</li>
+<li>Hubs provide a uniform set of interactive API documentation that developers use to access the resources in the Hub.</li>
+<li>Hubs combine resources from multiple categories providing a consistent set of APIs and documentation to access any collection of resources (e.g., combine Salesforce, Box, and QuickBooks API resources into a Hub).</li>
+</ul>
+
+<h3 id="authenticated-element-instance">Authenticated Element Instance</h3>
+
+<p>An Authenticated Element Instance is single authenticated connection of an element between Cloud Elements and an account at an API provider such as a Salesforce, Marketo, or Netsuite. An authenticated element instance can access all the objects, fields, and data for that account &mdash; including custom data. An authenticated element instance is created when a user successfully connects to the endpoint by providing an instance name, the required authentication credentials for that Element, and optional event configuration. </p>
+
+<h3 id="bulk-api">Bulk API</h3>
+
+<p>Bulk APIs are the Cloud Elements APIs used to move large amounts of data. Cloud Elements provides the ability to upload and download data in bulk from an endpoint in a normalized way. Cloud Elements will leverage the provider bulk endpoints whenever that is available. But, when the API provider has no bulk endpoints, we provide a pseudo bulk service for uploading and downloading data from the endpoint. For uploads, we accept a file, and then create objects at the endpoint on a record-by-record basis. For downloads, we execute a search API against the endpoint, and loop through all results until we have retrieved all the data. Cloud Elements stores the files (encrypted) on Cloud Elements servers for a maximum of seven days.</p>
+
+<h3 id="ceql">CEQL</h3>
+
+<p>CEQL is the Cloud Elements Query Language. The search and filter language used by Cloud Elements to standardize searching across all our different elements. Many APIs support some form of searching in their APIs but they’re almost all different, so we have standardized a common way to search across all our elements. Cloud Elements translates the CEQL to the endpoint’s searching syntax, however at times, CEQL supports more than the endpoint.</p>
+
+<h3 id="common-resource">Common Resource</h3>
+
+<p>A Common Resource is a stand-alone resource, created and defined by a user with the intention of creating a one-to-many transformation. Common resources define normalized fields that you can use in place of specific elements to facilitate one-to-many integrations. You map fields from element resources to the common resource fields to create transformations.</p>
+
+<h3 id="discovery-service">Discovery Service</h3>
+
+<p>Cloud Elements includes a comprehensive data discovery service that provides normalized metadata, such as the list of  field names and types. Additional information, if available from an endpoint, may also be obtained such as: display name, read-only, etc. If an endpoint doesn’t provide discovery service APIs, Cloud Elements will still provide a minimum set of metadata about the given resource (e.g., name and type). Cloud Elements also allows you to discover custom fields (as long as the values are not empty), by supplying an object Id when a native discovery service is not available. The Discovery Service is used along with the Transformation Service to normalize the responses across endpoints.</p>
+
+<h3 id="element">Element</h3>
+
+<p>An Element is a pre-built API integration that enables a connection into a specific API Provider endpoint (e.g., Salesforce, Quickbooks, or Marketo). All Elements start with a normalized set of features, including authentication, resources, paging, errors, events and search. At the hub level, we also seek to support the richer set of APIs that an application provides, even when not all the Elements in that category share that resource.  For example, Salesforce Sales Cloud has APIs that many other CRM services do not support. You can find these APIs that are specific to just Salesforce in the documentation for that Element</p>
+
+<ul>
+<li>Elements share common services including discovery, search query, pagination, bulk uploading and downloading, logging, and interactive documentation.</li>
+<li>Methods are normalized and accessible through RESTful APIs.</li>
+<li>Complete data payloads are returned in JSON and available to transform and normalize to a common resource.</li>
+<li>Cloud Elements keeps each element up-to-date with changes at the endpoint.</li>
+<li>Each elements is a multi-tenant connector supporting an unlimited number of authenticated accounts with no additional code required.</li>
+</ul>
+
+<h3 id="endpoint">Endpoint</h3>
+
+<p>A unique URI that represents a resource and includes the HTTP method and resource. it includes the method (GET, PUT, PATCH), the base URL, and the resource.</p>
+
+<h3 id="event">Event</h3>
+
+<p>An action that occurs at an API provider associated with an authenticated element instance and is monitored either through Polling or Webhooks.</p>
+
+<h3 id="formula-instance">Formula Instance</h3>
+
+<p>A specific instance of a formula template configured with explicit variables and associated with specific element instances.</p>
+
+<h3 id="formula-template">Formula Template</h3>
+
+<p>A Formula Template is a reusable workflow that is independent of the element and includes the triggers, steps, and variables for a formula instance to execute the workflow. The steps in a formula template accomplish a wide variety of use cases across different services, such as keeping systems in sync, migrating data between systems, and automating business workflows.</p>
+
+<h3 id="oauth-proxy">OAuth Proxy</h3>
+
+<p>The OAuth Proxy feature gives you the capability to have multiple environments, such as development, QA, etc, with one endpoint application. For example some vendors only allow one callback URL per application. The proxy will allow for the same callback URL to be used with multiple application endpoints. You would then use the proxy address as the Callback URL instead of your own Callback URL. This permits multiple endpoint applications to one callback URL.</p>
+
+<h3 id="payload">Payload</h3>
+
+<p>The data returned from an API response. Or, the body of an API request.</p>
+
+<h3 id="resource">Resource</h3>
+
+<p>An object or entity that can be accessed via a URI request. </p>
+
+<h3 id="transformation">Transformation</h3>
+
+<p>A Transformation is the result of mapping an API provider resource to a common resource. This allows you to define the fields to include in a specific resource, map those fields to the fields cotaining the same data in the provider resource, and then transform the data to match the common resource.</p>
+
+<ul>
+<li>Overview
+
+<ul>
+<li>Documentation</li>
+<li>Definitions</li>
+</ul></li>
+<li>Manage Your Profile</li>
+<li>Cloud Elements Tour</li>
+<li>Build Your First Integration
+*</li>
+</ul>
+
+    </div>
+
+  </div>
+  <script src="/assets/js/chart.js"></script>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

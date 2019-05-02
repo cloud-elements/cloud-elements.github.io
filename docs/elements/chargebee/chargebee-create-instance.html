@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/elements/chargebee/chargebee-create-instance.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> Chargebee </h2>
+          <!-- <h4> Create Instance </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/elements/chargebee/?elementId=451">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/chargebee/chargebee-endpoint-setup.html?elementId=451">Endpoint Setup</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/chargebee/authentication.html?elementId=451">Authentication</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/chargebee/chargebee-create-instance.html?elementId=451">Create Instance</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/chargebee/events.html?elementId=451">Events</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/chargebee/bulk.html?elementId=451">Bulk APIs</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/chargebee/error-codes.html?elementId=451">Error Codes</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/chargebee/ceql.html?elementId=451">Querying</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/chargebee/api-documentation.html?elementId=451">API Docs</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <h2 id="create-instance">Create Instance</h2>
+
+<p>To provision your Chargebee Element, use the /instances API.</p>
+
+<h3 id="step-1-call-the-instances-api">Step 1. Call the /instances API</h3>
+
+<ul>
+<li><strong>HTTP Headers</strong>: Authorization- User <user secret>, Organization <organization secret></li>
+<li><strong>HTTP Verb</strong>: POST</li>
+<li><strong>Request URL</strong>: /instances</li>
+<li><strong>Request Body</strong>: Required – see below</li>
+<li><strong>Query Parameters</strong>: none</li>
+</ul>
+
+<p>Description: An Element token is returned upon successful execution of this API. This token needs to be retained by the application for all subsequent requests involving this element instance.</p>
+
+<p>A sample request illustrating the /instances API is shown below.</p>
+
+<p>HTTP Headers:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIZATION_SECRET&gt;
+
+</code></pre></div>
+<p>This instance.json file must be included with your instance request.  Please fill your information to provision.  The “key” into Cloud Elements Chargebee is &quot;chargebee&quot;.  This will need to be entered in the “key” field below depending on which Element you wish to instantiate.</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"element"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"chargebee"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"configuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"site"</span><span class="p">:</span><span class="s2">"&lt;INSERT_CHARGEBEE_SUBDOMAIN&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"username"</span><span class="p">:</span><span class="s2">"&lt;INSERT_CHARGEBEE_API_KEY&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"password"</span><span class="p">:</span><span class="s2">"&lt;INSERT_CHARGEBEE_PASSWORD&gt;"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"&lt;INSERT_TAGS&gt;"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;INSERT_INSTANCE_NAME&gt;"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Here is an example cURL command to create an instance using /instances API.</p>
+
+<p>Example Request:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> POST
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIZATION_SECRET&gt;'</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span>
+<span class="nt">-d</span> @instance.json
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/instances'</span>
+</code></pre></div>
+<p>If the user does not specify a required config entry, an error will result notifying her of which entries she is missing.</p>
+
+<p>Below is a successful JSON response:</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Test"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cuED0/DezalhhzK2OtO6kMP7NvPnMyNcRDZc="</span><span class="p">,</span><span class="w">
+
+</span><span class="s2">"element"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">451</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Chargebee"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"chargebee"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Chargebee API"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://hfweb-assets.s3.amazonaws.com/integrations/chargebee.png"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"deleted"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"typeOauth"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"trialAccount"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"resources"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">    </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"transformationsEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"bulkDownloadEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"bulkUploadEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"cloneable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"authentication"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"basic"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"hub"</span><span class="p">:</span><span class="w"> </span><span class="s2">"payment"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"parameters"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">209</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"createdDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-04-25T01:20:30Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"site"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"vendorName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"site"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"configuration"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"vendorType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"path"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"request"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"elementId"</span><span class="p">:</span><span class="w"> </span><span class="mi">451</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"required"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"provisionInteractions"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+  </span><span class="s2">"valid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"disabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"maxCacheSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"cacheTimeToLive"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"configuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"base.url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://{site}.chargebee.com/api/v1"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"bulk.add_metadata"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"bulk.query.field_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"start_time"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"pagination.max"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event.vendor.type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"polling"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"bulk.query.operator"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&gt;="</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"bulk.query.date_mask"</span><span class="p">:</span><span class="w"> </span><span class="s2">"yyyy-MM-dd'T'HH:mm:ssXXX"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"bulk.query.download_format"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JSON"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"bulk.attribute.created_time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"created_at"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"site"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CHARGEBEE_SUBDOMAIN"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"password"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CHARGEBEE_PASSWORD"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"bulk.relations"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"pagination.type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"offset"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event.poller.refresh_interval"</span><span class="p">:</span><span class="w"> </span><span class="s2">"15"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event.notification.callback.url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event.poller.configuration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{</span><span class="se">\"</span><span class="s2">events</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">url</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">/hubs/payment/events?where=start_time='${epoch}'</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">idField</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"\"</span><span class="s2">}}"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CHARGEEBEE_USERNAME"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event.notification.enabled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"eventsEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"traceLoggingEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"cachingEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Note:  Make sure you have straight quotes in your JSON files and cURL commands.  Please use plain text formatting in your code.  Make sure you do not have spaces after the in the cURL command.</p>
+
+<h4 id="instance-configuration">Instance Configuration</h4>
+
+<p>The content in the <code>configuration</code> section or nested object in the body posted to the <code>POST /instances</code> or <code>PUT /instances/{id}</code> APIs varies depending on which element is being instantiated. However, some configuration properties are common to all elements and available to be configured for all elements. These properties are -</p>
+
+<ul>
+<li><code>event.notification.enabled</code>: This property is a <code>boolean</code> property, and determines if event reception (via <code>webhook</code> or <code>polling</code>) is enabled for the element instance. This property defaults to <em>false</em>.</li>
+<li><code>event.vendor.type</code>: When <code>event.notification.enabled</code> property is set to <em>true</em>, this property determines the mechanism for Cloud Elements to use to receive or fetch changed events from the service endpoint. The supported values are <code>webhook</code> and <code>polling</code>. Most elements support one mechanism or the other, but some elements, e.g., Salesforce.com support both mechanisms. This property is <em>optional</em>.</li>
+<li><code>event.notification.type</code>: This property can be used to determine how an event notification should be sent to the consumer of the element instance, in most cases your application. Currently, <code>webhook</code> is the only supported value for this property. This means that when an event is received by the element instance, it will get forwarded to the provided <code>event.notification.callback.url</code> via a <code>webhook</code> to you. This property is <em>optional</em>.</li>
+<li><code>event.notification.callback.url</code>: As mentioned above, the value of this property is an <code>http</code> or <code>https</code> URL to which Cloud Element will post the event for consumption by your application. This property is <em>optional</em>.</li>
+<li><code>filter.response.nulls</code>: This property defaults to <em>true</em>, i.e., it&#39;s  <code>boolean</code> property, and determines if <code>null</code> values in the response <code>JSON</code> should or should not be filtered from the response returned to the consuming application. By default, all <code>null</code> values are filtered from the response before sending the response to the consuming application.</li>
+</ul>
+
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

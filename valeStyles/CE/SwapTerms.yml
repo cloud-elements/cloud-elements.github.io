@@ -1,0 +1,38 @@
+extends: substitution
+message: "'Consider using '%s' instead of '%s'"
+ignorecase: true
+level: warning
+swap:
+  and/or: and
+  API call: request, response, or endpoint
+  API calls: requests, responses, or endpoints
+  API Integration Toolkit: Cloud Elements
+  API Manager Console: Cloud Elements
+  CE Integration Platform: Cloud Elements
+  Cloud elements: Cloud Elements
+  cloud elements: Cloud Elements
+  cloud Elements: Cloud Elements
+  Cloud Elements API Integration Platform: Cloud Elements
+  Cloud Elements API Management Platform: Cloud Elements
+  Cloud Elements API Manager Console: Cloud Elements
+  Cloud Elements Console: Cloud Elements
+  Cloud Elements Developer Console: Cloud Elements
+  Cloud Elements Console UI: Cloud Elements
+  cloud service: API provider
+  connector: element
+  console: Cloud Elements
+  Console: Cloud Elements
+  Console UI: Cloud Elements
+  Element Catalog: Elements Catalog
+  instantiatie: authenticate an instance
+  log into: log in to
+  Manager Console: Cloud Elements
+  (?:OAuth2|OAuth 2 ): OAuth 2.0
+  (?:OAuth1|OAuth 1 ): OAuth 1.0
+  one to many: one-to-many
+  our Console: Cloud Elements
+  platform: Cloud Elements
+  (?:Post-Hook|Post Hook): Post-Response Hook
+  (?:Pre-Hook|Pre Hook): Pre-Request Hook
+  provision: authenticate an instance
+  element token: element instance token

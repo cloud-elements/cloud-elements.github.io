@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/elements/weebly/weebly-create-intance.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> Weebly </h2>
+          <!-- <h4> Create Instance </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/elements/weebly/?elementId=449">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/weebly/weebly-endpoint-setup.html?elementId=449">Endpoint Setup</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/weebly/authentication.html?elementId=449">Authentication</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/weebly/weebly-create-intance.html?elementId=449">Create Instance</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/weebly/events.html?elementId=449">Events</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/weebly/transformations.html?elementId=449">Transform Data</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/weebly/error-codes.html?elementId=449">Error Codes</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/weebly/ceql.html?elementId=449">Querying</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/weebly/api-documentation.html?elementId=449">API Docs</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <h2 id="create-instance">Create Instance</h2>
+
+<p>Weebly is a Help Desk Platform. When you provision an instance, your app will have access to the different functionality offered by the Weebly platform.</p>
+
+<p>There are steps to complete for Weebly prior to beginning the Cloud Elements OAuth Flow.  Information on <a href="https://dev.weebly.com/authentication-using-oauth2.html">Completing the OAuth Flow</a> can be found on Weebly&#39;s site.  Below is an excerpt of that documentation.</p>
+
+<h3 id="step-1-completing-the-oauth-flow-from-weebly-documentation">Step 1 Completing the OAuth Flow (From Weebly Documentation)</h3>
+
+<p>In addition to configuring the manifest, you need to provide the following to complete the OAuth flow:</p>
+
+<ul>
+<li>Decode and verify the HMAC hash</li>
+<li>Use the provided email to create an account at your site (optional)</li>
+<li>Redirect back to Weebly, providing a redirect URL and the scope of entitlement</li>
+<li>Redirect back to Weebly with the authorization code and exchange it for a permanent api access token</li>
+<li>Finish the flow and redirect user to the endpoint</li>
+</ul>
+
+<p><strong>Decode and Verify the Hash</strong></p>
+
+<p>Weebly uses HMAC-SHA256 to encode the URL parameters and sends them to the callback URL provided in the manifest. You need to use the secret code (found on your app’s admin page in the Developer Admin portal) to decode the hash and compare it to the parameters.</p>
+
+<p><em>Note: If the secret appears truncated on the admin page, right-click &gt; copy will copy the entire code</em></p>
+
+<p>​Weebly sends the following:</p>
+
+<ul>
+<li><code>user_id</code>: Weebly user id</li>
+<li><code>site_id</code>: Weebly site id (optional)</li>
+<li><code>timestamp</code>: Current timestamp</li>
+<li><code>version</code>: Version cited in the manifest</li>
+<li><code>hmac</code>: The user<em>id, site</em>id (if provided), and timestamp processed through HMAC-SHA256 using the app&#39;s secret key</li>
+<li><code>callback_url</code>: The Weebly URL endpoint to be used in your callbacks. Do not hard code this value, as it is subject to change.</li>
+</ul>
+
+<p>Example:</p>
+
+<p>From Weebly</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>MANIFEST_CALLBACK_URL]?user_id<span class="o">=[</span>USER_ID]&amp;timestamp<span class="o">=[</span>TIMESTAMP]&amp;site_id<span class="o">=[</span>SITE_ID]&amp;version<span class="o">=[</span>VERSION]&amp;
+<span class="nv">hmac</span><span class="o">=[</span>HMAC-SHA256]&amp;callback_url<span class="o">=[</span>NEXT_OAUTH_STEP_URL]
+</code></pre></div>
+<p>Decode and Verify the Hash</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$hash_string</span> <span class="o">=</span> <span class="s2">"user_id=[USER_ID]&amp;timestamp=[TIMESTAMP]&amp;site_id=[SITE_ID]"</span><span class="p">;</span>
+<span class="nv">$hash</span> <span class="o">=</span> hash_hmac<span class="o">(</span><span class="s1">'sha256'</span>, <span class="nv">$hash_string</span>, SECRET_KEY<span class="o">)</span><span class="p">;</span>
+</code></pre></div>
+<p>Redirect back to Weebly with optional scope additions</p>
+
+<p>Redirect back to Weebly using the callback parameter provided. Unless necessary, all scope declarations should be done in the manifest.</p>
+
+<h3 id="step-2-redirect-back-to-weebly-with-optional-scope-additions">Step 2. Redirect back to Weebly with optional scope additions</h3>
+
+<p>Redirect back to Weebly using the callback parameter provided in the hash. Unless necessary, all scope declarations should be done in the manifest.</p>
+
+<p>Use this method:</p>
+
+<p>GET /app-center/authorize</p>
+
+<p>Redirect Back to Weebly</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>CALLBACK_URL]?client_id<span class="o">=[</span>CLIENT_ID]&amp;user_id<span class="o">=[</span>USER_ID]&amp;site_id<span class="o">=[</span>SITE_ID]&amp;scope<span class="o">=[</span>SCOPES]&amp;
+<span class="nv">redirect_uri</span><span class="o">=[</span>REDIRECT_URI]&amp;version<span class="o">=[</span>VERSION]
+</code></pre></div>
+<p>The CALLBACK<em>URL above is the callback</em>url we add to the manifest file callback url (see above).
+Include the following parameters:</p>
+
+<ul>
+<li><code>client_id</code>: Your ID number, found on your Developer Admin portal page</li>
+<li><code>user_id</code>: passed to you in the original request</li>
+<li><code>site_id</code>: optional ID of the site, passed to you in the original request</li>
+<li><p><code>scope</code>: comma-delimited list of scopes of information that your app needs. Initial/global scopes should be listed in the manifest and not here. The scopes added here are compared with those in the manifest. If they are different, then the user will be shown a dialog asking for the additional permissions.
+Choose from the following scopes:</p>
+
+<ul>
+<li><code>read:blog</code>: The app can read blog information.</li>
+<li><code>write:blog</code>: The app can modify blog information.</li>
+<li><code>read:site</code>: The app can read site information.</li>
+<li><code>write:site</code>: The app can modify site information.</li>
+<li><code>read:store-catalog</code>: The app can read store information.</li>
+<li><code>write:store-catalog</code>: The app can modify store information.</li>
+<li><code>read:store-orders</code>: The app can read order information.</li>
+<li><code>write:store-orders</code>: The app can modify order information.</li>
+<li><code>read:membership</code>: The app can read site&#39;s member and group information.</li>
+<li><code>write:membership</code>: The app can modify site&#39;s member and group information.</li>
+<li>webhook: You need access to the webhook API</li>
+</ul></li>
+<li><p><code>redirect_uri</code>: The URI for the resulting page. This URI must use the https protocol. This can be used to override the callback_uri in the manifest. If you don’t provide a URI, then the user is directed to the URI defined in the manifest.</p></li>
+<li><p><code>version</code>: The version number passed to you in the original request. Note that non-approved versions (that is versions that are not yet in the App Center) can only be installed by the user that owns the app.</p></li>
+</ul>
+
+<h3 id="step-3-create-an-instance">Step 3. Create an Instance</h3>
+
+<p>To provision your Weebly Element, use the /instances API.</p>
+
+<p>Below is an example of the provisioning API call.</p>
+
+<ul>
+<li><strong>HTTP Headers</strong>: Authorization- User <user secret>, Organization <organization secret></li>
+<li><strong>HTTP Verb</strong>: POST</li>
+<li><strong>Request URL</strong>: /instances</li>
+<li><strong>Request Body</strong>: Required – see below</li>
+<li><strong>Query Parameters</strong>: none</li>
+</ul>
+
+<p>Description: An Element token is returned upon successful execution of this API. This token needs to be retained by the application for all subsequent requests involving this element instance.</p>
+
+<p>A sample request illustrating the /instances API is shown below.</p>
+
+<p>HTTP Headers:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIZATION_SECRET&gt;
+
+</code></pre></div>
+<p>This instance.json file must be included with your instance request.  Please fill your information to provision.  The “key” into Cloud Elements Weebly is &quot;weebly&quot;.  This will need to be entered in the “key” field below depending on which Element you wish to instantiate.</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"element"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"weebly"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"providerData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Code on Return the URL"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"configuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"oauth.api.key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;INSERT_ZENDESK_UNIQUE_IDENTIFIER&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.api.secret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;INSERT_ZENDESK_CLIENT_SECRET&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"site.id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;FROM_OAUTH_EXCHANGE&gt;"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"&lt;INSERT_TAGS&gt;"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;INSERT_INSTANCE_NAME&gt;"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Here is an example cURL command to create an instance using /instances API.</p>
+
+<p>Example Request:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> POST
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIZATION_SECRET&gt;'</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span>
+<span class="nt">-d</span> @instance.json
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/instances'</span>
+</code></pre></div>
+<p>If the user does not specify a required config entry, an error will result notifying her of which entries she is missing.</p>
+
+<p>Below is a successful JSON response:</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1234</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Test"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"zg1dx35BCjiKo+pbTQS3dxcAKlfZcNVOWtI="</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"element"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">41</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Weebly"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"zendesk"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Add a Weebly Instance to connect your existing Weebly account to the eCommerce Hub, allowing you to manage orders and products across multiple eCommerce Elements. You will need your Weebly API information to add an instance."</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://blog.addthiscdn.com/wp-content/uploads/2015/11/weebly.png"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"deleted"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"typeOauth"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"trialAccount"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"resources"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"provisionInteractions"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+    </span><span class="s2">"valid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"disabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"maxCacheSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"cacheTimeToLive"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"configuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"oauth.api.secret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"WEEBLY_API_SECRET"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"base.url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.weebly.com/v1"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"event.notification.subscription.id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"102"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"pagination.max"</span><span class="p">:</span><span class="w"> </span><span class="s2">"200"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"site.id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"WEEBLY_SITE_ID"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"event.vendor.type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"webhooks"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"oauth.user.token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MjMyMTUxMWM4NGEyMjIyNzMTUzMjQ="</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"event.notification.instance.finder"</span><span class="p">:</span><span class="w"> </span><span class="s2">"site.id|data.site_id"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"pagination.type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"page"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"event.notification.callback.url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://requestb.in/19tx0ai1"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"oauth.api.key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"WEEBLY_API_KEY"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"pagination.page.startindex"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"oauth.final.callback.url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.weebly.com/app-center/oauth/finish?client_id=26412761"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"event.notification.enabled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"eventsEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"eventsNotificationCallbackUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://requestb.in/19tx0ai1"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"subscriptionId"</span><span class="p">:</span><span class="w"> </span><span class="mi">102</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"traceLoggingEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"cachingEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Note:  Make sure you have straight quotes in your JSON files and cURL commands.  Please use plain text formatting in your code.  Make sure you do not have spaces after the in the cURL command.</p>
+
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

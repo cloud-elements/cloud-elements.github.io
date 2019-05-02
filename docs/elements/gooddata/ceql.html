@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/elements/gooddata/ceql.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> GoodData </h2>
+          <!-- <h4> Make database queries using Cloud Elements Query Language. </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/elements/gooddata/?elementId=1469">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/gooddata/authentication.html?elementId=1469">Authentication</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/gooddata/gooddata-create-instance.html?elementId=1469">Create Instance</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/gooddata/bulk.html?elementId=1469">Bulk APIs</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/gooddata/error-codes.html?elementId=1469">Error Codes</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/gooddata/ceql.html?elementId=1469">Querying</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/gooddata/api-documentation.html?elementId=1469">API Docs</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <h1 id="querying-with-ceql">Querying with CEQL</h1>
+
+<p>The Cloud Elements Query Language (CEQL) provides a standard way to search across all of our elements. Many API providers support some form of searching in their APIs but each one approaches searching differently. Rather than having you research how to query each resource at a provider, we&#39;ve normalized your search experience in Cloud Elements. Cloud Elements translates your queries to the API provider&#39;s search syntax.</p>
+
+<p>CEQL represent the &quot;where&quot; portion of a typical query that can include many other components like field selection, sorting, and pagination. Take a look at <code>GET</code> requests or <code>POST /bulk/query</code> in the API docs for any element to see how you can structure your queries. Here are some examples from QuickBooks Online, MailChimp, and Salesforce Sales Cloud.
+<img src="/assets/img/ceql/api-docs.png" alt="CEQL in API Docs"></p>
+
+<p>The easiest way to make queries is through the API docs, but when you integrate your code with Cloud Elements you&#39;ll need to understand how to structure queries with CEQL.</p>
+
+<p>You compose queries with available query elements field selection, sorting, and pagination. Each element allows different components of the query, but inmost situations you can use some common parts. The most common components include the object name, CEQL expression, field selection, field sorting, and pagination. Here&#39;s how you might construct a query:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">&lt;object name&gt;?where &lt;expression&gt;&amp;&lt;select fields&gt;&amp;&lt;sort fields&gt;&amp;&lt;page size (limit)&gt;&amp;&lt;page offset (offset)&gt;
+</code></pre></div>
+<p>An example query with all components:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">/contacts?where=Department!='Procurement'&amp;fields=username&amp;orderBy=MailingCity asc&amp;page=1&amp;pageSize=10
+</code></pre></div>
+<h3 id="query-reference">Query Reference</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Query Component</th>
+<th style="text-align: left">Example</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">Object name</td>
+<td style="text-align: left"><strong>/contacts</strong>?where=Department!=&#39;Procurement&#39;&amp;fields=username&amp;orderBy=MailingCity asc&amp;page=1&amp;pageSize=10</td>
+<td style="text-align: left">The name of the object to search.</td>
+</tr>
+<tr>
+<td style="text-align: left">CEQL query</br>the &quot;where&quot; expression</td>
+<td style="text-align: left">/contacts<strong>?where=Department!=&#39;Procurement&#39;</strong>&amp;fields=username&amp;orderBy=MailingCity asc&amp;page=1&amp;pageSize=10</td>
+<td style="text-align: left">The expression or expressions specifying what to search and what objects to return in our result set. See <a href="#valid-ceql-operators">Valid CEQL Operators</a>.</br>This is made up of a left­ hand ­side (LHS), an operator and a right­ hand­ side (RHS).</td>
+</tr>
+<tr>
+<td style="text-align: left">Select fields</td>
+<td style="text-align: left">/contacts?where=Department!=&#39;Procurement&#39;<strong>&amp;fields=username</strong>&amp;orderBy=MailingCity asc&amp;page=1&amp;pageSize=10</td>
+<td style="text-align: left">The field or fields to return in your result set. </br>Field selection is available only for elements where the resource supports selecting fields. When not available, you can use a common resource to filter the fields that you receive in a response.</td>
+</tr>
+<tr>
+<td style="text-align: left">Sort fields</td>
+<td style="text-align: left">/contacts?where=Department!=&#39;Procurement&#39;&amp;fields=username<strong>&amp;orderBy=MailingCity asc</strong>&amp;page=1&amp;pageSize=10</td>
+<td style="text-align: left">The field or fields to sort your result set.</br>Include <code>asc</code> to sort ascending, and <code>desc</code> for descending.</td>
+</tr>
+<tr>
+<td style="text-align: left">Pagination</td>
+<td style="text-align: left">/contacts?where=Department!=&#39;Procurement&#39;&amp;fields=username&amp;orderBy=MailingCity asc<strong>&amp;page=1&amp;pageSize=10</strong></td>
+<td style="text-align: left"><code>page</code> is the offset to begin your results. </br><code>pageSize</code> is the maximum number of results to return.</td>
+</tr>
+</tbody></table>
+
+<h3 id="valid-ceql-operators">Valid CEQL Operators</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Operator</th>
+<th style="text-align: left">Descriptions</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">AND</td>
+<td style="text-align: left">TRUE if all the conditions separated by AND is TRUE</td>
+</tr>
+<tr>
+<td style="text-align: left">OR</td>
+<td style="text-align: left">TRUE if any of the conditions separated by OR is TRUE</td>
+</tr>
+<tr>
+<td style="text-align: left">=</td>
+<td style="text-align: left">Equal to</td>
+</tr>
+<tr>
+<td style="text-align: left">!=</td>
+<td style="text-align: left">Not equal to</td>
+</tr>
+<tr>
+<td style="text-align: left">&lt;</td>
+<td style="text-align: left">Less than</td>
+</tr>
+<tr>
+<td style="text-align: left">&gt;</td>
+<td style="text-align: left">Greater than</td>
+</tr>
+<tr>
+<td style="text-align: left">&lt;=</td>
+<td style="text-align: left">Less than or equal to</td>
+</tr>
+<tr>
+<td style="text-align: left">&gt;=</td>
+<td style="text-align: left">Greater than or equal to</td>
+</tr>
+<tr>
+<td style="text-align: left">LIKE</td>
+<td style="text-align: left">TRUE if the operand matches a pattern</td>
+</tr>
+<tr>
+<td style="text-align: left">IN</td>
+<td style="text-align: left">TRUE if the operand is equal to one of a list of expressions</td>
+</tr>
+<tr>
+<td style="text-align: left">IS NULL</td>
+<td style="text-align: left">TRUE if a NULL value is found</td>
+</tr>
+</tbody></table>
+
+<h3 id="examples">Examples</h3>
+
+<ul>
+<li><a href="#equal-operator">Equal Operator (=)</a></li>
+<li><a href="#and-operator">AND Operator</a></li>
+<li><a href="#or-and-greater-than-operators">OR and Greater Than (&gt;) Operators</a></li>
+<li><a href="#like-operator">LIKE Operator</a></li>
+<li><a href="#greater-than-or-equal-to-operator">Greater Than or Equal To (&gt;=) Operator</a></li>
+</ul>
+
+<h4 id="equal-operator">Equal Operator</h4>
+
+<p>Select from accounts where the Name equals a specific value.
+<img src="/assets/img/ceql/select-where-name.png" alt="Select where name"></p>
+
+<h5 id="http-request">HTTP Request</h5>
+<div class="highlight"><pre><code class="language-" data-lang="">https://api.cloud-elements.com/elements/api-v2/hubs/crm/accounts?where=Name='Edge Communications'
+</code></pre></div>
+<h5 id="curl">cURL</h5>
+<div class="highlight"><pre><code class="language-" data-lang="">curl -X GET \
+  'https://api.cloud-elements.com/elements/api-v2/hubs/crm/accounts?where=Name=%27Edge%20Communications%27' \
+  -H 'Authorization: User zyWPKPPPpRxvTol6ERrbm9MQFzcW7+Yj/ntkkchW06S=, Organization 4e3127e892099c22a5181492329bd10c, Element +HQhPaKeEcBZXif+xDaMf9E1JQqs9FR9zU1+VBQWPwg=' \
+  -H 'Content-Type: application/json' \
+</code></pre></div>
+<h4 id="and-operator">AND Operator</h4>
+
+<p>Select from accounts where the Name equals a specific value and the Industry equals a specific value.
+<img src="/assets/img/ceql/select-where-name-and-name.png" alt="Select where name and name"></p>
+
+<h5 id="http-request">HTTP Request</h5>
+<div class="highlight"><pre><code class="language-" data-lang="">https://api.cloud-elements.com:443/elements/api-v2/hubs/crm/accounts?where=Name=’Account Name’ AND Industry=’Electronics’
+</code></pre></div>
+<h5 id="curl">cURL</h5>
+<div class="highlight"><pre><code class="language-" data-lang="">curl -X GET \
+  'https://api.cloud-elements.com/elements/api-v2/hubs/crm/accounts?where=Name%3D'Account%20Name'%20AND%20Industry%3D'Electronics'' \
+  -H 'Authorization: User zyWPKPPPpRxvTol6ERrbm9MQFzcW7+Yj/ntkkchW06S=, Organization 4e3127e892099c22a5181492329bd10c, Element +HQhPaKeEcBZXif+xDaMf9E1JQqs9FR9zU1+VBQWPwg=' \
+  -H 'Content-Type: application/json' \
+</code></pre></div>
+<h4 id="or-and-greater-than-operators">OR and Greater Than Operators</h4>
+
+<p>Select from accounts where the name equals a specific value OR the Industry is a specific value AND the LastModifiedDate &gt; a specific value.
+<img src="/assets/img/ceql/select-where-name-or-name-and-date.png" alt="Select where name and name and date"></p>
+
+<p>When working with dates and time, wrapping a value in the ` character will ensure a column does not get split.</p>
+
+<p>For example:  <code>select * from customers ‘</code>metaData.lastUpdateTime<code>&gt; 2015-01-06T09:31:38-07:00’</code></p>
+
+<p>Since the `<code>metaData.lastUpdateTime</code> &gt; 2015-01-06T09:31:38-07:00′<code>is wrapped in \</code> character, the column will not get split.</p>
+
+<h5 id="http-request">HTTP Request</h5>
+<div class="highlight"><pre><code class="language-" data-lang="">https://api.cloud-elements.com/elements/api-v2/hubs/crm/accounts?where=LastModifiedDate&gt;'2018-01-15T00:00:00.000Z' AND (Name='Account Name' OR Industry='Apparel')
+</code></pre></div>
+<h5 id="curl">cURL</h5>
+<div class="highlight"><pre><code class="language-" data-lang="">curl -X GET \
+  'https://api.cloud-elements.com/elements/api-v2/hubs/crm/accounts?where=LastModifiedDate%3E%272018-01-15T00:00:00.000Z%27%20AND%20%28Name=%27Account%20Name%27%20OR%20Industry=%27Apparel%27%29' \
+  -H 'Authorization: User zyWPKPPPpRxvTol6ERrbm9MQFzcW7+Yj/ntkkchW06S=, Organization 4e3127e892099c22a5181492329bd10c, Element +HQhPaKeEcBZXif+xDaMf9E1JQqs9FR9zU1+VBQWPwg=' \
+  -H 'Content-Type: application/json' \
+</code></pre></div>
+<h4 id="like-operator">LIKE Operator</h4>
+
+<p>Select from accounts where the name is like a specific value. Use <code>%</code> as a wildcard character.
+<img src="/assets/img/ceql/like.png" alt="Select where name like"></p>
+
+<h5 id="http-request">HTTP Request</h5>
+<div class="highlight"><pre><code class="language-" data-lang="">https://api.cloud-elements.com/elements/api-v2/hubs/crm/accounts?where=Name LIKE 'Acc%')
+</code></pre></div>
+<h5 id="curl">cURL</h5>
+<div class="highlight"><pre><code class="language-" data-lang="">curl -X GET \
+  'https://api.cloud-elements.com/elements/api-v2/hubs/crm/accounts?where=Name%20LIKE%20%27Acc%25%27' \
+  -H 'Authorization: User zyWPKPPPpRxvTol6ERrbm9MQFzcW7+Yj/ntkkchW06S=, Organization 4e3127e892099c22a5181492329bd10c, Element +HQhPaKeEcBZXif+xDaMf9E1JQqs9FR9zU1+VBQWPwg=' \
+  -H 'Content-Type: application/json' \
+</code></pre></div>
+<h4 id="greater-than-or-equal-to-operator">Greater Than or Equal To Operator</h4>
+
+<p>Select from accounts where the estimated value of the AnnualRevenue is greater than or equal to a specific value.
+<img src="/assets/img/ceql/greater-than-equal-to.png" alt="Select where name like"></p>
+
+<h5 id="http-request">HTTP Request</h5>
+<div class="highlight"><pre><code class="language-" data-lang="">https://api.cloud-elements.com/elements/api-v2/hubs/crm/accounts?where=AnnualRevenue &gt;= 100000)
+</code></pre></div>
+<h5 id="curl">cURL</h5>
+<div class="highlight"><pre><code class="language-" data-lang="">curl -X GET \
+  'https://api.cloud-elements.com/elements/api-v2/hubs/crm/accounts?where=AnnualRevenue%20%3E=%20100000' \
+  -H 'Authorization: User zyWPKPPPpRxvTol6ERrbm9MQFzcW7+Yj/ntkkchW06S=, Organization 4e3127e892099c22a5181492329bd10c, Element +HQhPaKeEcBZXif+xDaMf9E1JQqs9FR9zU1+VBQWPwg=' \
+  -H 'Content-Type: application/json' \
+</code></pre></div>
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- History.js -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet"> <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/release-notes/page8/">
+
+<style>
+    /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+
+    /* this chunk of css is not part of the toolkit :) */
+
+    body {
+      width: 1px;
+      min-width: 100%;
+      *width: 100%;
+    }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+      <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper">
+      <link href="/assets/css/release-notes.css" rel="stylesheet">
+      <h1>Cloud Elements Release Notes</h1>
+      <div markdown="span" class="bs-callout bs-callout-warning" role="alert">
+  <h4>The docs are moving! </h4><p>Find us at our new <a href ="https://docs.cloud-elements.com/">Help Center</a> where we've combined our documentation and knowledgebase articles in one easy-to-search location.</p><p>We aren't updating the Developer Portal anymore, except for the Element Docs &mdash; all updates happen in the <a href ="https://docs.cloud-elements.com/">Help Center</a>. We're retiring the Developer Portal as you know it in:</p><h4 id="demo"></h4>
+  <script>
+  // Set the date we're counting down to
+  var countDownDate = new Date("December 14, 2018 20:00:00").getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+
+      // Get todays date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now an the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Output the result in an element with id="demo"
+      document.getElementById("demo").innerHTML = days + " days " + hours + " hours " + minutes + "m " + seconds + "s ";
+
+      // If the count down is over, write some text
+      if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("demo").innerHTML = "EXPIRED";
+      }
+  }, 1000);
+  </script>
+
+</div>
+
+      <div class="right">
+        <h5 class="release-notes">Recent Releases</h5> 
+        <p>
+          <a href="/2018/07/02/ReleaseNotes-2.176.html">Cloud Elements Version 2.172-2.176</a>
+        </p>
+        
+        <p>
+          <a href="/2018/06/11/ReleaseNotes-2.171.html">Cloud Elements Version 2.171</a>
+        </p>
+        
+        <p>
+          <a href="/2018/06/04/ReleaseNotes-2.170.html">Cloud Elements Version 2.170</a>
+        </p>
+        
+        <p>
+          <a href="/2018/05/28/ReleaseNotes-2.169.html">Cloud Elements Version 2.169</a>
+        </p>
+        
+        <p>
+          <a href="/2018/05/07/ReleaseNotes-2.165.html">Cloud Elements Version 2.165</a>
+        </p>
+        
+        <div class="notification-form-wrapper">
+          <h3 id="showPanel">Subscribe to Release Note updates</h3>
+          <div id="notificationForm" class="notification-form">
+            <!--[if lte IE 8]>
+<script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/v2-legacy.js"></script>
+<![endif]-->
+<!-- <script src="https://code.jquery.com/jquery-1.10.2.js"></script> -->
+<script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/v2.js"></script>
+<script>
+  hbspt.forms.create({
+    portalId: '440197',
+    formId: '7e428335-f944-4974-939e-45ceab2a8101',
+    target: "#notificationForm"
+  });
+</script>
+
+          </div>
+        </div>
+      </div>
+       <div class="p-b-md">
+
+</div>
+
+      <h2>
+        <a href="/2018/02/26/ReleaseNotes-2.154.html">Cloud Elements Version 2.154</a>
+      </h2>
+      <h4 class="release-notes"> February 26, 2018</h4> <h2 id="element-updates">Element Updates</h2>
+
+<h3 id="google-drive-order-search-results">Google Drive: Order search results</h3>
+
+<p>You can now order search results from <code>GET /search</code> and <code>GET /folders/{id}/contents</code> requests  by <code>name</code>, <code>createdDate</code>, and <code>modifiedDate</code>. For example:</p>
+
+<ul>
+<li>GET /search?path=/pathname&amp;text=searchterm&amp;orderBy=name desc</li>
+<li>GET /search?path=/pathname&amp;text=searchterm&amp;orderBy=name desc,createdDate asc</li>
+<li>GET /folders/0B4T4KJqlnrIENmw3VzN0c3NnYjA/contents?orderBy=modifiedDate</li>
+</ul>
+
+<h3 id="google-suite-background-and-foreground-colors">Google Suite: Background and foreground colors</h3>
+
+<p>We updated the Google suite element to support background and foreground colors.</p>
+
+<h3 id="microsoft-graph-new-element">Microsoft Graph: New element</h3>
+
+<p>We added the Microsoft Graph element to access the Microsoft Graph API and manage calendars and other objects.</p>
+
+<h3 id="docusign-added-recipients-endpoint-to-the-envelopes-resource">Docusign: Added <code>recipients</code> endpoint to the <code>envelopes</code> resource</h3>
+
+<p>You can now GET all the recipients of an envelope using <code>GET /envelopes/{id}/recipients</code>.</p>
+
+<h3 id="netsuite-added-support-for-more-custom-field-types">Netsuite: Added support for more custom field types</h3>
+
+<p>The following types of custom fields can be included in the POST request on Netsuite elements:</p>
+
+<ul>
+<li>_checkBox</li>
+<li>_currency</li>
+<li>_date</li>
+<li>_datetime</li>
+<li>_decimalNumber</li>
+<li>_document</li>
+<li>_eMailAddress</li>
+<li>_freeFormText</li>
+<li>_help</li>
+<li>_hyperlink</li>
+<li>_image</li>
+<li>_inlineHTML</li>
+<li>_integerNumber</li>
+<li>_listRecord</li>
+<li>_longText</li>
+<li>_password</li>
+<li>_percent</li>
+<li>_phoneNumber</li>
+<li>_richText</li>
+<li>_textArea</li>
+<li>_timeOfDay</li>
+<li>_multipleSelect</li>
+</ul>
+
+<h3 id="box-added-the-ability-to-specify-access-level-to-files">Box: Added the ability to specify access level to files</h3>
+
+<p>We added a new <code>access-level</code> query parameter for the following endpoints:</p>
+
+<ul>
+<li>/files/links</li>
+<li>/files/{id}/links</li>
+<li>/folders/{id}/links</li>
+<li>/folders/links</li>
+</ul>
+
+<h3 id="sugarcrm-added-support-for-changes-to-winter-18-release">SugarCRM: Added support for changes to Winter &#39;18 Release</h3>
+
+<p>Beginning with the Winter &#39;18 Release, Sugar will prevent REST API access to Sugar from unknown platform types. When you authenticate an element instance, you can now pass the <code>sugar.platform</code> to prevent any connection issues related to platform. See <a href="https://community.sugarcrm.com/community/developer/blog/2017/11/20/unknown-platforms-to-be-restricted-in-winter-18-release">Sugar&#39;s documentation</a> for more information.</p>
+
+<h2 id="cloud-elements-platform-updates">Cloud Elements Platform Updates</h2>
+
+<h3 id="security-updates">Security Updates</h3>
+
+<p>We made several changes to security in this release including:</p>
+
+<ul>
+<li>Any users with the MODIFY_SECURITY privilege can now update their organization&#39;s name, via <code>PUT /organizations/me</code>.</li>
+<li>Deleting an account within your organization will now delete all of the users associated with the account.</li>
+<li>Permanently deactivating an account within your organization (e.g., <code>PATCH /accounts/{id}?permanent=true { &quot;active&quot;: false }</code>) behaves the same as a deletion, and all of the account users will be deleted.</li>
+</ul>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Any deletions of a user, either by deleting or permanently deactivating the account, or directly deleting the user, will in turn delete all of the user's jobs (API scheduled, bulk, formula trigger, and polling). </div>
+
+<h3 id="cloud-elements-2-0-supports-custom-js-only-transformations">Cloud Elements 2.0 supports Custom JS only transformations</h3>
+
+<p>Previously, if you attempted to create a transformation using only Custom JS, you received an error indicating at least one field level transformation was required. You can now create a transformation exclusively through Custom JS.</p>
+
+      <!-- Pagination links -->
+       <div class="p-b-md">
+
+</div>
+
+      <h2>
+        <a href="/2018/02/20/ReleaseNotes-2.153.html">Cloud Elements Version 2.153</a>
+      </h2>
+      <h4 class="release-notes"> February 20, 2018</h4> <h2 id="element-updates">Element Updates</h2>
+
+<h3 id="intacct-added-files-endpoints-to-the-folders-resource">Intacct.: Added <code>files</code> endpoints to the <code>folders</code> resource</h3>
+
+<p>We added the following endpoints to the folders resource so you can manage attachments:</p>
+
+<ul>
+<li>POST /folders/{folderName}/files</li>
+<li>GET /folders/{folderName}/files</li>
+<li>PATCH /folders/{folderName}/files/{id}</li>
+<li>GET /folders/{folderName}/files/{id}</li>
+<li>DELETE /folders/{folderName}/files/{id}</li>
+</ul>
+
+<h3 id="square-added-customers-endpoint">Square: Added <code>customers</code> endpoint</h3>
+
+<p>You can now manage the customers associated with your Square element. We added the following endpoints:</p>
+
+<ul>
+<li>POST /customers</li>
+<li>GET /customers</li>
+<li>PATCH /customers/{id}</li>
+<li>GET /customers/{id}</li>
+<li>DELETE /customers/{id}</li>
+</ul>
+
+<h3 id="intacct-transformations-of-the-bill-payments-resource-included-duplicate-fields">Intacct.: Transformations of the <code>bill-payments</code> resource included duplicate fields</h3>
+
+<p>We removed the duplicate fields. When you map <code>bill-payments</code> to a common resource, you will no longer encounter duplicate fields.</p>
+
+<h3 id="bullhorn-updated-models-for-the-placements-resource">Bullhorn: Updated models for the <code>placements</code> resource</h3>
+
+<p>In the <code>placements</code> resource models the <code>clientContact</code> field was shown as <code>clientcontact</code>. We updated the model to show the correct value.</p>
+
+<h3 id="intacct-added-elements-total-count-header-to-paged-responses">Intacct.: Added elements-total-count header to paged responses</h3>
+
+<p>We added a response header to indicate the total Intacct records when querying.</p>
+
+<h3 id="onedrive-support-for-converged-app-authentication">Onedrive: Support for Converged App authentication</h3>
+
+<p>When you authenticate an element instance, you can now include the credentials from a converged app &mdash; an app that accepts both MSA &amp; Azure AD sign-in. To authenticate using a converged app, you must authenticate an element instance using the APIs.</p>
+
+<h3 id="sap-business-one-added-project-codes-resource">SAP Business One: Added <code>project-codes</code> resource</h3>
+
+<p>You can now fin projects using the <code>project-codes</code> resource.</p>
+
+<h3 id="zoho-crm-added-configurable-urls-to-support-authentication-with-both-us-and-european-accounts">Zoho CRM: Added configurable URLs to support authentication with both US and European accounts</h3>
+
+<p>You can now override the default US URLs for <strong>Authentication URL</strong> and <strong>Base URL</strong> with European URLs.</p>
+
+<h3 id="quickbooks-enterprise-added-tax-rates-and-tax-codes-resources">QuickBooks Enterprise: Added <code>tax-rates</code> and <code>tax-codes</code> resources</h3>
+
+<p>You can now perform CRUD operations on the tax rates and tax codes in QuickBooks Enterprise.</p>
+
+<h3 id="google-drive-added-support-for-thumbnails">Google Drive: Added support for thumbnails</h3>
+
+<p>We enhanced <code>POST /files</code> to accept a thumbnail file to associate with a file. We also added the following endpoints to update thumbnails:</p>
+
+<ul>
+<li>POST /files/{id}/thumbnails</li>
+<li>POST /files/thumbnails</li>
+</ul>
+
+<h3 id="intacct-fixed-authentication-via-cloud-elements-2-0">Intacct.: Fixed authentication via Cloud Elements 2.0</h3>
+
+<p>Previously, authenticating via Cloud Elements 2.0 resulted in errors. You can now authenticate an instance of the Intacct. element in Cloud Elements 2.0.</p>
+
+<h2 id="cloud-elements-platform-updates">Cloud Elements Platform Updates</h2>
+
+<h3 id="enabled-hash-verification-for-bulk-job-callbacks">Enabled Hash Verification for bulk job callbacks</h3>
+
+<p>To enable hash verification for bulk job callbacks, we updated the Event Notification Signature Key which is currently used to add an extra layer of security when receiving event callbacks.</p>
+
+<p>In the UI, we renamed <strong>Callback Notification Signature Key</strong> to <strong>Callback Notification Signature Key</strong>. The <strong>Callback Notification Signature Key</strong> property is now available as an optional field, rather than part of event setup. If you configure the <strong>Callback Notification Signature Key</strong>, it will be used to provide hash verification in the header of bulk job and event callbacks.</p>
+
+<p>The name of the configuration property <code>event.notification.signature.key</code> remains unchanged. If you set it, it will be used for bulk job and event callbacks.</p>
+
+      <!-- Pagination links -->
+      
+      <script>
+        $(document).ready(e => {
+          $('.box').addClass('active');
+          $("#notificationForm").hide()
+          $("#showPanel").click(function () {
+            if ($('#notificationForm').is(':hidden')) {
+              $("#notificationForm").show();
+            } else {
+              $("#notificationForm").hide();
+            }
+          });
+        });
+      </script>
+
+      
+      <div class="pagination">
+        
+        <span class="previous ">
+          <a class="prev-next" href="/docs/release-notes/page7">Next</a>
+        </span>   
+        <a href="/docs/release-notes/page7">1</a>   
+        <a href="/docs/release-notes/page2">2</a>   
+        <a href="/docs/release-notes/page3">3</a>   
+        <a href="/docs/release-notes/page4">4</a>   
+        <a href="/docs/release-notes/page5">5</a>   
+        <a href="/docs/release-notes/page6">6</a>   
+        <a href="/docs/release-notes/page7">7</a>   
+        <em>8</em>   
+        <a href="/docs/release-notes/page9">9</a>   
+        <a href="/docs/release-notes/page10">10</a>   
+        <a href="/docs/release-notes/page11">11</a>   
+        <a href="/docs/release-notes/page12">12</a>   
+        <a href="/docs/release-notes/page13">13</a>   
+        <a href="/docs/release-notes/page14">14</a>   
+        <a href="/docs/release-notes/page15">15</a>   
+        <a href="/docs/release-notes/page16">16</a>   
+        <a href="/docs/release-notes/page17">17</a>   
+        <a href="/docs/release-notes/page18">18</a>   
+        <span class="next ">
+          <a class="prev-next" href="/docs/release-notes/page9">Prev</a>
+        </span> 
+      </div>
+      
+
+    </div>
+
+
+
+
+  </div>
+  <script src="/assets/js/chart.js"></script>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <script src="/assets/js/ajaxLoading.js"></script> <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+ <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <script>
+    // execute/clear BS loaders for docs
+    $(function () {
+      while (window.BS && window.BS.loader && window.BS.loader.length) {
+        (window.BS.loader.pop())()
+      }
+    })
+  </script>
+</body>
+
+</html>

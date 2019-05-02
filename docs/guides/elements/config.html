@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- History.js -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/guides/elements/config.html">
+
+  <script src="/api-docs/swagger-ui.js" type="text/javascript"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper">
+      <div markdown="span" class="bs-callout bs-callout-warning" role="alert">
+  <h4>The docs are moving! </h4><p>Find us at our new <a href ="https://docs.cloud-elements.com/">Help Center</a> where we've combined our documentation and knowledgebase articles in one easy-to-search location.</p><p>We aren't updating the Developer Portal anymore, except for the Element Docs &mdash; all updates happen in the <a href ="https://docs.cloud-elements.com/">Help Center</a>. We're retiring the Developer Portal as you know it in:</p><h4 id="demo"></h4>
+  <script>
+  // Set the date we're counting down to
+  var countDownDate = new Date("December 14, 2018 20:00:00").getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+
+      // Get todays date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now an the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Output the result in an element with id="demo"
+      document.getElementById("demo").innerHTML = days + " days " + hours + " hours " + minutes + "m " + seconds + "s ";
+
+      // If the count down is over, write some text
+      if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("demo").innerHTML = "EXPIRED";
+      }
+  }, 1000);
+  </script>
+
+</div>
+
+      <script src="/assets/js/application.js"></script>
+<link href="/assets/css/contentToggle.css" rel="stylesheet">
+
+
+
+      
+      <h1 id="element-builder-configuration-and-parameters">Element Builder Configuration and Parameters</h1>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='define-info.html';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Info</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='properties.html';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Properties</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='auth.html';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Authentication</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='config.html';">
+
+  <div class="workFlowStepNum"> 4</div>
+  <div>Config & Parameters</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='hooks.html';">
+
+  <div class="workFlowStepNum"> 5</div>
+  <div>Hooks</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='events.html';">
+
+  <div class="workFlowStepNum"> 6</div>
+  <div>Events</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='resources.html';">
+
+  <div class="workFlowStepNum"> 7</div>
+  <div>Resources</div>
+</div>
+
+<p></div>
+</div></p>
+
+<p>Element configuration and parameters work together solve various scenarios presented by API providers. When you set up your element configuration, you define the information that you want to store with the element. The information can include data that you collect from the user when they authenticate an instance of an element. You can also store variables in the configuration that you can act on with parameters and hooks. You can also store information that you need to pass with each request to the API provider.</p>
+
+<p>Parameters enable you to configure information that you need to send to an API provider with each request and how they expect to receive it. You can pass variables that you added to the configuration, information provided by the user, specific values, and more.</p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> The configuration and parameters that you define here affect all requests made by the element. You will also define configurations and parameters specific to each endpoint when you <a href=resources.html>set up resources</a>.  </div>
+
+<div markdown="span" class="bs-callout bs-callout-info"><strong>On this page</strong></br><a href=#reserved-configurations>Reserved Configurations</a></br><a href=#set-up-element-configuration>Set Up Element Configuration</a></br><a href=#set-up-element-parameters>Set Up Element Parameters</a></br><a href=#delete-configurations-and-parameters>Delete Configurations and Parameters</a></div>
+
+<h2 id="reserved-configurations">Reserved Configurations</h2>
+
+<p>Each parameter that you set up when <a href="auth.html">defining the authentication information</a> is available as an element configuration. The element configuration also includes the properties of the element: pagination information and base URL. The configuration Keys associated with the authorization and pagination parameters are reserved. You will receive an error if you try to create a configuration with a reserved configuration Key. The following table shows reserved configuration Keys.</p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">OAuth Keys</th>
+<th style="text-align: left">Basic Keys</th>
+<th style="text-align: left">Properties Keys</th>
+<th style="text-align: left">Events and Bulk</th>
+<th style="text-align: left">AWS Keys</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">oauth.basic.header</td>
+<td style="text-align: left">username</td>
+<td style="text-align: left">base.url</td>
+<td style="text-align: left">Any keys beginning bulk.</td>
+<td style="text-align: left">aws.api.key</td>
+</tr>
+<tr>
+<td style="text-align: left">oauth.user.refresh_time</td>
+<td style="text-align: left">password</td>
+<td style="text-align: left">pagination.type</td>
+<td style="text-align: left">Any keys beginning event.</td>
+<td style="text-align: left">aws.api.secret</td>
+</tr>
+<tr>
+<td style="text-align: left">oauth.user.refresh_token</td>
+<td style="text-align: left"></td>
+<td style="text-align: left">pagination.max</td>
+<td style="text-align: left">event.notification.instance.finder</td>
+<td style="text-align: left">aws.region</td>
+</tr>
+<tr>
+<td style="text-align: left">oauth.user.refresh_interval</td>
+<td style="text-align: left"></td>
+<td style="text-align: left">pagination.page.startindex</td>
+<td style="text-align: left">event.vendor.type</td>
+<td style="text-align: left">expires</td>
+</tr>
+<tr>
+<td style="text-align: left">oauth.user.token</td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+<td style="text-align: left">event.poller.refresh_interval</td>
+<td style="text-align: left">expires_in</td>
+</tr>
+<tr>
+<td style="text-align: left">oauth.api.key</td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+<td style="text-align: left">event.notification.enabled</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">oauth.scope</td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+<td style="text-align: left">event.notification.callback.url</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">oauth.token.url</td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+<td style="text-align: left">event.poller.configuration</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">oauth.api.secret</td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+<td style="text-align: left">event.notification.subscription.id</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">oauth.authorization.url</td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+<td style="text-align: left">event.metadata</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">oauth.token.refresh_url</td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+<td style="text-align: left">event.helper.key</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">oauth.callback.url</td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">oauth.request.authorization.type</td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">oauth.request.url</td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">oauth.token.revoke_url</td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">oauth.user.token.secret</td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+<td style="text-align: left"></td>
+</tr>
+</tbody></table>
+
+<h2 id="set-up-element-configuration">Set Up Element Configuration</h2>
+
+<p>The element configuration is the storage place for any data that you need to operate on with parameters and hooks. For example, if the API provider requires something specific with each request, you can add that to the configuration and then define a parameter that passes the data with each request. You can expose the configuration to the user so that they can supply the information when they authenticate. Or, if it is not user specific information, you can store a default value in the configuration to act on later.</p>
+
+<p>Before you set up configurations, review the <a href="custom-elements.html#element-conventions">Element Conventions</a> so your element will align with others in the Elements Catalog.</p>
+
+<p>To set up a configuration:</p>
+
+<ol>
+<li>Navigate to <strong>Configuration</strong>, and then click <img src="/assets/img/platform-icons/btn-add.png" alt="Alt Text" class="inlineImage">.</li>
+<li>In <strong>Key</strong> you can choose to update the value automatically created from the configuration name or leave it. The configuration Key identifies the configuration property in the element configuration. You also use the configuration Key to refer to the configuration in parameters and hooks.</li>
+<li>Enter the name of the configuration. If you choose to show this on the UI, Cloud Elements will show the configuration name as you define it here.</li>
+<li>In <strong>Type</strong> select the type of configuration. Configurations can be text strings, boolean, or passwords.</li>
+<li>In <strong>Default</strong> enter any default value for the configuration. If shown on the UI, a user can overwrite the default value.</li>
+<li>In <strong>Description</strong> enter a brief description of the configuration. If the configuration appears in Cloud Elements, the description is available as hover help.</li>
+<li>To make the configuration a required part of authentication, switch <strong>Required</strong> on.</li>
+<li>Switch <strong>Hide UI</strong> to on to prevent the configuration from appearing on the UI when the user authenticates. By default, the configuration appears on the UI.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+
+<h3 id="element-configuration-parameters">Element Configuration Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">Name</td>
+<td style="text-align: left">The visible name of the configuration as it appears in the Cloud Elements UI.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">Key</td>
+<td style="text-align: left">The internal unique identifier for the configuration. The configuration key value appears in the authentication JSON. You also refer to the configuration by configuration key in parameters and hooks.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">Type</td>
+<td style="text-align: left">The type of configuration, which can be any of the following:</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">Text Area, Text Text 32, Text 64, Text 100, Text 128 &mdash; Identifies configurations that accept free text strings.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">true/false and yes/no &mdash; Identifies configurations that accept boolean inputs.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">password &mdash; Identifies configurations intended to collect passwords. Passwords are masked in Cloud Elements.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">Required</td>
+<td style="text-align: left">Identifies whether the configuration is required. Switch on to force a user to provide data when authenticating. Configurations not required, but that show in Cloud Elements appear under Show Optional Fields.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">Hide on UI</td>
+<td style="text-align: left">Identifies whether the configuration appears in Cloud Elements. Switch on to show the configuration in Cloud Elements. The configuration appears to the user with the configuration name and the description as hover help text.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">Configuration Description</td>
+<td style="text-align: left">The description appears as hover help text. The text space available is limited, so write brief but useful descriptions.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">Default Value</td>
+<td style="text-align: left">The default value of the configuration.</td>
+<td style="text-align: left">N</td>
+</tr>
+</tbody></table>
+
+<h2 id="set-up-element-parameters">Set Up Element Parameters</h2>
+
+<p>Element parameters allow you to pass various properties with each request. You can create parameters that require user input or parameters that get their values from other sources. Use the element parameters to configure required query parameters, searches, pagination, ids, and required fields. You can configure most required and optional parameters for most APIs using parameters and configurations. Map parameters that you send as part of the request from Cloud Elements on the top row to parameters available to the resource at the API provider on the bottom row.
+<img src="img/element-parameter.png" alt="Add parameters UI"></p>
+
+<p>Before you set up parameters, review the <a href="custom-elements.html#element-conventions">Element Conventions</a> so your element will align with others in the Elements Catalog. Each parameter includes information about how the parameter is used at Cloud Elements and how the API provider expects to receive the parameter.</p>
+
+<p>To define a parameter :</p>
+
+<ol>
+<li>Navigate to <strong>Configuration</strong>, and then click <img src="/assets/img/platform-icons/btn-add.png" alt="Alt Text" class="inlineImage">.</li>
+<li>Complete the top row of Cloud Elements parameter information:
+
+<ul>
+<li>In <strong>Name</strong> enter the name of the parameter. The name appears in the API documentation and should match any existing values. For example, if you choose a type of &quot;configuration&quot;, the name must match the configuration key it refers to. a type of &quot;configuration&quot;, the name must match the configuration key it refers to.</li>
+<li>In <strong>Type</strong> select the source of the parameter. Refer to Cloud Elements Parameter Type in the <a href="#element-parameter-fields">Element Parameter Fields</a> table.</li>
+<li>If you want to switch the standard workflow where the parameters in the top row are part of the request from Cloud Elements, and want the parameters on the top row to represent the response from the API provider, click <strong>Source</strong>, and then select <strong>Response</strong>.</li>
+<li>In <strong>Description</strong> enter a brief description of the parameter. If the parameter appears in the API documentation, this description also appears.</li>
+</ul></li>
+<li>Complete the bottom row of API provider parameter information:
+
+<ul>
+<li>In <strong>Name</strong> enter the name of the API provider&#39;s name for the parameter to map to.</li>
+<li>In <strong>Type</strong> select select how the API provider receives the parameter. Refer to API Provider Parameter Type in the <a href="#element-parameter-fields">Element Parameter Fields</a> table.</li>
+</ul></li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+
+<h4 id="element-parameter-fields">Element Parameter Fields</h4>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">Cloud Elements Parameter Name</td>
+<td style="text-align: left">The parameter name acts as a key and provides values to the Parameter Types.</td>
+<td style="text-align: left">Required</td>
+</tr>
+<tr>
+<td style="text-align: left">Cloud Elements Parameter Type</td>
+<td style="text-align: left">The source of the parameter value on the Cloud Elements side.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">configuration &mdash; The value of the parameter is the value of the configuration identified by the configuration Key specified in the Parameter Name. The Parameter Name must match a configuration Key in the element configuration.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">header &mdash; The value is the request header parameter that matches the Parameter Name.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">path &mdash; The value is the part of the request path that matches the Parameter Name.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">body &mdash; The value is the part of the request body that matches the Parameter Name.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">query &mdash;  The value is the query parameter that matches the Parameter Name.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">form  &mdash; The value is the value of the key that matches the Parameter Name in the x-www-form-urlencoded body of a request. If a file, then use &quot;file&quot; as the Parameter Name.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">multipart &mdash; The value is the value of the key that matches the Parameter Name in the x-www-form-urlencoded body of a request. If a file, then use &quot;file&quot; as the Parameter Name.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">value  &mdash; The value is the Parameter Name.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">bodyField &mdash;  The value is the value of the field in a request body that matches the Parameter Name.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">prevBody - Cloud Elements parameter type only. If chaining requests, the value is the part of the request body of the previous request in the chain that matches the Parameter Name.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">prevBodyField  - Cloud Elements parameter type only. If chaining requests, the value is the field in the request body of the previous request in the chain that matches the Parameter Name</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">Source</td>
+<td style="text-align: left">Identifies the side that represents the source, or left side of the parameter. The default request identifies Cloud Elements as the source. If you choose response, you effectively flip the Cloud Elements and API provider sides.</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left">Description</td>
+<td style="text-align: left">A free text area to describe the parameter.</td>
+<td style="text-align: left">N</td>
+</tr>
+<tr>
+<td style="text-align: left">API Provider Parameter Name</td>
+<td style="text-align: left">The parameter at the API provider that equals the parameter that you are defining.</td>
+<td style="text-align: left">Required</td>
+</tr>
+<tr>
+<td style="text-align: left">API Provider Parameter Type</td>
+<td style="text-align: left">The destination of the parameter value on the API provider side.:</td>
+<td style="text-align: left">Y</td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">configuration &mdash; Requests to the API provider pass the parameter value as part of the configuration.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">header &mdash; Requests to the API provider pass the parameter value in the header.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">path &mdash; Requests to the API provider pass the parameter value in the path.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">body &mdash; Requests to the API provider pass the parameter value in the body.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">query &mdash;  Requests to the API provider pass the parameter value as a query parameter.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">form  &mdash; Requests to the API provider pass the parameter value as part of the x-www-form-urlencoded body of a request.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">multipart &mdash; Requests to the API provider pass the parameter value as part of the x-www-form-urlencoded body of a request.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">value  &mdash; Requests to the API provider pass the parameter value as a value.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">bodyField &mdash; Requests to the API provider pass the parameter value as a body field.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">bodyToken &mdash; Requests to the API provider pass the parameter value as a body token.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"></td>
+<td style="text-align: left">no-op &mdash;  Indicates that the API provider does not need to operate on the parameter. Use no-op if you use the parameter in hooks.</td>
+<td style="text-align: left"></td>
+</tr>
+</tbody></table>
+
+<h2 id="delete-configurations-and-parameters">Delete Configurations and Parameters</h2>
+
+<p>You can delete an element configuration or parameter. When you delete the configuration or parameter, Cloud Elements does not check for references in hooks or to other element configurations.</p>
+
+<p>To delete a configuration or parameter, click <strong>Delete</strong> <img src="img/delete-config.png" alt="Alt Text" class="inlineImage">.</p>
+
+<p>Continue to the next step, <a href="hooks.html">Custom Hooks</a>.</p>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='define-info.html';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Info</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='properties.html';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Properties</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='auth.html';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Authentication</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='config.html';">
+
+  <div class="workFlowStepNum"> 4</div>
+  <div>Config & Parameters</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='hooks.html';">
+
+  <div class="workFlowStepNum"> 5</div>
+  <div>Hooks</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='events.html';">
+
+  <div class="workFlowStepNum"> 6</div>
+  <div>Events</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='resources.html';">
+
+  <div class="workFlowStepNum"> 7</div>
+  <div>Resources</div>
+</div>
+
+<p></div>
+</div></p>
+
+    </div>
+
+  </div>
+  <script src="/assets/js/chart.js"></script>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

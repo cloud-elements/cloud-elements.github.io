@@ -1,0 +1,432 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link href="/assets/css/elementTiles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/elements.html">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper">
+      <div class="container-fluid">
+        <div class="row">
+  <div class="col-md-12 text-xs-center">
+    <div class="input-with-icon">
+      
+        <input type="text" id='txtList' class="form-control">
+      
+      <span class="icon icon-magnifying-glass"></span>
+    </div>
+  </div>
+</div>
+
+        <div class="elementTileWrapper">
+          <div id="filter" class="row text-xs-center p-a-lg">
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/abbyy/"><img src="/assets/img/element-logos/abbyy.png" alt="ABBYY">ABBYY</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/acton/"><img src="/assets/img/element-logos/acton.png" alt="Act-On">Act-On</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/actessentials/"><img src="/assets/img/element-logos/actpremium.png" alt="Act! Essentials">Act! Essentials</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/actpremium/"><img src="/assets/img/element-logos/actpremium.png" alt="Act! Premium">Act! Premium</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/actpremiumcrm/"><img src="/assets/img/element-logos/actpremium.png" alt="Act! Premium CRM">Act! Premium CRM</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/acuity/"><img src="/assets/img/element-logos/acuity.png" alt="Acuity Scheduling">Acuity Scheduling</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/adobe-sign/"><img src="/assets/img/element-logos/adobesign.png" alt="Adobe Sign">Adobe Sign</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/amazons3/"><img src="/assets/img/element-logos/amazons3.png" alt="Amazon S3">Amazon S3 Beta</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/autopilot/"><img src="/assets/img/element-logos/autopilot.png" alt="Autopilot">Autopilot</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/autotask-crm/"><img src="/assets/img/element-logos/autotask.png" alt="Autotask CRM">Autotask CRM</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/autotask-finance/"><img src="/assets/img/element-logos/autotask.png" alt="Autotask Finance">Autotask Finance</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/autotask-helpdesk/"><img src="/assets/img/element-logos/autotask.png" alt="Autotask Help Desk">Autotask Help Desk</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/bamboohr/"><img src="/assets/img/element-logos/BambooHR.png" alt="BambooHR">BambooHR</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/basecrm/"><img src="/assets/img/element-logos/basecrm.png" alt="BaseCRM">BaseCRM</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/bigcommerce/"><img src="/assets/img/element-logos/bigcommerce.png" alt="BigCommerce">BigCommerce</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/box/"><img src="/assets/img/element-logos/box.png" alt="Box">Box</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/brandfolder/"><img src="/assets/img/element-logos/brandfolder.png" alt="Brandfolder">Brandfolder</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/brighttalk"><img src="/assets/img/element-logos/BrightTALK.png" alt="BrightTALK">BrightTALK</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/bullhorn/"><img src="/assets/img/element-logos/bullhorn.png" alt="Bullhorn CRM">Bullhorn</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/campaignmonitor/"><img src="https://www.campaignmonitor.com/assets/brand/campaignmonitor.jpg" alt="Campaign Monitor">Campaign Monitor</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/chargebee/"><img src="/assets/img/element-logos/chargebee.png" alt="Chargebee">Chargebee</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/chargify/"><img src="/assets/img/element-logos/chargify.png" alt="Chargify">Chargify</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/cisco-spark/"><img src="/assets/img/element-logos/ciscospark.png" alt="Cisco Spark">Cisco Spark</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/sharefile/"><img src="/assets/img/element-logos/sharefile.png" alt="Citrix ShareFile">Citrix ShareFile</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/closeio/"><img src="/assets/img/element-logos/closeio.png" alt="Close.io">Close.io</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/clover/"><img src="https://my.cloudelements.io/assets/img/elements/clover.svg" alt="Clover">Clover</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/concur/"><img src="http://assets.concur.com/logos/Concur_Logo_VT_Color_500px.png" alt="Concur">Concur Beta</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/connectwise-crm/"><img src="/assets/img/element-logos/connectwise.png" alt="ConnectWise CRM">ConnectWise CRM</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/connectwise-rest-crm/"><img src="/assets/img/element-logos/connectwise.png" alt="ConnectWise CRM REST">ConnectWise CRM REST</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/connectwise-helpdesk/"><img src="/assets/img/element-logos/connectwise.png" alt="ConnectWise Help Desk">ConnectWise Help Desk</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/constantcontact/"><img src="/assets/img/element-logos/provider_constantcontact.png" alt="Constant Contact">Constant Contact</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/desk/"><img src="/assets/img/element-logos/desk.png" alt="Desk.com">Desk.com</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/docusign/"><img src="/assets/img/element-logos/docusign.png" alt="DocuSign">DocuSign</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/dropbox/"><img src="/assets/img/element-logos/dropbox.png" alt="Dropbox">Dropbox</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/dropbox-business/"><img src="/assets/img/element-logos/dropbox.png" alt="Dropbox Business">Dropbox Business</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/dynamicscrm/"><img src="/assets/img/element-logos/dynamicscrm.png" alt="Dynamics CRM">Microsoft Dynamics CRM</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/e-conomic/"><img src="https://images.cloudelements.io/2743_2743_e-conomic-logo201712051817.png" alt="E-conomic">E-conomic</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/ecwid/"><img src="/assets/img/element-logos/ecwid.png" alt="Ecwid">Ecwid</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/egnyte/"><img src="/assets/img/element-logos/egnyte.png" alt="Egnyte">Egnyte</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/epages/"><img src="/assets/img/element-logos/epages.png" alt="ePages">ePages</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/etsy/"><img src="/assets/img/element-logos/etsy.png" alt="Etsy">Etsy</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/evernote/"><img src="/assets/img/element-logos/evernote.png" alt="Evernote">Evernote Beta</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/expensify/"><img src="/assets/img/element-logos/expensify.png" alt="Expensify">Expensify</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/facebook/"><img src="/assets/img/element-logos/facebook.png" alt="Facebook">Facebook</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/facebookleadads/"><img src="/assets/img/element-logos/facebook.png" alt="Facebook Lead Ads">Facebook Lead Ads</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/fieldaware/"><img src="/assets/img/element-logos/fieldaware.png" alt="FieldAware">FieldAware</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/flickr/"><img src="/assets/img/element-logos/flickr.png" alt="Flickr">Flickr</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/fortnox/"><img src="/assets/img/element-logos/fortnox_logo_svart.svg" alt="Fortnox">Fortnox</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/freshbooks/"><img src="/assets/img/element-logos/freshbooks.png" alt="FreshBooks Classic">FreshBooks Classic</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/freshbooksv2/"><img src="/assets/img/element-logos/freshbooks-cloud.svg" alt="FreshBooks Cloud Accounting">FreshBooks Cloud Accounting</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/freshdesk/"><img src="/assets/img/element-logos/freshdesk.png" alt="Freshdesk">Freshdesk</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/freshservice/"><img src="/assets/img/element-logos/freshservice.png" alt="Freshservice">Freshservice</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/github/"><img src="/assets/img/element-logos/github-logo.png" alt="GitHub">GitHub</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/gooddata/"><img src="/assets/img/element-logos/gooddata.png" alt="GoodData">GoodData</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/gmail/"><img src="https://dyzz9obi78pm5.cloudfront.net/app/image/id/5b34ec9aad121c8b7c744c7e/n/logo-gmail-lockup-light-1x.png" alt="Gmail">Gmail</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/google-calendar/"><img src="https://my.cloudelements.io/assets/img/elements/googlecalendar.svg" alt="Google Calendar">Google Calendar</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/googledrive/"><img src="/assets/img/element-logos/googledrive.png" alt="Google Drive">Google Drive</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/googlesheets/"><img src="/assets/img/element-logos/googlesheets.png" alt="Google Sheets">Google Sheets</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/google-suite/"><img src="/assets/img/element-logos/lockup_gsuite.svg" alt="Google Suite">Google Suite</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/gotowebinar/"><img src="/assets/img/element-logos/gotowebinar.png" alt="GoToWebinar">GoToWebinar</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/greatplains/"><img src="/assets/img/element-logos/greatplains.png" alt="Great Plains">MS Great Plains Beta</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/greenhouse/"><img src="https://my.cloudelements.io/assets/img/elements/greenhouse.svg" alt="Greenhouse">Greenhouse</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/helpscout/"><img src="/assets/img/element-logos/helpscout.png" alt="Help Scout">Help Scout</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/hireright/"><img src="/assets/img/element-logos/hireright.png" alt="HireRight">HireRight</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/hootsuite/"><img src="/assets/img/element-logos/hootsuite.png" alt="Hootsuite">Hootsuite</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/hubspot-crm/"><img src="/assets/img/element-logos/hubspot.png" alt="HubSpot CRM">HubSpot CRM</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/hubspot/"><img src="/assets/img/element-logos/hubspot.png" alt="HubSpot Marketing">HubSpot Marketing</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/icontact/"><img src="/assets/img/element-logos/provider_icontact.png" alt="iContact">iContact</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/infusionsoft-crm/"><img src="https://my.cloudelements.io/assets/img/elements/infusionsoftcrm.svg" alt="Infusionsoft CRM">Infusionsoft CRM</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/infusionsoft-ecommerce/"><img src="https://my.cloudelements.io/assets/img/elements/infusionsoftcrm.svg" alt="Infusionsoft Online Sales">Infusionsoft Online Sales</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/infusionsoft-marketing/"><img src="https://my.cloudelements.io/assets/img/elements/infusionsoftcrm.svg" alt="Infusionsoft Marketing Automation">Infusionsoft Marketing Automation Beta</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/infusionsoft-rest/"><img src="https://my.cloudelements.io/assets/img/elements/infusionsoftcrm.svg" alt="Infusionsoft REST">Infusionsoft REST</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/insightly/"><img src="/assets/img/element-logos/insightly.jpg" alt="Insightly">Insightly</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/instagram/"><img src="/assets/img/element-logos/instagram.png" alt="Instagram">Instagram Beta</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/linkedin/"><img src="https://my.cloudelements.io/assets/img/elements/linkedin.svg" alt="LinkedIn">LinkedIn</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/lithium/"><img src="/assets/img/element-logos/lithium.png" alt="Lithium">Lithium</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/infobip/"><img src="/assets/img/element-logos/infobip.png" alt="Infobip">Infobip</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/intacct/"><img src="/assets/img/element-logos/intacct.png" alt="Intacct">Intacct</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/jira/"><img src="/assets/img/element-logos/jira.png" alt="JIRA">JIRA</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/mailchimp/"><img src="/assets/img/element-logos/mailchimp.png" alt="MailChimp">MailChimp</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/mailjet-marketing/"><img src="/assets/img/element-logos/mailjet.png" alt="MailJet Marketing">MailJet Marketing Beta</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/mailjet-messaging/"><img src="/assets/img/element-logos/mailjet.png" alt="MailJet Messaging">MailJet Messaging Beta</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/magentov2/"><img src="/assets/img/element-logos/magento.png" alt="Magento 2.0">Magento 2.0</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/magento-soap/"><img src="/assets/img/element-logos/magento.png" alt="Magento SOAP">Magento SOAP V1.9 Beta</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/marketo/"><img src="/assets/img/element-logos/marketo.png" alt="Marketo">Marketo</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/maximizer/"><img src="/assets/img/element-logos/Maximizer_CRM_white_background-768x218.png" alt="Maximizer">Maximizer</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/microsoftgraph/"><img src="/assets/img/element-logos/microsoft-gray.png" alt="Microsoft Graph">Microsoft Graph</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/sqlserver/"><img src="/assets/img/element-logos/sqlserver.png" alt="Microsoft SQL Server">Microsoft SQL Server</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/mixpanel/"><img src="https://uxcam.com/images/mixpanel-logo.png" alt="Mixpanel">Mixpanel</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/mysql/"><img src="/assets/img/element-logos/mysql.png" alt="MySQL">MySQL</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/netsuite-2016-crm/"><img src="/assets/img/element-logos/netsuite.png" alt="NetSuite CRM 2016">NetSuite CRM 2016</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/netsuite-2016-human-capital/"><img src="/assets/img/element-logos/netsuite.png" alt="NetSuite Human Capital 2016">NetSuite Human Capital 2016</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/netsuite-2016-finance/"><img src="/assets/img/element-logos/netsuite.png" alt="NetSuite Finance 2016">NetSuite Finance 2016</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/netsuite-2016-erp/"><img src="/assets/img/element-logos/netsuite.png" alt="NetSuite ERP 2016">NetSuite ERP 2016</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/onedrive/"><img src="/assets/img/element-logos/onedrive.png" alt="OneDrive">OneDrive</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/onedrivebusiness/"><img src="/assets/img/element-logos/onedrivebusiness.png" alt="OneDrive Business">Microsoft OneDrive for Business Beta</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/onenote/"><img src="/assets/img/element-logos/onenote.png" alt="OneNote">OneNote Beta</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/eloqua/"><img src="/assets/img/element-logos/eloqua.png" alt="Oracle Eloqua">Oracle Eloqua</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/oraclesalescloud/"><img src="/assets/img/element-logos/oraclesalescloud.png" alt="Oracle Sales Cloud">Oracle Sales Cloud</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/oracleservicecloud/"><img src="/assets/img/element-logos/oracleservicecloud.png" alt="Oracle Service Cloud">Oracle Service Cloud</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/outlookemail/"><img src="https://dyzz9obi78pm5.cloudfront.net/app/image/id/5b35051aec161cfa6b303783/n/download.png" alt="Outlook Email">Outlook Email</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/pardot/"><img src="/assets/img/element-logos/pardot.png" alt="Pardot">Pardot</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/paypal/"><img src="/assets/img/element-logos/paypal.png" alt="PayPal">PayPal</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/pipedrive/"><img src="/assets/img/element-logos/pipedrive.png" alt="Pipedrive">Pipedrive</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/plaid/"><img src="/assets/img/element-logos/plaid.svg" alt="Plaid">Plaid</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/postgresql/"><img src="/assets/img/element-logos/postgresql.png" alt="PostgreSQL">PostgreSQL</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/quickbase/"><img src="/assets/img/element-logos/quickbase.png" alt="QuickBase">QuickBase</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/quickbooksenterprise/"><img src="/assets/img/element-logos/quickbooksenterprise.png" alt="QuickBooks Enterprise">QuickBooks Enterprise</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/quickbooksonline/"><img src="/assets/img/element-logos/quickbooksonline.png" alt="QuickBooks Online">QuickBooks Online</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/revel/"><img src="/assets/img/element-logos/revel.png" alt="Revel">Revel</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/salesforce-files/"><img src="/assets/img/element-logos/salesforce.png" alt="Salesforce Files">Salesforce Files</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/salesforce-libraries/"><img src="/assets/img/element-logos/salesforce.png" alt="Salesforce Libraries">Salesforce Libraries</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/salesforce-marketing-cloud/"><img src="/assets/img/element-logos/salesforce.png" alt="Salesforce Marketing Cloud Beta">Salesforce Marketing Cloud Beta</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/salesforce/"><img src="/assets/img/element-logos/salesforce.png" alt="Salesforce Sales Cloud">Salesforce Sales Cloud</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/salesforce-service-cloud/"><img src="/assets/img/element-logos/salesforce.png" alt="Salesforce Service Cloud">Salesforce Service Cloud</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/salesforcebylaunchbi/"><img src="https://images.cloudelements.io/launchbi-logo201712291511.png" alt="Salesforce by LaunchBI">Salesforce by LaunchBI</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/sagecrm/"><img src="/assets/img/element-logos/sagecrm.png" alt="Sage CRM">Sage CRM</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/sagelive/"><img src="/assets/img/element-logos/sagelive.png" alt="Sage Live">Sage Live</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/sageone/"><img src="http://www.merchantmaverick.com/wp-content/uploads/2015/09/sage-one-logo1.jpg" alt="Sage One">Sage One</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/sapanywhere/"><img src="/assets/img/element-logos/sapanywhere.png" alt="SAP Anywhere">SAP Anywhere</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/sap-b-one"><img src="https://my.cloudelements.io/assets/img/elements/sapbusinessone.svg" alt="SAP Business One">SAP Business One</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/sapborestbylaunchbi/"><img src="https://images.cloudelements.io/launchbi-logo201712291511.png" alt="SAP Business Objects REST by LaunchBI">SAP Business Objects REST by LaunchBI</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/sapbobylaunchbi/"><img src="https://images.cloudelements.io/launchbi-logo201712291511.png" alt="SAP Business Objects by LaunchBI">SAP Business Objects by LaunchBI</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/sapc4c-crm/"><img src="/assets/img/element-logos/sapc4c.png" alt="SAP Hybris Cloud for Customer CRM">SAP Hybris Cloud for Customer CRM</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/sapc4c-hd/"><img src="/assets/img/element-logos/sapc4c.png" alt="SAP Hybris Cloud for Customer Helpdesk">SAP Hybris Cloud for Customer Helpdesk</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/saps4bapi/"><img src="https://my.cloudelements.io/assets/img/elements/sap.svg" alt="SAP S/4 BAPI">SAP S/4 BAPI</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/sapr3bapi/"><img src="https://my.cloudelements.io/assets/img/elements/sap.svg" alt="SAP R/3 BAPI">SAP R/3 BAPI</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/saps4hanacloud/"><img src="https://my.cloudelements.io/assets/img/elements/sap.svg" alt="SAP S/4 HANA Cloud">SAP S/4 HANA Cloud</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/sendgrid/"><img src="/assets/img/element-logos/sendgrid.png" alt="SendGrid">SendGrid</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/servicemax/"><img src="/assets/img/element-logos/servicemax.png" alt="ServiceMax">ServiceMax</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/servicenow/"><img src="/assets/img/element-logos/servicenow.png" alt="ServiceNow">ServiceNow</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/servicenow-oauth/"><img src="/assets/img/element-logos/servicenow.png" alt="ServiceNow OAuth">ServiceNow OAuth Beta</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/sftp/"><img src="/assets/img/element-logos/sftp.png" alt="SFTP">SFTP Beta</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/sharepoint/"><img src="/assets/img/element-logos/sharepoint.png" alt="Sharepoint">Sharepoint 2013 Online</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/shopify/"><img src="/assets/img/element-logos/shopify.png" alt="Shopify">Shopify</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/slack/"><img src="/assets/img/element-logos/slack.png" alt="Slack">Slack</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/smartrecruiters/"><img src="/assets/img/element-logos/smart-recruiters.png" alt="SmartRecruiters">SmartRecruiters</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/square/"><img src="/assets/img/element-logos/square.png" alt="Square">Square</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/stripe/"><img src="/assets/img/element-logos/stripe.png" alt="Stripe">Stripe</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/sugarcrm/"><img src="/assets/img/element-logos/sugarcrm.png" alt="SugarCRM">SugarCRM</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/tableaubylaunchbi/"><img src="https://images.cloudelements.io/launchbi-logo201712291511.png" alt="Tableau by LaunchBI">Tableau by LaunchBI</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/taleobusiness/"><img src="https://images.cloudelements.io/Taleo_Symbol201801182318.jpg" alt="Taleo Business Edition">Taleo Business Edition</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/taxify/"><img src="/assets/img/element-logos/taxify.png" alt="Taxify">Taxify</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/twilio/"><img src="/assets/img/element-logos/twilio.png" alt="Twilio SMS">Twilio</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/twilio-v2/"><img src="/assets/img/element-logos/twilio.png" alt="Twilio V2">Twilio V2</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/twitter/"><img src="/assets/img/element-logos/twitter.png" alt="Twitter">Twitter</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/typeform/"><img src="/assets/img/element-logos/typeform.png" alt="Typeform">Typeform</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/volusion/"><img src="/assets/img/element-logos/volusion.png" alt="Volusion">Volusion</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/weebly/"><img src="/assets/img/element-logos/weebly.png" alt="Weebly">Weebly</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/woocommerce-rest/"><img src="/assets/img/element-logos/woocommerce.png" alt="WooCommerce">WooCommerce</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/wrike/"><img src="/assets/img/element-logos/wrike.png" alt="Wrike">Wrike</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/wufoo/"><img src="/assets/img/element-logos/wufoo.png" alt="Wufoo">Wufoo</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/zendesk/"><img src="/assets/img/element-logos/zendesk.png" alt="Zendesk">Zendesk</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/zohocrm/"><img src="/assets/img/element-logos/zohocrm.png" alt="ZohoCRM">ZohoCRM</a></div>
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 element-column"><a href="./elements/zuora/"><img src="/assets/img/element-logos/zuora-logoblue.png" alt="Zuora">Zuora</a></div>
+</div>
+
+        </div>
+        <a class="docs-top" style="display: none" href="#">Back to top</a>
+      </div>
+      <script src="/assets/js/chart.js"></script>
+      <script src="/assets/js/tablesorter.min.js"></script>
+      <script src="/assets/js/toolkit.js"></script>
+      <script src="/assets/js/application.js"></script>
+      <script src="/assets/js/filter.js"></script>
+    </div>
+  </div>
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

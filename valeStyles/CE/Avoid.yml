@@ -1,0 +1,13 @@
+extends: existence
+message: "Consider removing '%s'"
+ignorecase: true
+level: warning
+tokens:
+  - disruption
+  - thought leader
+  - internets
+  - rockstar
+  - wizard
+  - '(?:killing|crushing) it'
+  - crazy
+  - insane

@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/elements/quickbooksenterprise/reports.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> QuickBooks Enterprise </h2>
+          <!-- <h4> Find reports. </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/elements/quickbooksenterprise/?elementId=195">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/quickbooksenterprise/setup.html?elementId=195">API Provider Setup</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/quickbooksenterprise/authenticate.html?elementId=195">Authenticate</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/quickbooksenterprise/bulk.html?elementId=195">Bulk APIs</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/quickbooksenterprise/events.html?elementId=195">Events</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/quickbooksenterprise/ceql.html?elementId=195">Querying</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/quickbooksenterprise/reports.html?elementId=195">Reports</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/quickbooksenterprise/tips.html?elementId=195">Tips</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/quickbooksenterprise/api-documentation.html?elementId=195">API Docs</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <h1 id="reports">Reports</h1>
+
+<p>You can access reports in QuickBooks Enterprise via API. Cloud Elements provides the following endpoints:</p>
+
+<ul>
+<li><code>GET /report-types</code></li>
+<li><code>GET /reports</code></li>
+</ul>
+
+<div markdown="span" class="bs-callout bs-callout-info"><strong>On this page</strong></br><a href=#get-a-list-of-reports-and-categories>Get a List of Reports and Categories</a></br><a href=#pulling-reports>Pulling Reports</a></div>
+
+<h2 id="get-a-list-of-reports-and-categories">Get a List of Reports and Categories</h2>
+
+<p>Use <code>GET /report-types</code> to retrieve a list of reports and report categories. Use the <code>Name</code> from the response as <code>ReportName</code> to search for specific reports in <code>GET /reports</code>.</p>
+
+<h3 id="json-response">JSON Response</h3>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BudgetSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Profit and Loss Budget vs. Actual"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Income by Customer Summary"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AgingReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AR Aging Summary"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Profit and Loss Standard"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Profit and Loss by Class"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BudgetSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Balance Sheet Budget Overview"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Physical Inventory Worksheet"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AgingReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AP Aging Summary"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Balance Sheet Previous Year Comparison"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BudgetSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Profit and Loss Budget Overview"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Trial Balance"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Income Tax Summary"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Profit and Loss Previous Year Comparison"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AgingReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Collections Report"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Balance Sheet Summary"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Customer Balance Summary"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Expense by Vendor Summary"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sales by Customer Summary"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Inventory Stock Status by Vendor"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Inventory Stock Status by Item"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Inventory Valuation Summary"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BudgetSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Profit and Loss Budget Performance"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Vendor Balance Summary"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sales by Rep Summary"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sales by Item Summary"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BudgetSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Balance Sheet Budget vs. Actual"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Purchase by Vendor Summary"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sales Tax Revenue Summary"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Purchase by Item Summary"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AgingReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AR Aging Detail"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sales Tax Liability"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Profit and Loss YTD Comparison"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Balance Sheet Standard"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GeneralSummaryReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Profit and Loss by Job"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"Category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AgingReport"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AP Aging Detail"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div>
+<h2 id="pulling-reports">Pulling Reports</h2>
+
+<p>Use <code>GET /reports</code> to access your Quickbook reports vai API.</p>
+
+<p>You must specify a <code>ReportName</code> in the CEQL expression. The <code>ReportName</code> is the <code>Name</code> from the <code>GET /report-types</code> JSON response.</p>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">fieldName</th>
+<th style="text-align: left">operator</th>
+<th style="text-align: left">Values</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">AccountType</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left"><a href="#accounttype">See below</a></td>
+</tr>
+<tr>
+<td style="text-align: left">AccountId</td>
+<td style="text-align: left">= , in</td>
+<td style="text-align: left">Data values</td>
+</tr>
+<tr>
+<td style="text-align: left">AccountName</td>
+<td style="text-align: left">= , in</td>
+<td style="text-align: left">Data values</td>
+</tr>
+<tr>
+<td style="text-align: left">BudgetCriterion</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left"><a href="#budgetcriterion">See below</a></td>
+</tr>
+<tr>
+<td style="text-align: left">ClassId</td>
+<td style="text-align: left">in, =</td>
+<td style="text-align: left">Data</td>
+</tr>
+<tr>
+<td style="text-align: left">ClassName</td>
+<td style="text-align: left">in, =</td>
+<td style="text-align: left">Data</td>
+</tr>
+<tr>
+<td style="text-align: left">EntityId</td>
+<td style="text-align: left">= , in</td>
+<td style="text-align: left">Data</td>
+</tr>
+<tr>
+<td style="text-align: left">EntityName</td>
+<td style="text-align: left">= ,in</td>
+<td style="text-align: left">Data</td>
+</tr>
+<tr>
+<td style="text-align: left">EntityType</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left"><a href="#entitytype">See below</a></td>
+</tr>
+<tr>
+<td style="text-align: left">FiscalYear</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left">Date Year <code>YYYY</code></td>
+</tr>
+<tr>
+<td style="text-align: left">IncludeAccounts</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left"><a href="#includeaccounts">See below</a></td>
+</tr>
+<tr>
+<td style="text-align: left">ItemId</td>
+<td style="text-align: left">in, =</td>
+<td style="text-align: left">Data</td>
+</tr>
+<tr>
+<td style="text-align: left">ItemName</td>
+<td style="text-align: left">in, =</td>
+<td style="text-align: left">Data</td>
+</tr>
+<tr>
+<td style="text-align: left">ItemType</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left"><a href="#itemtype">See below</a></td>
+</tr>
+<tr>
+<td style="text-align: left">ReportAgingAsOf</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left"><a href="#reportagingasof">See below</a></td>
+</tr>
+<tr>
+<td style="text-align: left">ReportBasis</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left"><a href="#reportbasis">See below</a></td>
+</tr>
+<tr>
+<td style="text-align: left">ReportCalendar</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left"><a href="#reportcalendar">See below</a></td>
+</tr>
+<tr>
+<td style="text-align: left">ReportDetail</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left"><a href="#reportdetail">See below</a></td>
+</tr>
+<tr>
+<td style="text-align: left">ReportModifiedFromDate</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left"><code>yyyy-mm-ddThh:mm:ss</code></td>
+</tr>
+<tr>
+<td style="text-align: left">ReportName</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left">string see valid</td>
+</tr>
+<tr>
+<td style="text-align: left">ReportPeriodStart</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left"><code>yyyy-mm-ddThh:mm:ss</code></td>
+</tr>
+<tr>
+<td style="text-align: left">ReportPeriodEnd</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left"><code>yyyy-mm-ddThh:mm:ss</code></td>
+</tr>
+<tr>
+<td style="text-align: left">ReportPostingStatus</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left"><a href="#reportpostingstatus">See below</a></td>
+</tr>
+<tr>
+<td style="text-align: left">ReportTxnType</td>
+<td style="text-align: left">in, =</td>
+<td style="text-align: left"><a href="#reporttxntype">See below</a></td>
+</tr>
+<tr>
+<td style="text-align: left">ReturnColumns</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left"><a href="#returncolumns">See below</a></td>
+</tr>
+<tr>
+<td style="text-align: left">ReturnRows</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left"><a href="#returnrows">See below</a></td>
+</tr>
+<tr>
+<td style="text-align: left">SummarizeBudgetColumnsBy</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left"><a href="#summarizebudgetcolumnsby">See below</a></td>
+</tr>
+<tr>
+<td style="text-align: left">SummarizeBudgetRowsBy</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left"><a href="#summarizebudgetrowsby">See below</a></td>
+</tr>
+<tr>
+<td style="text-align: left">SummarizeColumnsBy</td>
+<td style="text-align: left">=</td>
+<td style="text-align: left"><a href="#summarizecolumnsby">See below</a></td>
+</tr>
+</tbody></table>
+
+<h4 id="accounttype">AccountType</h4>
+<div class="highlight"><pre><code class="language-" data-lang="">GET /reports?where=ReportName%20%3D%20'AR%20Aging%20Summary'%20AND%20AccountType%20%3D%2035
+</code></pre></div>
+<table><thead>
+<tr>
+<th style="text-align: left">Account Type</th>
+<th style="text-align: left">Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">atfAccountsPayable</td>
+<td style="text-align: left">0</td>
+</tr>
+<tr>
+<td style="text-align: left">atfAccountsReceivable</td>
+<td style="text-align: left">1</td>
+</tr>
+<tr>
+<td style="text-align: left">atfAllowedFor1099</td>
+<td style="text-align: left">2</td>
+</tr>
+<tr>
+<td style="text-align: left">atfAPAndSalesTax</td>
+<td style="text-align: left">3</td>
+</tr>
+<tr>
+<td style="text-align: left">atfAPOrCreditCard</td>
+<td style="text-align: left">4</td>
+</tr>
+<tr>
+<td style="text-align: left">atfARAndAP</td>
+<td style="text-align: left">5</td>
+</tr>
+<tr>
+<td style="text-align: left">atfAsset</td>
+<td style="text-align: left">6</td>
+</tr>
+<tr>
+<td style="text-align: left">atfBalanceSheet</td>
+<td style="text-align: left">7</td>
+</tr>
+<tr>
+<td style="text-align: left">atfBank</td>
+<td style="text-align: left">8</td>
+</tr>
+<tr>
+<td style="text-align: left">atfBankAndARAndAPAndUF</td>
+<td style="text-align: left">9</td>
+</tr>
+<tr>
+<td style="text-align: left">atfBankAndUF</td>
+<td style="text-align: left">10</td>
+</tr>
+<tr>
+<td style="text-align: left">atfCostOfSales</td>
+<td style="text-align: left">11</td>
+</tr>
+<tr>
+<td style="text-align: left">atfCreditCard</td>
+<td style="text-align: left">12</td>
+</tr>
+<tr>
+<td style="text-align: left">atfCurrentAsset</td>
+<td style="text-align: left">13</td>
+</tr>
+<tr>
+<td style="text-align: left">atfCurrentAssetAndExpense</td>
+<td style="text-align: left">14</td>
+</tr>
+<tr>
+<td style="text-align: left">atfCurrentLiability</td>
+<td style="text-align: left">15</td>
+</tr>
+<tr>
+<td style="text-align: left">atfEquity</td>
+<td style="text-align: left">16</td>
+</tr>
+<tr>
+<td style="text-align: left">atfEquityAndIncomeAndExpense</td>
+<td style="text-align: left">17</td>
+</tr>
+<tr>
+<td style="text-align: left">atfExpenseAndOtherExpense</td>
+<td style="text-align: left">18</td>
+</tr>
+<tr>
+<td style="text-align: left">atfFixedAsset</td>
+<td style="text-align: left">19</td>
+</tr>
+<tr>
+<td style="text-align: left">atfIncomeAndExpense</td>
+<td style="text-align: left">20</td>
+</tr>
+<tr>
+<td style="text-align: left">atfIncomeAndOtherIncome</td>
+<td style="text-align: left">21</td>
+</tr>
+<tr>
+<td style="text-align: left">atfLiability</td>
+<td style="text-align: left">22</td>
+</tr>
+<tr>
+<td style="text-align: left">atfLiabilityAndEquity</td>
+<td style="text-align: left">23</td>
+</tr>
+<tr>
+<td style="text-align: left">atfLongTermLiability</td>
+<td style="text-align: left">24</td>
+</tr>
+<tr>
+<td style="text-align: left">atfNonPosting</td>
+<td style="text-align: left">25</td>
+</tr>
+<tr>
+<td style="text-align: left">atfOrdinaryExpense</td>
+<td style="text-align: left">26</td>
+</tr>
+<tr>
+<td style="text-align: left">atfOrdinaryIncome</td>
+<td style="text-align: left">27</td>
+</tr>
+<tr>
+<td style="text-align: left">atfOrdinaryIncomeAndCOGS</td>
+<td style="text-align: left">28</td>
+</tr>
+<tr>
+<td style="text-align: left">atfOrdinaryIncomeAndExpense</td>
+<td style="text-align: left">29</td>
+</tr>
+<tr>
+<td style="text-align: left">atfOtherAsset</td>
+<td style="text-align: left">30</td>
+</tr>
+<tr>
+<td style="text-align: left">atfOtherCurrentAsset</td>
+<td style="text-align: left">31</td>
+</tr>
+<tr>
+<td style="text-align: left">atfOtherCurrentLiability</td>
+<td style="text-align: left">32</td>
+</tr>
+<tr>
+<td style="text-align: left">atfOtherExpense</td>
+<td style="text-align: left">33</td>
+</tr>
+<tr>
+<td style="text-align: left">atfOtherIncome</td>
+<td style="text-align: left">34</td>
+</tr>
+<tr>
+<td style="text-align: left">atfOtherIncomeOrExpense</td>
+<td style="text-align: left">35</td>
+</tr>
+</tbody></table>
+
+<h4 id="budgetcriterion">BudgetCriterion</h4>
+<div class="highlight"><pre><code class="language-" data-lang="">GET /reports?where=ReportName%20%3D%20'AR%20Aging%20Summary'%20AND%20BudgetCriterion%20%3D%202
+</code></pre></div>
+<table><thead>
+<tr>
+<th style="text-align: left">Budget Criterion</th>
+<th style="text-align: left">Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">bcAccounts</td>
+<td style="text-align: left">0</td>
+</tr>
+<tr>
+<td style="text-align: left">bcAccountsAndClasses</td>
+<td style="text-align: left">1</td>
+</tr>
+<tr>
+<td style="text-align: left">bcAccountsAndCustomers</td>
+<td style="text-align: left">2</td>
+</tr>
+</tbody></table>
+
+<h4 id="entitytype">EntityType</h4>
+<div class="highlight"><pre><code class="language-" data-lang="">GET /reports?where=ReportName%20%3D%20'Profit%20and%20Loss%20Standard'%20AND%20EntityFilter%20%3D%203
+</code></pre></div>
+<table><thead>
+<tr>
+<th style="text-align: left">EntityType</th>
+<th style="text-align: left">Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">etfCustomer</td>
+<td style="text-align: left">0</td>
+</tr>
+<tr>
+<td style="text-align: left">etfEmployee</td>
+<td style="text-align: left">1</td>
+</tr>
+<tr>
+<td style="text-align: left">etfOtherName</td>
+<td style="text-align: left">2</td>
+</tr>
+<tr>
+<td style="text-align: left">etfVendor</td>
+<td style="text-align: left">3</td>
+</tr>
+</tbody></table>
+
+<h4 id="includeaccounts">IncludeAccounts</h4>
+<div class="highlight"><pre><code class="language-" data-lang="">GET /reports?where=ReportName%20%3D%20'Profit%20and%20Loss%20Standard'%20AND%20IncludeAccounts%20%3D%200
+</code></pre></div>
+<table><thead>
+<tr>
+<th style="text-align: left">Accounts</th>
+<th style="text-align: left">Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">iaAll</td>
+<td style="text-align: left">0</td>
+</tr>
+<tr>
+<td style="text-align: left">iaInUse</td>
+<td style="text-align: left">1</td>
+</tr>
+</tbody></table>
+
+<h4 id="itemtype">ItemType</h4>
+<div class="highlight"><pre><code class="language-" data-lang="">GET /reports?where=ReportName%20%3D%20'Profit%20and%20Loss%20Standard'%20AND%20ItemType%20%3D%203
+</code></pre></div>
+<table><thead>
+<tr>
+<th style="text-align: left">Item Type</th>
+<th style="text-align: left">Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">itfAllExceptFixedAsset</td>
+<td style="text-align: left">0</td>
+</tr>
+<tr>
+<td style="text-align: left">itfAssembly</td>
+<td style="text-align: left">1</td>
+</tr>
+<tr>
+<td style="text-align: left">itfDiscount</td>
+<td style="text-align: left">2</td>
+</tr>
+<tr>
+<td style="text-align: left">itfFixedAsset</td>
+<td style="text-align: left">3</td>
+</tr>
+<tr>
+<td style="text-align: left">itfInventory</td>
+<td style="text-align: left">4</td>
+</tr>
+<tr>
+<td style="text-align: left">itfInventoryAndAssembly</td>
+<td style="text-align: left">5</td>
+</tr>
+<tr>
+<td style="text-align: left">itfNonInventory</td>
+<td style="text-align: left">6</td>
+</tr>
+<tr>
+<td style="text-align: left">itfOtherCharge</td>
+<td style="text-align: left">7</td>
+</tr>
+<tr>
+<td style="text-align: left">itfPayment</td>
+<td style="text-align: left">8</td>
+</tr>
+<tr>
+<td style="text-align: left">itfSales</td>
+<td style="text-align: left">9</td>
+</tr>
+<tr>
+<td style="text-align: left">itfSalesTax</td>
+<td style="text-align: left">10</td>
+</tr>
+<tr>
+<td style="text-align: left">itfService</td>
+<td style="text-align: left">11</td>
+</tr>
+</tbody></table>
+
+<h4 id="reportagingasof">ReportAgingAsOf</h4>
+<div class="highlight"><pre><code class="language-" data-lang="">GET /reports?where=ReportName%20%3D%20'AR%20Aging%20Summary'%20AND%20ReportAgingAsOf%20%3D%200
+</code></pre></div>
+<table><thead>
+<tr>
+<th style="text-align: left">Report Aging</th>
+<th style="text-align: left">Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">raaoReportEndDate</td>
+<td style="text-align: left">0</td>
+</tr>
+<tr>
+<td style="text-align: left">raaoToday</td>
+<td style="text-align: left">1</td>
+</tr>
+</tbody></table>
+
+<h4 id="reportbasis">ReportBasis</h4>
+<div class="highlight"><pre><code class="language-" data-lang="">GET /reports?where=ReportName%20%3D%20'Profit%20and%20Loss%20Standard'%20AND%ReportBasis%20%3D%201
+</code></pre></div>
+<table><thead>
+<tr>
+<th style="text-align: left">Report Basis</th>
+<th style="text-align: left">Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">rbAccrual</td>
+<td style="text-align: left">0</td>
+</tr>
+<tr>
+<td style="text-align: left">rbCash</td>
+<td style="text-align: left">1</td>
+</tr>
+<tr>
+<td style="text-align: left">rbNone</td>
+<td style="text-align: left">2</td>
+</tr>
+</tbody></table>
+
+<h4 id="reportcalendar">ReportCalendar</h4>
+<div class="highlight"><pre><code class="language-" data-lang="">GET /reports?where=ReportName%20%3D%20'AP%20Aging%20Summary'%20AND%20ReportCalendar%20%3D%201
+</code></pre></div>
+<table><thead>
+<tr>
+<th style="text-align: left">Report Calendar</th>
+<th style="text-align: left">Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">rcCalendarYear</td>
+<td style="text-align: left">0</td>
+</tr>
+<tr>
+<td style="text-align: left">rcFiscalYear</td>
+<td style="text-align: left">1</td>
+</tr>
+<tr>
+<td style="text-align: left">rcTaxYear</td>
+<td style="text-align: left">2</td>
+</tr>
+</tbody></table>
+
+<h4 id="reportdetail">ReportDetail</h4>
+<div class="highlight"><pre><code class="language-" data-lang="">GET /reports?where=ReportName%20%3D%20'AP%20Aging%20Summary'%20AND%ReportDetail%20%3D%201
+</code></pre></div>
+<table><thead>
+<tr>
+<th style="text-align: left">Report Detail</th>
+<th style="text-align: left">Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">rdlfAll</td>
+<td style="text-align: left">0</td>
+</tr>
+<tr>
+<td style="text-align: left">rdlfAllExceptSummary</td>
+<td style="text-align: left">1</td>
+</tr>
+<tr>
+<td style="text-align: left">rdlfSummaryOnly</td>
+<td style="text-align: left">2</td>
+</tr>
+</tbody></table>
+
+<h4 id="reportpostingstatus">ReportPostingStatus</h4>
+<div class="highlight"><pre><code class="language-" data-lang="">GET /reports?where=ReportName%20%3D%20'AP%20Aging%20Summary'%20AND%ReportPostingStatus%20%3D%201
+</code></pre></div>
+<table><thead>
+<tr>
+<th style="text-align: left">Posting Status</th>
+<th style="text-align: left">Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">rpsfEither</td>
+<td style="text-align: left">0</td>
+</tr>
+<tr>
+<td style="text-align: left">rpsfNonPosting</td>
+<td style="text-align: left">1</td>
+</tr>
+<tr>
+<td style="text-align: left">rpsfPosting</td>
+<td style="text-align: left">2</td>
+</tr>
+</tbody></table>
+
+<h4 id="reporttxntype">ReportTxnType</h4>
+<div class="highlight"><pre><code class="language-" data-lang="">GET /reports?where=ReportName%20%3D%20'AP%20Aging%20Summary'%20AND%ReportTxnType%20%3D%2011
+</code></pre></div>
+<table><thead>
+<tr>
+<th style="text-align: left">Transaction Type</th>
+<th style="text-align: left">Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">ttfAll</td>
+<td style="text-align: left">0</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfARRefundCreditCard</td>
+<td style="text-align: left">1</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfBill</td>
+<td style="text-align: left">2</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfBillPaymentCheck</td>
+<td style="text-align: left">3</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfBillPaymentCreditCard</td>
+<td style="text-align: left">4</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfBuildAssembly</td>
+<td style="text-align: left">5</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfCharge</td>
+<td style="text-align: left">6</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfCheck</td>
+<td style="text-align: left">7</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfCreditCardCharge</td>
+<td style="text-align: left">8</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfCreditCardCredit</td>
+<td style="text-align: left">9</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfCreditMemo</td>
+<td style="text-align: left">10</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfDeposit</td>
+<td style="text-align: left">11</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfEstimate</td>
+<td style="text-align: left">12</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfInventoryAdjustment</td>
+<td style="text-align: left">13</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfInvoice</td>
+<td style="text-align: left">14</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfItemReceipt</td>
+<td style="text-align: left">15</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfJournalEntry</td>
+<td style="text-align: left">16</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfLiabilityAdjustment</td>
+<td style="text-align: left">17</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfPaycheck</td>
+<td style="text-align: left">18</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfPayrollLiabilityCheck</td>
+<td style="text-align: left">19</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfPurchaseOrder</td>
+<td style="text-align: left">20</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfReceivePayment</td>
+<td style="text-align: left">21</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfSalesOrder</td>
+<td style="text-align: left">22</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfSalesReceipt</td>
+<td style="text-align: left">23</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfSalesTaxPaymentCheck</td>
+<td style="text-align: left">24</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfTransfer</td>
+<td style="text-align: left">25</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfVendorCredit</td>
+<td style="text-align: left">26</td>
+</tr>
+<tr>
+<td style="text-align: left">ttfYTDAdjustment</td>
+<td style="text-align: left">27</td>
+</tr>
+</tbody></table>
+
+<h4 id="returncolumns">ReturnColumns</h4>
+<div class="highlight"><pre><code class="language-" data-lang="">GET /reports?where=ReportName%20%3D%20'AP%20Aging%20Summary'%20AND%ReturnColumns%20%3D%202
+</code></pre></div>
+<table><thead>
+<tr>
+<th style="text-align: left">Columns</th>
+<th style="text-align: left">Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">rcActiveOnly</td>
+<td style="text-align: left">0</td>
+</tr>
+<tr>
+<td style="text-align: left">rcNonZero</td>
+<td style="text-align: left">1</td>
+</tr>
+<tr>
+<td style="text-align: left">rcAll</td>
+<td style="text-align: left">2</td>
+</tr>
+</tbody></table>
+
+<h4 id="returnrows">ReturnRows</h4>
+<div class="highlight"><pre><code class="language-" data-lang="">GET /reports?where=ReportName%20%3D%20'AP%20Aging%20Summary'%20AND%ReturnRows%20%3D%201
+</code></pre></div>
+<table><thead>
+<tr>
+<th style="text-align: left">Columns</th>
+<th style="text-align: left">Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">rcActiveOnly</td>
+<td style="text-align: left">0</td>
+</tr>
+<tr>
+<td style="text-align: left">rcNonZero</td>
+<td style="text-align: left">1</td>
+</tr>
+<tr>
+<td style="text-align: left">rcAll</td>
+<td style="text-align: left">2</td>
+</tr>
+</tbody></table>
+
+<h4 id="summarizebudgetcolumnsby">SummarizeBudgetColumnsBy</h4>
+<div class="highlight"><pre><code class="language-" data-lang="">GET /reports?where=ReportName%20%3D%20'Profit%20and%20Loss%20Budget%20Overview'%20AND%20FiscalYear%20%3D%20'2016'%20AND%20SummarizeBudgetColumnsBy%20%3D%201
+</code></pre></div>
+<table><thead>
+<tr>
+<th style="text-align: left">Columns</th>
+<th style="text-align: left">Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">sbcbClass</td>
+<td style="text-align: left">0</td>
+</tr>
+<tr>
+<td style="text-align: left">sbcbCustomer</td>
+<td style="text-align: left">1</td>
+</tr>
+<tr>
+<td style="text-align: left">sbcbDate</td>
+<td style="text-align: left">2</td>
+</tr>
+</tbody></table>
+
+<h4 id="summarizebudgetrowsby">SummarizeBudgetRowsBy</h4>
+<div class="highlight"><pre><code class="language-" data-lang="">GET /reports?where=ReportName%20%3D%20'Profit%20and%20Loss%20Budget%20Overview'%20AND%20FiscalYear%20%3D%20'2016'%20AND%20SummarizeBudgetRowsBy%20%3D%201
+</code></pre></div>
+<table><thead>
+<tr>
+<th style="text-align: left">Columns</th>
+<th style="text-align: left">Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">sbrbAccount</td>
+<td style="text-align: left">0</td>
+</tr>
+<tr>
+<td style="text-align: left">sbrbClass</td>
+<td style="text-align: left">1</td>
+</tr>
+<tr>
+<td style="text-align: left">sbrbCustomer</td>
+<td style="text-align: left">2</td>
+</tr>
+</tbody></table>
+
+<h4 id="summarizecolumnsby">SummarizeColumnsBy</h4>
+<div class="highlight"><pre><code class="language-" data-lang="">GET /reports?where=ReportName%20%3D%20'Profit%20and%20Loss%20Budget%20Overview'%20AND%20FiscalYear%20%3D%20'2016'%20AND%20SummarizeColumnsBy%20%3D%2014
+
+</code></pre></div>
+<table><thead>
+<tr>
+<th style="text-align: left">Columns</th>
+<th style="text-align: left">Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">scbAccount</td>
+<td style="text-align: left">0</td>
+</tr>
+<tr>
+<td style="text-align: left">scbBalanceSheet</td>
+<td style="text-align: left">1</td>
+</tr>
+<tr>
+<td style="text-align: left">scbClass</td>
+<td style="text-align: left">2</td>
+</tr>
+<tr>
+<td style="text-align: left">scbCustomer</td>
+<td style="text-align: left">3</td>
+</tr>
+<tr>
+<td style="text-align: left">scbCustomerType</td>
+<td style="text-align: left">4</td>
+</tr>
+<tr>
+<td style="text-align: left">scbDay</td>
+<td style="text-align: left">5</td>
+</tr>
+<tr>
+<td style="text-align: left">scbEmployee</td>
+<td style="text-align: left">6</td>
+</tr>
+<tr>
+<td style="text-align: left">scbFourWeek</td>
+<td style="text-align: left">7</td>
+</tr>
+<tr>
+<td style="text-align: left">scbHalfMonth</td>
+<td style="text-align: left">8</td>
+</tr>
+<tr>
+<td style="text-align: left">scbIncomeStatement</td>
+<td style="text-align: left">9</td>
+</tr>
+<tr>
+<td style="text-align: left">scbItemDetail</td>
+<td style="text-align: left">10</td>
+</tr>
+<tr>
+<td style="text-align: left">scbItemType</td>
+<td style="text-align: left">11</td>
+</tr>
+<tr>
+<td style="text-align: left">scbMonth</td>
+<td style="text-align: left">12</td>
+</tr>
+<tr>
+<td style="text-align: left">scbPayee</td>
+<td style="text-align: left">13</td>
+</tr>
+<tr>
+<td style="text-align: left">scbPaymentMethod</td>
+<td style="text-align: left">14</td>
+</tr>
+<tr>
+<td style="text-align: left">scbPayrollItemDetail</td>
+<td style="text-align: left">15</td>
+</tr>
+<tr>
+<td style="text-align: left">scbPayrollYtdDetail</td>
+<td style="text-align: left">16</td>
+</tr>
+<tr>
+<td style="text-align: left">scbQuarter</td>
+<td style="text-align: left">17</td>
+</tr>
+<tr>
+<td style="text-align: left">scbSalesRep</td>
+<td style="text-align: left">18</td>
+</tr>
+<tr>
+<td style="text-align: left">scbSalesTaxCode</td>
+<td style="text-align: left">19</td>
+</tr>
+<tr>
+<td style="text-align: left">scbShipMethod</td>
+<td style="text-align: left">20</td>
+</tr>
+<tr>
+<td style="text-align: left">scbTerms</td>
+<td style="text-align: left">21</td>
+</tr>
+<tr>
+<td style="text-align: left">scbTotalOnly</td>
+<td style="text-align: left">22</td>
+</tr>
+<tr>
+<td style="text-align: left">scbTwoWeek</td>
+<td style="text-align: left">23</td>
+</tr>
+<tr>
+<td style="text-align: left">scbVendor</td>
+<td style="text-align: left">24</td>
+</tr>
+<tr>
+<td style="text-align: left">scbVendorType</td>
+<td style="text-align: left">25</td>
+</tr>
+<tr>
+<td style="text-align: left">scbWeek</td>
+<td style="text-align: left">26</td>
+</tr>
+<tr>
+<td style="text-align: left">scbYear</td>
+<td style="text-align: left">27</td>
+</tr>
+</tbody></table>
+
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

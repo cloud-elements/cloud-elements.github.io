@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/elements/insightly/">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> Insightly </h2>
+          <!-- <h4> Integrate Insightly into your application via the Cloud Elements APIs. </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/elements/insightly/?elementId=5993">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/insightly/setup.html?elementId=5993">API Provider Setup</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/insightly/authenticate.html?elementId=5993">Authenticate</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/insightly/events.html?elementId=5993">Events</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/insightly/bulk.html?elementId=5993">Bulk</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/insightly/ceql.html?elementId=5993">Querying</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/insightly/api-documentation.html?elementId=5993">API Docs</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <h1 id="welcome-to-the-insightly-element">Welcome to the Insightly Element</h1>
+
+<p>Insightly is available in the CRM hub. Connect an Insightly account to integrate with accounts, contacts, leads, opportunities, and more.</p>
+
+<p>Use this Postman collection and the documentation here to get started.</p>
+
+<div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+<div class="postman-run-button"
+data-postman-action="collection/import"
+data-postman-var-1="9548caf4b3ab5b55ea6f"></div>
+<script type="text/javascript">
+  (function (p,o,s,t,m,a,n) {
+    !p[s] && (p[s] = function () { (p[t] || (p[t] = [])).push(arguments); });
+    !o.getElementById(s+t) && o.getElementsByTagName("head")[0].appendChild((
+      (n = o.createElement("script")),
+      (n.id = s+t), (n.async = 1), (n.src = m), n
+    ));
+  }(window, document, "_pm", "PostmanRunObject", "https://run.pstmn.io/button.js"));
+</script>
+
+</div>
+
+<div markdown="span" class="bs-callout bs-callout-info"><strong>On this page</strong></br><a href=#element-details>Element Details</a></br><a href=#base-url>Base URL</a></br><a href=#authenticating-with-cloud-elements>Authenticating with Cloud Elements</a></br><a href=#error-codes>Error Codes</a></div>
+
+<h2 id="element-details">Element Details</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Element Information</th>
+<th style="text-align: left">Details</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">API Documentation</td>
+<td style="text-align: left"><a href="https://api.insight.ly/v2.2/Help">Insightly API documentation</a></td>
+</tr>
+<tr>
+<td style="text-align: left">Authentication</td>
+<td style="text-align: left">Basic</td>
+</tr>
+<tr>
+<td style="text-align: left">Events</td>
+<td style="text-align: left">Polling</td>
+</tr>
+<tr>
+<td style="text-align: left">Bulk</td>
+<td style="text-align: left">Supported for both upload and download.</td>
+</tr>
+<tr>
+<td style="text-align: left">Transformations</td>
+<td style="text-align: left">Supported. See <a href="https://docs.cloud-elements.com/home/common-object">Define Common Resources and Transformations</a> for more information about transforming your Insightly data.</td>
+</tr>
+</tbody></table>
+
+<h2 id="base-url">Base URL</h2>
+
+<p>The Cloud Element Base URL for all API calls is <code>https://api.cloud-elements.com/elements/api-v2</code>.</p>
+
+<p>HTTP requests to the REST API are protected with HTTP Custom authentication with your Organization and User secret and an Element Instance token. We use many standard HTTP features, like HTTP verbs, understood by most HTTP clients. JSON is returned in all responses from the API, including errors. The APIs have predictable, straightforward URLs and use HTTP response codes to indicate API errors.</p>
+
+<h2 id="authenticating-with-cloud-elements">Authenticating with Cloud Elements</h2>
+
+<p>To authenticate with Cloud Elements, you need to know your Organization Secret and User Secret. When making some calls, you also need to know the Element Instance token.</p>
+
+<p>When you create an account with us, we assign you an Organization Secret and a User Secret. An Organization is a customer of Cloud Elements (<code>/organizations</code>). The User and Organization secrets represent your account with Cloud Elements.</p>
+
+<p>To find your Organization and User Secret open the profile menu.
+<img src="/assets/img/elements/org-user-secret-C2.png" alt="Search"></p>
+
+<p>Alternatively, use the<code>/users/{emailOrId}</code> endpoint:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> GET <span class="se">\</span>
+  https://staging.cloud-elements.com/elements/api-v2/users/4370 <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'authorization: User &lt;ADMINISTRATOR_USER_SECRET&gt;, Organization &lt;ORGANIZATION_SECRET&gt;'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'content-type: application/json'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'elements-user-password: &lt;USER_PASSWORD&gt;'</span> <span class="se">\</span>
+</code></pre></div>
+<p>When you create a new connection to an endpoint, you will receive an Element Instance token. After you create an instance, Cloud Elements automatically refreshes the token behind the scenes so that you won&#39;t need to connect your application again.</p>
+
+<p>To find your Element instance token:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">    GET /instances/&lt;INSTANCE_ID&gt;
+</code></pre></div>
+<p>An Element Instance token and a User secret are required to execute one of our Hub API calls (e.g. <code>/hubs/documents/files</code> or <code>/hubs/crm/contacts</code>). For more information about Hubs, see the Hub API docs in the navigation area.</p>
+
+<p>Pass tokens and secrets as basic HTTP Header values.</p>
+
+<ul>
+<li><p>To make a Platform or API call, include the following in the header:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_USER_SECRET&gt;
+</code></pre></div></li>
+<li><p>To make a Hub API call, include the following in the header:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">User &lt;INSERT_USER_SECRET&gt;, Element &lt;INSERT_ELEMENT_INSTANCE_TOKEN&gt;
+</code></pre></div></li>
+</ul>
+
+<h2 id="error-codes">Error Codes</h2>
+
+<p>Errors are never fun. To save you time we took a list of error codes from our service providers and normalized them. If a response returns a message that includes a specific detail about the method call, we send our normalized error code along with any additional data included in the body of the message. Below is a sample message from a service provider that would be included with our normalized error code.</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+   </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Failed to upload file. File with the same name already exists. Change the name of the file you're uploading or set the overwrite query parameter to true."</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"53dbca9430045c016b46566c"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"providerMessage"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Item with the same name already exists"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>We provide the following normalized error codes:</p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Response Code</th>
+<th style="text-align: left">Error</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">200</td>
+<td style="text-align: left">OK – Everything worked as expected.</td>
+</tr>
+<tr>
+<td style="text-align: left">400</td>
+<td style="text-align: left">Bad Request – Often due to a missing request parameter.</td>
+</tr>
+<tr>
+<td style="text-align: left">401</td>
+<td style="text-align: left">Unauthorized – An invalid element token, user secret and/or org secret provided.</td>
+</tr>
+<tr>
+<td style="text-align: left">403</td>
+<td style="text-align: left">Forbidden – Access to the resource by the provider is forbidden.</td>
+</tr>
+<tr>
+<td style="text-align: left">404</td>
+<td style="text-align: left">Not found - The requested resource is not found</td>
+</tr>
+<tr>
+<td style="text-align: left">405</td>
+<td style="text-align: left">Method Not Allowed – Incorrect HTTP verb used, e.g., GET used when POST expected.</td>
+</tr>
+<tr>
+<td style="text-align: left">406</td>
+<td style="text-align: left">Not Acceptable – The response content type does not match the “Accept” header value.</td>
+</tr>
+<tr>
+<td style="text-align: left">409</td>
+<td style="text-align: left">Conflict – A resource being created already exists.</td>
+</tr>
+<tr>
+<td style="text-align: left">415</td>
+<td style="text-align: left">Unsupported Media Type – The server cannot handle the requested Content-Type.</td>
+</tr>
+<tr>
+<td style="text-align: left">500</td>
+<td style="text-align: left">Server Error – Something went wrong on the Cloud Elements server.</td>
+</tr>
+</tbody></table>
+
+<p>Get started by <a href="setup.html">setting up the API provider</a>.</p>
+
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

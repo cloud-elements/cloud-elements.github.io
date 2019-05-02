@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- History.js -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/quickstart/integrate.html">
+
+  <script src="/api-docs/swagger-ui.js" type="text/javascript"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper">
+      <div markdown="span" class="bs-callout bs-callout-warning" role="alert">
+  <h4>The docs are moving! </h4><p>Find us at our new <a href ="https://docs.cloud-elements.com/">Help Center</a> where we've combined our documentation and knowledgebase articles in one easy-to-search location.</p><p>We aren't updating the Developer Portal anymore, except for the Element Docs &mdash; all updates happen in the <a href ="https://docs.cloud-elements.com/">Help Center</a>. We're retiring the Developer Portal as you know it in:</p><h4 id="demo"></h4>
+  <script>
+  // Set the date we're counting down to
+  var countDownDate = new Date("December 14, 2018 20:00:00").getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+
+      // Get todays date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now an the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Output the result in an element with id="demo"
+      document.getElementById("demo").innerHTML = days + " days " + hours + " hours " + minutes + "m " + seconds + "s ";
+
+      // If the count down is over, write some text
+      if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("demo").innerHTML = "EXPIRED";
+      }
+  }, 1000);
+  </script>
+
+</div>
+
+      <script src="/assets/js/application.js"></script>
+<link href="/assets/css/contentToggle.css" rel="stylesheet">
+
+
+
+      
+      <h1 id="set-up-your-first-integration">Set Up Your First Integration</h1>
+
+<p>In this Getting Started Guide, we&#39;ll walk you through the steps to integrate your contacts in Salesforce with your customers in Shopify. The data sync use case is a simple example that demonstrates the power of Cloud Elements. We&#39;ll set up your  <a href="#" data-toggle="tooltip" data-original-title="A prebuilt API integration that enables a connection into a specific cloud application or cloud service endpoint (such as Box or Salesforce.com). We organize our Elements into categories called ‘Hubs’, which allow you to integrate an entire category through a single, uniform API.">elements</a>, create a  <a href="#" data-toggle="tooltip" data-original-title="A stand-alone resource, created and defined by a user with the intention of creating a one-to-many transformation.">common resource</a> to transform the data into what we need, and then we&#39;ll set up a  <a href="#" data-toggle="tooltip" data-original-title="A reusable workflow that is independent of the Element and includes the triggers, steps, and variables for a formula instance to execute the workflow. ">formula</a> to automatically perform the sync.</p>
+
+<p>The four steps in this process are:
+<link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#authenticate-element-instances';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Authenticate</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#map-to-a-common-resource';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Map to Common Resource</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#build-a-formula';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Build a Formula</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#create-a-formula-instance';">
+
+  <div class="workFlowStepNum"> 4</div>
+  <div>Create Formula Instance</div>
+</div>
+
+<p></div>
+</div></p>
+
+<h2 id="authenticate-element-instances"><img src="/assets/img/callouts/1.png" alt="1" class="inlineImage"> Authenticate Element Instances</h2>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='#authenticate-element-instances';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Authenticate</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#map-to-a-common-resource';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Map to Common Resource</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#build-a-formula';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Build a Formula</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#create-a-formula-instance';">
+
+  <div class="workFlowStepNum"> 4</div>
+  <div>Create Formula Instance</div>
+</div>
+
+<p></div>
+</div></p>
+
+<p>The first step in setting up our contact sync from Salesforce to Shopify, is to authorize the Salesforce Sales Cloud and Shopify elements to connect to your accounts. To do so, you will authenticate  <a href="#" data-toggle="tooltip" data-original-title="The specific authenticated instance of an element.">element instances</a> of both Salesforce Sales Cloud and Shopify. We&#39;ll walk you through a simple authentication below, but if you want more information take a look at the Element Guides for <a href="../elements/salesforce-service-cloud/authentication.html">Salesforce Sales Cloud</a> and <a href="../elements/shopify/authenticate.html">Shopify</a>.</p>
+
+<div markdown="span" class="bs-callout bs-callout-info">The Authenticate step includes these sub-steps:<ul><li><a href=#authenticate-a-salesforce-sales-cloud-instance>Authenticate a Salesforce Sales Cloud Instance</a></li><li><a href=#authenticate-a-salesforce-sales-cloud-instance>Authenticate a Shopify Instance</a></li></ul></div>
+
+<h3 id="authenticate-a-salesforce-sales-cloud-instance">Authenticate a Salesforce Sales Cloud Instance</h3>
+
+<p>In this step you will authenticate an element instance with Salesforce Sales Cloud. As part of that authentication, you will enable events so Cloud Elements can monitor any additions or changes to your list of contacts.</p>
+
+<p>To authenticate a Salesforce Sales Cloud instance:</p>
+
+<ol>
+<li>Navigate to the Elements Catalog. From anywhere in the application, click <strong>Elements</strong> on the left side.
+<img src="img/elements-nav.png" alt="Navigate to Elements Catalog"></li>
+<li>In the Elements Catalog, search for Salesforce Sales Cloud.
+<img src="img/search.gif" alt="Search"></li>
+<li><p>Hover over the element card, and then click <strong>Authenticate</strong>.
+<img src="/assets/img/elements/authenticate-instance.gif" alt="Create Instance"></p>
+
+<p>The Authentication page includes the fields you need to complete on the left and a code view on the right. When you start building our APIs into your app, you can use this code view to help integrate our APIs in your code. You can see the steps to authenticate by using our APIs in <a href="../elements/salesforce-service-cloud/authentication.html">the Salesforce Sales Cloud Element Guide</a>.</p>
+
+<p>Because authentication between Cloud Elements and Salesforce Sales Cloud is done using OAuth 2.0, all you need to do is provide a name for the instance and set up events. After you finish, you&#39;ll authorize Cloud Elements access to your Salesforce account.</p></li>
+<li><p>In <strong>Name</strong> enter a descriptive name for the instance. For this tutorial, we&#39;ll call it &quot;Salesforce Contacts&quot;.</p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> If you need to log in to a Sandbox environment for Salesforce, click <strong>Show Optional Fields</strong>, and then change the <strong>Endpoint Address</strong> to <code>https://login.salesforce.com</code>.  </div></li>
+<li><p>Click <strong>Events Enabled</strong>.</p></li>
+<li><p>In <strong>Event Type</strong>, select <strong>Polling</strong>. We also offer webhooks for Salesforce Sales Cloud, but it requires more setup.</p></li>
+<li><p>For this tutorial, leave <strong>Event Notification Callback URL</strong> and <strong>Callback Notification Signature Key</strong> empty. When you start integrating our APIs in your apps, you&#39;ll use these fields to receive event notifications and to add enhanced security.</p></li>
+<li><p>In <strong>Objects to Monitor for Changes</strong> enter <code>Contact</code>.</p></li>
+<li><p>Change the <code>Event poller refresh interval</code> to 4. This sets the poller to check every 4 minutes.</p>
+
+<p>Your authentication configuration should look like the example below. Notice that the configuration is also reflected in the code view.
+<img src="img/sfdc.png" alt="Salesforce Instance"></p></li>
+<li><p>Click <strong>Create Instance</strong>.</p></li>
+<li><p>As part of the OAuth 2.0 process, log in to Salesforce and allow the connection to Cloud Elements.</p></li>
+</ol>
+
+<p>After you authenticate the element instance we suggest that you test it out using the API docs. Click <strong>Test in the API</strong> docs, open <code>GET /contacts</code>, click <strong>Try it out</strong>, and then click <strong>Execute</strong>. The response body includes all of the contacts in your Salesforce account.</p>
+
+<p>When you finish testing, move on to authenticate with Shopify.</p>
+
+<h3 id="authenticate-a-shopify-instance">Authenticate a Shopify Instance</h3>
+
+<p>In this step you will authenticate an element instance with Shopify. Because this example creates a one-directional sync from Salesforce to Shopify, you do not need to configure events.</p>
+
+<p>To authenticate a Shopify instance:</p>
+
+<ol>
+<li>Navigate to the Elements Catalog and search for Shopify.</li>
+<li><p>Hover over the element card, and then click <strong>Authenticate</strong>.</p>
+
+<p>Like Salesforce, Cloud Elements also uses OAuth 2.0 to authenticate with Shopify, but you also need to configure your <strong>Shopify Site Address</strong>. Because each element has its own authentication requirements, make sure you check out the Element Guides like <a href="../elements/shopify/authenticate.html">Shopify&#39;s Element Guide</a>.</p></li>
+<li><p>In <strong>Name</strong> enter &quot;Shopify Customers&quot;.</p></li>
+<li><p>In <strong>Shopify Site Address</strong> enter the personalized portion of your <code>myshopify.com</code> URL. For example, for <code>https://cloud-elements.myshopify.com</code> just enter <code>cloud-elements</code>.</p></li>
+<li><p>Click <strong>Create Instance</strong>.</p></li>
+<li><p>Log in to Shopify, and then click <strong>Install unlisted app</strong>.</p></li>
+</ol>
+
+<p>Like the Salesforce Sales Cloud instance, we suggest that you test Shopify out using the API docs. Click <strong>Test in the API</strong> docs, open <code>GET /customers</code>, click <strong>Try it out</strong>, and then click <strong>Execute</strong>. The response body includes all of the contacts in your Salesforce account.</p>
+
+<p>With two authenticated instances, you&#39;re now ready to map the Salesforce <code>/contacts</code> object and the Shopify <code>/customers</code> object to a common resource that you define and that contains only the data you want.</p>
+
+<h2 id="map-to-a-common-resource"><img src="/assets/img/callouts/2.png" alt="2" class="inlineImage"> Map to a Common Resource</h2>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#authenticate-element-instances';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Authenticate</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='#map-to-a-common-resource';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Map to Common Resource</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#build-a-formula';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Build a Formula</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#create-a-formula-instance';">
+
+  <div class="workFlowStepNum"> 4</div>
+  <div>Create Formula Instance</div>
+</div>
+
+<p></div>
+</div></p>
+
+<p>To move a contact from Salesforce to Shopify, we need to map the Salesforce <code>/Contact</code> object and the Shopify <code>/customer</code> object to a <strong>common resource</strong>: A stand-alone resource, created and defined by a user with the intention of creating a one-to-many transformation. We&#39;ll help you set up a common resource below, but if you want more information take a look at <a href="../guides/common-resources/index.html">Defining Common Resources &amp; Transformations</a>.</p>
+
+<div markdown="span" class="bs-callout bs-callout-info">The process to map to a common resource involves three primary steps:<ul><li><a href=#define-a-common-resource>Define a Common Resource</a></li><li><a href=#map-and-transform-salesforce-contacts>Map and Transform Salesforce Contacts</a></li><li><a href=#map-and-transform-shopify-customers>Map and Transform Shopify Customers</a></li></ul></div>
+
+<h3 id="define-a-common-resource">Define a Common Resource</h3>
+
+<p>To define a common resource:</p>
+
+<ol>
+<li>Navigate to the Common Resources page. From anywhere in the application, click <strong>Resources</strong> on the left side.</li>
+<li><p>On the Common Resources page, click <strong>Create New Common Resource</strong>.
+<img src="/assets/img/common-resources/create-new.png" alt="Create New Common Resource"></p>
+
+<p>The Create page shows your new Common Resource with a default organization-level field of <strong>id</strong>.
+<img src="/assets/img/common-resources/New-Common_Resource.png" alt="New Resource from Scratch"></p></li>
+<li><p>Enter a name for your common resource, such as &quot;myContact&quot; for a resource to map multiple types of contacts or customers to.</p></li>
+<li><p>Add additional fields: In the Organization Level Fields section, click <img src="/assets/img/platform-icons/btn-add.png" alt="Add Button" class="inlineImage">.
+<img src="/assets/img/common-resources/add-fields.png" alt="Add Fields"></p></li>
+<li><p>In Field Name, enter <code>Email</code>.</p></li>
+<li><p>Repeat to create the following fields:</p>
+
+<ul>
+<li><code>Last Name</code></li>
+<li><code>First Name</code></li>
+</ul></li>
+<li><p>Click <strong>Save</strong>.</p></li>
+</ol>
+
+<p>Your myContact common resource should look like the example below. Notice that you can now create a transformation on the right side of the page. We&#39;ll do that next in <a href="#map-and-transform-salesforce-contacts">Map and Transform Salesforce Contacts</a>.
+<img src="img/defined-cr.png" alt="Common Resource Defined"></p>
+
+<h3 id="map-and-transform-salesforce-contacts">Map and Transform Salesforce Contacts</h3>
+
+<p>Now that you created a common resource, you&#39;ll map fields in the Salesforce <code>/Contact</code> object to the common resource. After you map the fields, Cloud Elements transforms the data from Salesforce to match the fields in the common resource.</p>
+
+<p>To map fields and transform the data:</p>
+
+<ol>
+<li><p>Click <strong>Create New Transformation for &quot;myContact&quot;</strong>.</p>
+
+<p>The two authenticated element instances that you created in Step 1 appear on the left side of the list.
+<img src="img/auth-instances.png" alt="Authentciated Instances"></p></li>
+<li><p>Click <strong>Salesforce Contacts</strong>.</p>
+
+<p>The Salesforce resources &mdash; or objects &mdash; available to you appear on the right side. Salesforce has many resources, but instead of scrolling through the list we&#39;ll search.</p></li>
+<li><p>In Search type <code>contact</code>.</p></li>
+<li><p>Click the <strong>Contact</strong> resource in the list.
+<img src="img/contact-search.png" alt="Contact Object"></p>
+
+<p>Back on the Transformations page you see the fields in the <code>myContact</code> common resource on the left and empty fields to map on the right.
+<img src="img/mapping.png" alt="Mapping"></p></li>
+<li><p>In the first empty field type <code>email</code>. The list filters the fields until you can select the <strong>Email</strong> field, like the example below.
+<img src="../guides/common-resources/img/gif-filter.gif" alt="Filtering Resources"></p></li>
+<li><p>Repeat to map the following fields:</p>
+
+<ul>
+<li><code>First Name</code> map to <code>FirstName</code>.</li>
+<li><code>id</code> map to <code>Id</code></li>
+<li><code>Last Name</code> map to <code>LastName</code></li>
+</ul>
+
+<p>Your mapping should match the the example below:
+<img src="img/sfdc-mapping.png" alt="Salesforce Mapping"></p></li>
+<li><p>Click <strong>Save</strong>.</p></li>
+<li><p>To be able to test the mapping and transformation in the API docs, switch the API docs on: Click <img src="../guides/common-resources/img/btn-Advanced-Settings.png" alt="Advanced Settings" class="inlineImage">, switch on <strong>Add to API Docs</strong>, and then click <strong>Save</strong>.</p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> <strong>Remove Unmapped Fields</strong> is on by default. This ensures that we return only the fields that you identify in your common resource. If it is not on, switch it on. </div></li>
+<li><p>Test it out: Click <img src="../guides/common-resources/img/btn-Try.png" alt="Try it out" class="inlineImage">.</p>
+
+<p>On the <strong>Transformed</strong> tab, you see a payload with just the fields that you defined in the common resource.
+<img src="img/transformed.png" alt="Transformed Payload"></p></li>
+<li><p>As a comparison, click <strong>Original</strong> to see the payload before Cloud Elements transformed it.</p></li>
+<li><p>Click <strong>Cancel</strong> to return to the Transformations page.</p></li>
+</ol>
+
+<p>Now that you mapped the Salesforce <code>/Contact</code> object to your <code>myContacts</code> common resource, let&#39;s map the Shopify <code>/customers</code> resource.</p>
+
+<h3 id="map-and-transform-shopify-customers">Map and Transform Shopify Customers</h3>
+
+<p>To map the fields in the Shopify <code>/customer</code> object, we just need to repeat the steps that you just completed for your authenticated Shopify instance.</p>
+
+<p>To map fields and transform the data:</p>
+
+<ol>
+<li><p>From the Transformations page with the mapped Salesforce Contacts instance, click <strong>/myContact</strong> in the <strong>My Resources</strong> list.
+<img src="img/click-myContact.png" alt="Navigate to CR"></p>
+
+<p>The Salesforce Contact instance that you just mapped appears in the <strong>Mapped Transformations</strong> section.
+<img src="img/mapped-transformations.png" alt="Mapped Transformations"></p></li>
+<li><p>Click <strong>Create New Transformation for &quot;myContact&quot;</strong>.</p></li>
+<li><p>This time, click the <strong>Shopify Customers</strong> instance on the left, and then locate and select the <strong>customer</strong> resource on the right.
+<img src="img/shopify-customers.png" alt="Shopify Customers"></p></li>
+<li><p>Map the fields to:</p>
+
+<ul>
+<li><code>Email</code> map to <code>email</code></li>
+<li><code>First Name</code> map to <code>first_name</code></li>
+<li><code>id</code> map to <code>id</code></li>
+<li><code>Last Name</code> map to <code>last_name</code></li>
+</ul></li>
+<li><p>Click <strong>Save</strong>.</p></li>
+<li><p>Switch on the API docs: Click <img src="../guides/common-resources/img/btn-Advanced-Settings.png" alt="Advanced Settings" class="inlineImage">, switch on <strong>Add to API Docs</strong>, and then click <strong>Save</strong>.</p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Make sure that <strong>Remove Unmapped Fields</strong> is on so you see only the fields in the common resource.  </div></li>
+<li><p>Test it out: Click <img src="../guides/common-resources/img/btn-Try.png" alt="Try it out" class="inlineImage">.</p></li>
+</ol>
+
+<p>Like the Salesforce element, your response includes only the fields defined in your common resource.
+<img src="img/transformed-shopify.png" alt="Transformed Shopify"></p>
+
+<h2 id="build-a-formula"><img src="/assets/img/callouts/3.png" alt="3" class="inlineImage"> Build a Formula</h2>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#authenticate-element-instances';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Authenticate</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#map-to-a-common-resource';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Map to Common Resource</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='#build-a-formula';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Build a Formula</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#create-a-formula-instance';">
+
+  <div class="workFlowStepNum"> 4</div>
+  <div>Create Formula Instance</div>
+</div>
+
+<p></div>
+</div></p>
+
+<p>In Cloud Elements you can build <strong>formula templates</strong> &mdash; reusable workflow templates that are independent of API providers. Formula templates include triggers, like events or schedules, that kick off a series of steps. Formulas support a large variety of different use cases across different services.  For example, they can keep systems in sync, migrate data between systems, or automate business workflows.</p>
+
+<p>For this tutorial, you&#39;ll create a formula template that:</p>
+
+<ol>
+<li>Kicks off when you update a contact.</li>
+<li>Checks to see if the contact is new or if it was updated (which it will ignore).</li>
+<li>Gets the contact your Salesforce Sales Cloud element instance and posts it to your Shopify instance.</li>
+</ol>
+
+<p>Before we start, it&#39;s important to understand the difference between a formula template and a formula instance. The template defines how the formula works regardless of variables like the kind of element or a user input. With formula instances you plug actual values into the variables in the template. With this approach you can plug different element instances into the formula so you can sync contacts with Hubspot, Woocommerce, Zoho, Etsy, Magento, or any of our elements.</p>
+
+<p>If you want to see a completed formula template for comparison, <a href="https://developers.cloud-elements.com/download/Sync-Contacts.json">download our sample copy</a>, and then import it.</p>
+
+<div markdown="span" class="bs-callout bs-callout-info">The process to map to a create a formula template involves two primary steps:</ul><li><a href=#set-up-the-formula-triggers-and-variables>Set Up the Formula Triggers and Variables</a></li><li><a href=#link>Add Steps to the Formula Template</a></li></ul></div>
+
+<h3 id="set-up-the-formula-triggers-and-variables">Set Up the Formula Triggers and Variables</h3>
+
+<p>The trigger used in a formula template is the action that kicks off the formula. You can set up triggers for events, scheduled jobs, API requests to elements, and manual triggering. Variables can represent authenticated element instances or values. When you actually run a formula by creating a formula instance, you replace the variables with actual authenticated element instances or values.</p>
+
+<p>For this tutorial, the trigger will be based on an event &mdash; when a new contact is created in Salesforce. The variables will represent the Salesforce Sales Cloud and Shopify element instances that you created earlier.</p>
+
+<p>To set up triggers and variables:</p>
+
+<ol>
+<li>Navigate to the Formulas page. From anywhere in the application, click <strong>Formulas</strong> on the left side.</li>
+<li><p>On the Formulas page, click <strong>Build New Formula Template</strong>.</p>
+
+<p>You can build formula templates based on existing templates or by importing a JSON file that defines the template. For this tutorial, you will build the formula template from scratch. However, if you want to test your formula with ours, <a href="https://developers.cloud-elements.com/download/Sync-Contacts.json">download our copy</a>, and then import it later.</p></li>
+<li><p>Click <strong>Build New Formula</strong>.</p></li>
+<li><p>Enter a name for your formula like &quot;Sync Contacts&quot;, and then click <strong>Create</strong>.</p>
+
+<p>Cloud Elements provides you a list of triggers. Triggers define how the formula starts. Because we want to automatically sync contacts when our event framework discovers a new <code>/Contact</code>, we&#39;ll use an Event trigger. When new or updated contacts appear in Salesforce, our Event framework builds a payload that can trigger a Formula.
+<img src="../guides/formulasC2/img/triggers.png" alt="New Formula Template"></p></li>
+<li><p>Click <strong>Event</strong>.</p>
+
+<p>As mentioned earlier, formula templates consist of variables. The variables can represent authenticated element instances or values. In this formula, the variables will represent the two element instances that you authenticated earlier. Because you have not yet created a variable you need to create one to represent the element that kicks off the formula.</p></li>
+<li><p>Click the add button <img src="/assets/img/platform-icons/btn-add-black.png" alt="Add" class="inlineImage">.</p></li>
+<li><p>On the Formula Variables window, click <strong>Add New Variable</strong>, and then  click <strong>Element Instance</strong>.</p></li>
+<li><p>Name the variable that represents the element that kicks off the template <strong>OriginInstance</strong>. In our example, this will be Salesforce Sales Cloud.</p>
+
+<p>The variable should look like the example below:
+<img src="img/origininstance.png" alt="Origin Instance"></p></li>
+<li><p>Click <strong>Save</strong>.</p></li>
+<li><p>Select the variable that you just created <strong>OriginInstance</strong>, and then on the <strong>Edit event: &quot;trigger&quot;</strong> window click <strong>Save</strong>.</p></li>
+<li><p>Now add a variable for the element that gets updated when a contact is created (Shopify): Click <strong>Variables</strong> in the menu bar.
+<img src="../guides/formulasC2/img/variables.png" alt="Variables"></p></li>
+<li><p>Click <strong>Element Instance</strong>.
+<img src="img/formula-variables.png" alt="Element Instance"></p></li>
+<li><p>Name the variable <strong>DestinationInstance</strong>, and then click <strong>Save</strong>.</p></li>
+</ol>
+
+<p>At this point you built a template based on an Event trigger with two variables to represent the origin and destination elements. Next, add the steps needed to perform the sync.</p>
+
+<h3 id="add-steps-to-the-formula-template">Add Steps to the Formula Template</h3>
+
+<p>In addition to triggers and variables, formula template include steps that represent actions that the formula needs to take to accomplish its goal. At the end of every step, the formula can follow an On Success or On Failure path. For this tutorial, all steps will follow the On Success path. The steps we&#39;ll add include:</p>
+
+<ol>
+<li>Create a Filter.</li>
+<li>Retrieve the contact.</li>
+<li>Create a new contact.</li>
+</ol>
+
+<p>To add steps:</p>
+
+<ol>
+<li><p>Under the trigger click <img src="../guides/formulasC2/img/btn-add-step.gif" alt="Add a Step" class="inlineImage">.</p>
+
+<p>You can use many different kinds of steps in a formula. Because we&#39;re going to write some logic to make sure that the event we receive is for a created contact, we&#39;ll use the JS Script step type.</p></li>
+<li><p>Click <strong>JS Script</strong>.</p></li>
+<li><p>Enter a name for the step like &quot;IsCreateContact&quot;.</p></li>
+<li><p>In the code area, enter the following, and then click <strong>Save</strong>.</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">let</span> <span class="nx">theEvent</span> <span class="o">=</span> <span class="nx">trigger</span><span class="p">.</span><span class="nx">event</span><span class="p">.</span><span class="nx">eventType</span><span class="p">;</span>
+<span class="kd">let</span> <span class="nx">theObject</span> <span class="o">=</span> <span class="nx">trigger</span><span class="p">.</span><span class="nx">event</span><span class="p">.</span><span class="nx">objectType</span><span class="p">;</span>
+
+<span class="nx">done</span><span class="p">((</span><span class="nx">theEvent</span> <span class="o">===</span> <span class="s1">'CREATED'</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">theObject</span> <span class="o">===</span> <span class="s1">'Contact'</span> <span class="o">||</span> <span class="nx">theObject</span> <span class="o">===</span> <span class="s1">'contact'</span><span class="p">));</span>
+</code></pre></div></li>
+<li><p>Now add the next step to retrieve the created contact from the element represented by the <code>OriginInstance</code> variable &mdash; Salesforce Sales Cloud. Click the <strong>IsCreateContact</strong> step that you just created, and then click <strong>Add OnSuccess</strong>.
+<img src="img/add-onsuccess.png" alt="Add On Success"></p></li>
+<li><p>This time select the <strong>Element API Request</strong> step type. With this type of step, you need to identify the element variable to request and what the endpoint should be.</p></li>
+<li><p>In the <strong>Add Formula Step</strong> window, enter the name for the step: &quot;RetrieveContact&quot;.</p></li>
+<li><p>In Element Instance Variable click <img src="/assets/img/platform-icons/btn-add-black.png" alt="Add" class="inlineImage">, and then select <strong>OriginInstance</strong>.</p></li>
+<li><p>In <strong>Method</strong>, select <strong>GET</strong>.</p></li>
+<li><p>In <strong>API</strong> enter <code>/hubs/crm/myContact/${trigger.event.objectId}</code>. This is the endpoint of the Common Resource that you created earlier.</p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> <code>${trigger.event.objectId}</code> refers to the context of the formula. When a trigger receives the event payload, it includes data that you can manipulate. In the case, we are creating a request to get the payload returned by an event with a specific <code>objectId</code>. </br> Also see that the API request endpoint is the common resource that we created earlier, so only the data we care about will be posted to Shopify.</div></li>
+<li><p>Click <strong>Save</strong>.</p></li>
+<li><p>Now create the final step, which is posting the created contact to the element represented by the destination variable &mdash; Shopify. Create another Element API Request with the information below:</p></li>
+</ol>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Field</th>
+<th style="text-align: left">Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">Name</td>
+<td style="text-align: left"><code>CreateContact</code></td>
+</tr>
+<tr>
+<td style="text-align: left">Element Instance</td>
+<td style="text-align: left"><code>config.destinationinstance</code></td>
+</tr>
+<tr>
+<td style="text-align: left">Method</td>
+<td style="text-align: left"><code>POST</code></td>
+</tr>
+<tr>
+<td style="text-align: left">API</td>
+<td style="text-align: left"><code>/hubs/ecommerce/myContact</code></td>
+</tr>
+<tr>
+<td style="text-align: left">Body</td>
+<td style="text-align: left"><code>steps.RetrieveContact.response.body</code></br><div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Click <strong>Show Advanced</strong> to find the Body field. This also uses the context of the formula to look in the response to the <code>RetrieveContact</code> step to compose the body of its own request.  </div></td>
+</tr>
+</tbody></table>
+
+<p>|</p>
+
+<p>You are almost done. Now we just need to create and run a formula instance to see the actual sync occur.</p>
+
+<h2 id="create-a-formula-instance"><img src="/assets/img/callouts/4.png" alt="4" class="inlineImage"> Create a Formula Instance</h2>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#authenticate-element-instances';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Authenticate</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#map-to-a-common-resource';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Map to Common Resource</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#build-a-formula';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Build a Formula</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='#create-a-formula-instance';">
+
+  <div class="workFlowStepNum"> 4</div>
+  <div>Create Formula Instance</div>
+</div>
+
+<p></div>
+</div></p>
+
+<p>The formula instance actually performs the sync. In this case we&#39;re going to associate the Salesforce Sales Cloud element instance with the <code>OriginInstance</code> formula variable, and Shopify with <code>DestinationInstance</code>. Whenever you create a new contact in Salesforce, the Cloud Elements poller recognizes that an even occurred. The trigger for the formula kicks off when an event occurs at the element in the <code>OriginInstance</code> variable, which then kicks off the logic in the formula.</p>
+
+<p>To create a formula instance:</p>
+
+<ol>
+<li>Navigate back to the main Formulas page.</li>
+<li>Hover over the <strong>Sync Contacts</strong> card, and then click <strong>Create Instance</strong>.</li>
+<li>Name the instance something more specific than the template like &quot;Salesforce to Shopify Contact Sync.&quot;</li>
+<li>Click<code>OriginInstance</code>, and then select the Salesforce instance that you authenticated earlier &mdash; Salesforce Contacts.</li>
+<li><p>Click<code>DestinationInstance</code>, and then select the Shopify instance that you authenticated earlier &mdash; Shopify Customers.</p>
+
+<p>You&#39;re formula instance should look like the example below.
+<img src="img/formula-instance.png" alt="Formula Instance"></p></li>
+<li><p>Click <strong>Create Instance</strong>.</p></li>
+</ol>
+
+<h2 id="try-it-out">Try it Out</h2>
+
+<ol>
+<li>Log in in your Salesforce account and create a new contact.</li>
+<li>Wait a few minutes &mdash; remember that we set the polling interval for five minutes &mdash; and return to Cloud Elements.</li>
+<li>On the Formulas page, hover over the <strong>Sync Contacts</strong> card, and then click <strong>Executions</strong>.</li>
+<li>The executions appear on the left side, listed by Object ID. You can click the Execution itself to see the series of steps, and you can get even more detailed by click ing on each step.</li>
+<li>Lastly, log in to Shopify to see the new Customer that has been created in your account.</li>
+</ol>
+
+<p>Congratulations! You created your first integration. Email <a href="mailto:documentation@cloud-elements.com">documentation@cloud-elements.com</a> if you have any feedback on this tutorial.</p>
+
+    </div>
+
+  </div>
+  <script src="/assets/js/chart.js"></script>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

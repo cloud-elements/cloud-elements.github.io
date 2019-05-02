@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/elements/gmail/authenticate.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> Gmail </h2>
+          <!-- <h4> Authenticate an element instance with the API provider </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/elements/gmail/?elementId=6409">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/gmail/setup.html?elementId=6409">API Provider Setup</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/gmail/authenticate.html?elementId=6409">Authenticate</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/gmail/events.html?elementId=6409">Events</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/gmail/bulk.html?elementId=6409">Bulk</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/gmail/ceql.html?elementId=6409">Querying</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/gmail/api-documentation.html?elementId=6409">API Docs</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <h1 id="authenticate-with-google">Authenticate with Google</h1>
+
+<p>You can authenticate with Google to create your own instance of the Gmail element through the UI or through APIs. Once authenticated, you can use the element instance to access the different functionality offered by the Google platform.</p>
+
+<div markdown="span" class="bs-callout bs-callout-info"><strong>On this page</strong></br><a href=#authenticate-through-the-ui>Authenticate Through the UI</a></br><a href=#authenticate-through-api>Authenticate Through API</a></br><a href=#parameters>Parameters</a></br><a href=#example-response-for-an-authenticated-element-instance>Example Response for an Authenticated Element Instance</a></div>
+
+<h2 id="authenticate-through-the-ui">Authenticate Through the UI</h2>
+
+<p>Use the UI to authenticate with Google and create a Gmail element instance.  Google authentication follows the typical OAuth 2.0 framework and you will need to sign in to Google as part of the process.</p>
+
+<p>If you are configuring events, see the <a href="events.html">Events section</a>.</p>
+
+<p>To authenticate an element instance:</p>
+
+<ol>
+<li>Sign in to Cloud Elements, and then search for Gmail in our Elements Catalog.
+<img src="/assets/img/elements/element-search2.png" alt="Search"></li>
+<li>Hover over the element card, and then click <strong>Authenticate</strong>.
+<img src="/assets/img/elements/authenticate-instance.gif" alt="Create Instance"></li>
+<li>Enter a name for the element instance.</li>
+<li>Optionally type or select one or more Element Instance Tags to add to the authenticated element instance.</li>
+<li>Click <strong>Create Instance</strong>.</li>
+<li>Provide your Google credentials, and then allow the connection.</li>
+</ol>
+
+<p>After successfully authenticating, we give you several options for next steps. <a href="https://docs.cloud-elements.com/home/view-element-api-docs#test-an-element-instance">Make requests using the API docs</a> associated with the instance, <a href="https://docs.cloud-elements.com/home/common-object">map the instance to a virtual data resource</a>, or <a href="https://docs.cloud-elements.com/home/formula-template">use it in a formula template</a>.</p>
+
+<h2 id="authenticate-through-api">Authenticate Through API</h2>
+
+<p>Authenticating through API is similar to authenticating via the UI. Instead of clicking and typing through a series of buttons, text boxes, and menus, you will instead send a request to our <code>instance</code> endpoint. The end result is the same, though: an authenticated element instance with a  <strong>token</strong> and <strong>id</strong>.</p>
+
+<p>Authenticating through API follows a multi-step OAuth 2.0 process that involves:</p>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#getting-a-redirect-url';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Redirect URL</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#authenticating-users-and-receiving-the-authorization-grant-code';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Authenticate Users</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#authenticating-the-element-instance';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Authenticate Instance</div>
+</div>
+
+<p></div>
+</div></p>
+
+<ul>
+<li><a href="#getting-a-redirect-url">Getting a redirect URL</a>. This URL sends users to the vendor to log in to their account.</li>
+<li><a href="#authenticating-users-and-receiving-the-authorization-grant-code">Authenticating users and receiving the authorization grant code</a>. After the user logs in, the vendor makes a callback to the specified url with an authorization grant code.</li>
+<li><a href="#authenticating-the-element-instance">Authenticating the element instance</a>. Using the authorization code from the vendor, authenticate with the vendor to create an element instance at Cloud Elements.</li>
+</ul>
+
+<h3 id="getting-a-redirect-url">Getting a Redirect URL</h3>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='#getting-a-redirect-url';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Redirect URL</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#authenticating-users-and-receiving-the-authorization-grant-code';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Authenticate Users</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#authenticating-the-element-instance';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Authenticate Instance</div>
+</div>
+
+<p></div>
+</div></p>
+
+<p>Use the following API call to request a redirect URL where the user can authenticate with the service provider. Replace <code>{keyOrId}</code> with the element key, <code>gmail</code>.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> GET /elements/<span class="o">{</span>keyOrId<span class="o">}</span>/oauth/url?apiKey<span class="o">=</span>&lt;api_key&gt;&amp;apiSecret<span class="o">=</span>&lt;api_secret&gt;&amp;callbackUrl<span class="o">=</span>&lt;url&gt;&amp;siteAddress<span class="o">=</span>&lt;url&gt;
+</code></pre></div>
+<h4 id="query-parameters">Query Parameters</h4>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Query Parameter</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">apiKey</td>
+<td style="text-align: left">The API key or client ID obtained from registering your app with the provider.  This is the <strong>Client ID</strong> that you recorded in <a href="setup.html">API Provider Setup</a>.</td>
+</tr>
+<tr>
+<td style="text-align: left">apiSecret</td>
+<td style="text-align: left">The client secret obtained from registering your app with the API provider.   This is the <strong>Client secret</strong> that you recorded in <a href="setup.html">API Provider Setup</a>.</td>
+</tr>
+<tr>
+<td style="text-align: left">callbackUrl</td>
+<td style="text-align: left">The URL that the API provider returns a user to after they authorize access.  This is the <strong>Authorized redirect URI</strong> that you recorded in <a href="setup.html">API Provider Setup</a></td>
+</tr>
+</tbody></table>
+
+<h4 id="example-curl">Example cURL</h4>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> GET <span class="se">\</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/elements/gmail/oauth/url?apiKey=Rand0MAP1-key&amp;apiSecret=fak3AP1-s3Cr3t&amp;callbackUrl=https:%3A%2F%2Fwww.mycoolapp.com%2auth'</span> <span class="se">\</span>
+</code></pre></div>
+<h4 id="example-response">Example Response</h4>
+
+<p>Use the <code>oauthUrl</code> in the response to allow users to authenticate with the vendor.</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"oauthUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&amp;prompt=consent&amp;scope=https%3A%2F%2Fmail.google.com%2F+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fgmail.settings.basic&amp;response_type=code&amp;redirect_uri=https%3A%2F%2Fhttpbin.org%2Fget&amp;state=gmail&amp;client_id=902730456353-eg6u18jk0b6ud8lcp3gg6i3r9l8fhvf3.apps.googleusercontent.com"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"element"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gmail"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<h3 id="authenticating-users-and-receiving-the-authorization-grant-code">Authenticating Users and Receiving the Authorization Grant Code</h3>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#getting-a-redirect-url';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Redirect URL</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='#authenticating-users-and-receiving-the-authorization-grant-code';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Authenticate Users</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#authenticating-the-element-instance';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Authenticate Instance</div>
+</div>
+
+<p></div>
+</div></p>
+
+<p>Provide the <code>oauthUrl</code> in the response from the previous step to the users. After users authenticate, Google provides the following information in the response:</p>
+
+<ul>
+<li>code</li>
+<li>state</li>
+</ul>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Response Parameter</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">code</td>
+<td style="text-align: left">The authorization grant code returned from the API provider in an OAuth 2.0 authentication workflow. Cloud Elements uses the code to retrieve the OAuth access and refresh tokens from the endpoint.</td>
+</tr>
+<tr>
+<td style="text-align: left">state</td>
+<td style="text-align: left">A customizable identifier, typically the element key (<code>gmail</code>) .</td>
+</tr>
+</tbody></table>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> If the user denies authentication and/or authorization, there will be a query string parameter called <code>error</code> instead of the <code>code</code> parameter. In this case, your application can handle the error gracefully.</div>
+
+<h3 id="authenticating-the-element-instance">Authenticating the Element Instance</h3>
+
+<p><link href="/assets/css/workflow.css" rel="stylesheet">
+<div class="workFlowWrapper">
+<div class="workFlowFlex"></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#getting-a-redirect-url';">
+
+  <div class="workFlowStepNum"> 1</div>
+  <div>Redirect URL</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep inactiveWorkFlowStep" onclick="location.href='#authenticating-users-and-receiving-the-authorization-grant-code';">
+
+  <div class="workFlowStepNum"> 2</div>
+  <div>Authenticate Users</div>
+</div>
+
+<p><div class="arrow"></div></p>
+
+<!-- Determine if the step should be highlighted -->
+
+<div class="workFlowStep activeWorkFlowStep" onclick="location.href='#authenticating-the-element-instance';">
+
+  <div class="workFlowStepNum"> 3</div>
+  <div>Authenticate Instance</div>
+</div>
+
+<p></div>
+</div></p>
+
+<p>Use the <code>code</code> from the previous step and the <code>/instances</code> endpoint to authenticate with Google and create an element instance. If you are configuring events, see the <a href="events.html">Events section</a>.</p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> The endpoint returns an element instance token and id upon successful completion. Retain the token and id for all subsequent requests involving this element instance.  </div>
+
+<p>To authenticate an element instance:</p>
+
+<ol>
+<li><p>Construct a JSON body as shown below (see <a href="#parameters">Parameters</a>):</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"element"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gmail"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"providerData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;AUTHORIZATION_GRANT_CODE&gt;"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"configuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"oauth.api.key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;Google app Client ID&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.api.secret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;Google app Client secret&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.callback.url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;Google app Authorized redirect URI &gt;"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"&lt;Add_Your_Tag&gt;"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;INSTANCE_NAME&gt;"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></li>
+<li><p>Call the following, including the JSON body you constructed in the previous step:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">POST /instances
+</code></pre></div>
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Make sure that you include the User and Organization keys in the header. See <a href=index.html#authenticating-with-cloud-elements>the Overview</a> for details. </div></li>
+<li><p>Locate the <code>token</code> and <code>id</code> in the response and save them for all future requests using the element instance.</p></li>
+</ol>
+
+<h4 id="example-curl">Example cURL</h4>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> POST <span class="se">\</span>
+  https://api.cloud-elements.com/elements/api-v2/instances <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'authorization: User &lt;USER_SECRET&gt;, Organization &lt;ORGANIZATION_SECRET&gt;'</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s1">'content-type: application/json'</span> <span class="se">\</span>
+  <span class="nt">-d</span> <span class="s1">'{
+  "element": {
+    "key": "gmail"
+  },
+  "providerData": {
+    "code": "xxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  "configuration": {
+    "oauth.callback.url": "https;//mycoolapp.com",
+    "oauth.api.key": "xxxxxxxxxxxxxxxxxx",
+    "oauth.api.secret": "xxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  "tags": [
+    "Docs"
+  ],
+  "name": "API Instance"
+}'</span>
+</code></pre></div>
+<h2 id="parameters">Parameters</h2>
+
+<p>API parameters not shown in Cloud Elements are in <code>code formatting</code>.</p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Event related parameters are described in <a href=events.html>Events</a>.</div>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Data Type</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left"><code>key</code></td>
+<td style="text-align: left">The element key.<br>gmail</td>
+<td style="text-align: left">string</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>code</code></td>
+<td style="text-align: left">The authorization grant code returned from the API provider in an OAuth 2.0 authentication workflow. Cloud Elements uses the code to retrieve the OAuth access and refresh tokens from the endpoint.</td>
+<td style="text-align: left">string</td>
+</tr>
+<tr>
+<td style="text-align: left">Name</br><code>name</code></td>
+<td style="text-align: left">The name of the element instance created during authentication.</td>
+<td style="text-align: left">string</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>oauth.api.key</code></td>
+<td style="text-align: left">The API key or client ID obtained from registering your app with the provider.  This is the <strong>Client ID</strong> that you noted in <a href="setup.html">API Provider Setup</a>.</td>
+<td style="text-align: left">string</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>oauth.api.secret</code></td>
+<td style="text-align: left">The client secret obtained from registering your app with the API provider.   This is the <strong>Client secret</strong> that you noted in <a href="setup.html">API Provider Setup</a>.</td>
+<td style="text-align: left">string</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>oauth.callback.url</code></td>
+<td style="text-align: left">The API key or client ID obtained from registering your app with the provider.  This is the <strong>Authorized redirect URI</strong> that you noted in <a href="setup.html">API Provider Setup</a>.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">tags</td>
+<td style="text-align: left"><em>Optional</em>. User-defined tags to further identify the instance.</td>
+<td style="text-align: left">string</td>
+</tr>
+</tbody></table>
+
+<h2 id="example-response-for-an-authenticated-element-instance">Example Response for an Authenticated Element Instance</h2>
+
+<p>In this example, the instance ID is <code>12345</code> and the instance token starts with &quot;ABC/D...&quot;. The actual values returned to you will be unique: make sure you save them for future requests to this new instance.</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">12345</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"API Instance"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"createdDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-01-22T20:55:08Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ABC/Dxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"element"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">6409</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Gmail"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"hookName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Gmail"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gmail"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Add a Gmail Instance to connect your existing Google account to the general Hub, allowing you to manage your emails.You will need your Google account information to add an instance "</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"elements/custom-element-default-logo.png"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"deleted"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"typeOauth"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"trialAccount"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"resources"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"transformationsEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"bulkDownloadEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"bulkUploadEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"cloneable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"extendable"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"beta"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"authentication"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oauth2"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"extended"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"hub"</span><span class="p">:</span><span class="w"> </span><span class="s2">"general"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"protocolType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"parameters"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+    </span><span class="s2">"private"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"elementId"</span><span class="p">:</span><span class="w"> </span><span class="mi">8153</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"Docs"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"provisionInteractions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"valid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"disabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"maxCacheSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"cacheTimeToLive"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"providerData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4/T6i0VObdJU8_reE0xQ90cGJJNTPW8MS-Ri_7G_x3FIQ"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"configuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">    </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"eventsEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"eventsNotificationCallbackUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"traceLoggingEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"cachingEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"externalAuthentication"</span><span class="p">:</span><span class="w"> </span><span class="s2">"none"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3306</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"emailAddress"</span><span class="p">:</span><span class="w"> </span><span class="s2">"claude.elements@cloud-elements.com"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Claude"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Elements"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

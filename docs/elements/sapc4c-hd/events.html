@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/elements/sapc4c-hd/events.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> SAP Hybris Cloud for Customer Helpdesk </h2>
+          <!-- <h4> Enable SAP Anywhere events for your application. </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/elements/sapc4c-hd/?elementId=3522">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/sapc4c-hd/endpoint-setup.html?elementId=3522">Endpoint Setup</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/sapc4c-hd/authenticate.html?elementId=3522">Authenticate</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/sapc4c-hd/events.html?elementId=3522">Events</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/sapc4c-hd/bulk.html?elementId=3522">Bulk APIs</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/sapc4c-hd/ceql.html?elementId=3522">Querying</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/sapc4c-hd/tips.html?elementId=3522">Tips</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/sapc4c-hd/api-documentation.html?elementId=3522">API Docs</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <h1 id="events">Events</h1>
+
+<p>Cloud Elements currently supports events via <strong>polling</strong> or <strong>webhooks</strong> depending on the endpoint.</p>
+
+<ul>
+<li><strong>Polling</strong> is a mechanism where Cloud Elements executes the configured query every <code>n</code> minutes and captures the changed information.</li>
+<li><strong>Webhooks</strong> are when the provider lets Cloud Elements know what information has changed. Note that additional endpoint setup may be required prior to creating your Element Instance.</li>
+</ul>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Cloud Elements normalizes only the objectId, objectType, and eventType event data. Event data also contains raw data, which the provider returns. The raw data varies based on the endpoint.  </div>
+
+<p>If you would like to see more information on our Events framework, please see the <a href="/docs/platform/event-management/index.html">Event Management Guide</a>.</p>
+
+<p>Cloud Elements supports polling events for the following SAP Hybris Cloud for Customer Helpdesk resources:</p>
+
+<ul>
+<li>accounts</li>
+<li>contacts</li>
+<li>incidents</li>
+<li>incidents-statuses</li>
+</ul>
+
+<div markdown="span" class="bs-callout bs-callout-info"><strong>On this page</strong></br><a href=#configure-polling-through-the-ui>Configure Polling Through the UI</a></br><a href=#configure-polling-through-api>Configure Polling Through API</a></br><a href=#parameters>Parameters</a></br><a href=#example-curl>Example cURL</br><a href=#example-response>Example Response</a></a></div>
+
+<h2 id="configure-polling-through-the-ui">Configure Polling Through the UI</h2>
+
+<p>Use Cloud Elements to authenticate with SAP Hybris Cloud for Customer and create an element instance with polling enabled.</p>
+
+<p>To authenticate an element instance with polling:</p>
+
+<ol>
+<li>Sign in to Cloud Elements, and then search for SAP Hybris Cloud for Customer Helpdesk in our Elements Catalog.
+<img src="/assets/img/elements/element-search2.png" alt="Search"></li>
+<li>Hover over the element card, and then click <strong>Authenticate</strong>.
+<img src="/assets/img/elements/authenticate-instance.gif" alt="Create Instance"></li>
+<li>Enter a name for the element instance.</li>
+<li>Complete the required parameters in the Configuration section: <strong>Subdomain</strong>, <strong>Username</strong>, and <strong>Password</strong>. See <a href="#parameters">Parameters</a> for descriptions.</li>
+<li>Switch <strong>Events Enabled</strong> on.</li>
+<li>Add an Event Notification Callback URL.</li>
+<li>Use the <strong>Event poller refresh interval (mins)</strong> slider or enter a number in minutes to specify how often Cloud Elements should poll for changes.</li>
+<li>Select the resources to poll.</li>
+<li>Advanced users can further configure polling:
+
+<ul>
+<li>Click <img src="/assets/img/platform-icons/code.png" alt="Code Button" class="inlineImage"> to edit the polling configuration JSON directly.
+<img src="/assets/img/elements/configure-polling-json.gif" alt="Configure Polling UI"></li>
+<li>Click <img src="/assets/img/platform-icons/pencil.png" alt="Edit Button" class="inlineImage"> to access the poller configuration.
+<img src="/assets/img/elements/configure-polling2.gif" alt="Configure Polling JSON"></li>
+</ul></li>
+<li>Click <strong>Create Instance</strong>.</li>
+<li>Optionally add tags in the earlier UI</li>
+</ol>
+
+<p>After successfully authenticating, we give you several options for next steps. <a href="https://docs.cloud-elements.com/home/view-element-api-docs">Make requests using the API docs</a> associated with the instance, <a href="https://docs.cloud-elements.com/home/common-object">map the instance to a virtual data resource</a>, or <a href="https://docs.cloud-elements.com/home/formula-template">use it in a formula template</a>.</p>
+
+<h2 id="configure-polling-through-api">Configure Polling Through API</h2>
+
+<p>Use the <code>/instances</code> endpoint to authenticate with SAP Hybris Cloud for Customer and create an element instance with polling enabled.</p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> The endpoint returns an Element token upon successful completion. Retain the token for all subsequent requests involving this element instance.  </div>
+
+<p>To authenticate an element instance with polling:</p>
+
+<ol>
+<li><p>Construct a JSON body as shown below (see <a href="#parameters">Parameters</a>):</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+    </span><span class="s2">"element"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sapc4chd"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"configuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"subdomain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;domain&gt;.crm.ondemand.com"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;YOUR_SAP_Hybris Cloud for Customer_USERNAME&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"password"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;YOUR_SAP_Hybris Cloud for Customer_PASSWORD&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"event.notification.enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"event.notification.callback.url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://mycoolapp.com"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"event.poller.refresh_interval"</span><span class="p">:</span><span class="w"> </span><span class="s2">"15"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"accounts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/helpdesk/accounts?where=ChangedOn&gt;='${date:yyyy-MM-dd'T'HH:mm:ss'Z'}"</span><span class="p">,</span><span class="w">
+       </span><span class="s2">"idField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ObjectID"</span><span class="p">,</span><span class="w">
+       </span><span class="s2">"datesConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+         </span><span class="s2">"updatedDateField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ChangedOn"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"updatedDateFormat"</span><span class="p">:</span><span class="w"> </span><span class="s2">"milliseconds"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"createdDateField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CreatedOn"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"createdDateFormat"</span><span class="p">:</span><span class="w"> </span><span class="s2">"milliseconds"</span><span class="w">
+       </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"contacts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/helpdesk/contacts?where=ChangedOn&gt;='${date:yyyy-MM-dd'T'HH:mm:ss'Z'}'"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"idField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ObjectID"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"datesConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"updatedDateField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ChangedOn"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"updatedDateFormat"</span><span class="p">:</span><span class="w"> </span><span class="s2">"milliseconds"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createdDateField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CreatedOn"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createdDateFormat"</span><span class="p">:</span><span class="w"> </span><span class="s2">"milliseconds"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"incidents"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/helpdesk/incidents?where=ChangedOn&gt;='${date:yyyy-MM-dd'T'HH:mm:ss'Z'}"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"idField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ObjectID"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"datesConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"updatedDateField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ChangedOn"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"updatedDateFormat"</span><span class="p">:</span><span class="w"> </span><span class="s2">"milliseconds"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createdDateField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CreatedOn"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createdDateFormat"</span><span class="p">:</span><span class="w"> </span><span class="s2">"milliseconds"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"incidents-statuses"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/helpdesk/incidents-statuses?where=ChangedOn&gt;='${date:yyyy-MM-dd'T'HH:mm:ss'Z'}"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"idField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ObjectID"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"datesConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"updatedDateField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ChangedOn"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"updatedDateFormat"</span><span class="p">:</span><span class="w"> </span><span class="s2">"milliseconds"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createdDateField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CreatedOn"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createdDateFormat"</span><span class="p">:</span><span class="w"> </span><span class="s2">"milliseconds"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"ElementDocs"</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;AUTHENTICATED_INSTANCE_NAME&gt;"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></li>
+<li><p>Call the following, including the JSON body you constructed in the previous step:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">POST /instances
+</code></pre></div>
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Make sure that you include the User and Organization keys in the header. See <a href=index.html#authenticating-with-cloud-elements>the Overview</a> for details. </div></li>
+<li><p>Locate the <code>token</code> and <code>id</code> in the response and save them for all future requests using the element instance.</p></li>
+</ol>
+
+<h2 id="parameters">Parameters</h2>
+
+<p>API parameters not shown in Cloud Elements are in <code>code formatting</code>.</p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Event related parameters are described in <a href=events.html>Events</a>.</div>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Parameter</th>
+<th style="text-align: left">Description</th>
+<th style="text-align: left">Data Type</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">&#39;key&#39;</td>
+<td style="text-align: left">The element key.<br>sapc4chd</td>
+<td style="text-align: left">string</td>
+</tr>
+<tr>
+<td style="text-align: left">Name</br><code>name</code></td>
+<td style="text-align: left">The name for the element instance created during authentication.</td>
+<td style="text-align: left">string</td>
+</tr>
+<tr>
+<td style="text-align: left">Subdomain </br><code>subdomain</code></td>
+<td style="text-align: left">The url of your SAP Hybris Cloud for Customer Helpdesk site. Replace <domain> in the default url with your own information.</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left">Username</td>
+<td style="text-align: left">Your user name for SAP Hybris Cloud for Customer Helpdesk.</td>
+<td style="text-align: left">String</td>
+</tr>
+<tr>
+<td style="text-align: left">Password</td>
+<td style="text-align: left">Your password for SAP Hybris Cloud for Customer Helpdesk.</td>
+<td style="text-align: left">String</td>
+</tr>
+<tr>
+<td style="text-align: left">Events Enabled </br><code>event.notification.enabled</code></td>
+<td style="text-align: left"><em>Optional</em>. Identifies that events are enabled for the element instance.</br>Default: <code>false</code>.</td>
+<td style="text-align: left">boolean</td>
+</tr>
+<tr>
+<td style="text-align: left">Event Notification Callback URL</br><code>event.notification.callback.url</code></td>
+<td style="text-align: left">The URL where you want Cloud Elements to send the events.</td>
+<td style="text-align: left">string</td>
+</tr>
+<tr>
+<td style="text-align: left">Event poller refresh interval (mins)</br><code>event.poller.refresh_interval</code></td>
+<td style="text-align: left">A number in minutes to identify how often the poller should check for changes.</td>
+<td style="text-align: left">number</td>
+</tr>
+<tr>
+<td style="text-align: left">Configure Polling </br><code>&quot;event.poller.configuration&quot;</code></td>
+<td style="text-align: left">Resource to poll along with its configuration.</td>
+<td style="text-align: left">JSON Object</td>
+</tr>
+<tr>
+<td style="text-align: left">accounts</br><code>&quot;event.poller.configuration&quot;: &quot;{\&quot;accounts\&quot;...}&quot;</code></td>
+<td style="text-align: left"><em>Optional</em></br>The SAP Hybris Cloud for Customer Helpdesk <code>accounts</code> resource available for polling.</td>
+<td style="text-align: left">JSON object</td>
+</tr>
+<tr>
+<td style="text-align: left">contacts</br><code>&quot;event.poller.configuration&quot;: &quot;{\&quot;contacts\&quot;...}&quot;</code></td>
+<td style="text-align: left"><em>Optional</em></br>The SAP Hybris Cloud for Customer Helpdesk <code>contacts</code> resource available for polling.</td>
+<td style="text-align: left">JSON object</td>
+</tr>
+<tr>
+<td style="text-align: left">leads</br><code>&quot;event.poller.configuration&quot;: &quot;{\&quot;leads\&quot;...}&quot;</code></td>
+<td style="text-align: left"><em>Optional</em></br>The SAP Hybris Cloud for Customer Helpdesk <code>incidents</code> resource available for polling.</td>
+<td style="text-align: left">JSON object</td>
+</tr>
+<tr>
+<td style="text-align: left">opportunities</br><code>&quot;event.poller.configuration&quot;: &quot;{\&quot;opportunities\&quot;...}&quot;</code></td>
+<td style="text-align: left"><em>Optional</em></br>The SAP Hybris Cloud for Customer Helpdesk <code>incidents-statuses</code> resource available for polling.</td>
+<td style="text-align: left">JSON object</td>
+</tr>
+<tr>
+<td style="text-align: left">tags</td>
+<td style="text-align: left"><em>Optional</em>. User-defined tags to further identify the instance.</td>
+<td style="text-align: left">string</td>
+</tr>
+</tbody></table>
+
+<h2 id="example-curl">Example cURL</h2>
+<div class="highlight"><pre><code class="language-" data-lang="">curl -X POST \
+  https://staging.cloud-elements.com/elements/api-v2/instances \
+  -H 'Authorization: User &lt;INSERT&gt;, Organization &lt;INSERT&gt;'  \
+  -H 'content-type: application/json' \
+  -d '{
+  "element": {
+    "key": "sapc4chd"
+  },
+  "configuration": {
+    "subdomain": "&lt;domain&gt;.crm.ondemand.com",
+    "username": "&lt;USERNAME&gt;",
+    "password": "&lt;YOUR_SAP_Hybris Cloud for Customer_PASSWORD&gt;",
+          "event.notification.enabled": true,
+          "event.notification.callback.url": "http://mycoolapp.com",
+          "event.poller.refresh_interval": "15",
+          "incidents": {
+            "url": "/hubs/helpdesk/incidents?where=ChangedOn&gt;='\''${date:yyyy-MM-dd'\''T'\''HH:mm:ss'\''Z'\''}",
+           "idField": "ObjectID",
+           "datesConfiguration": {
+             "updatedDateField": "ChangedOn",
+             "updatedDateFormat": "milliseconds",
+             "createdDateField": "CreatedOn",
+             "createdDateFormat": "milliseconds"
+           }
+}
+  },
+  "tags": [
+    "ElementDocs"
+  ],
+  "name": "&lt;AUTHENTICATED_INSTANCE_NAME&gt;"
+}
+'
+</code></pre></div>
+<h2 id="example-response">Example Response</h2>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">50753</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SAPHybris Cloud for CustomerAPI1"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"createdDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-05-19T14:00:59Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4RFxtlivv2BW9oAoO64wCnLvwwps4SPCf6LyCUq8Ihg="</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"element"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">5354</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SAP Hybris Cloud for Customer Helpdesk"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sapc4chd"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Add a SAP Cloud for Customer (Hybris Cloud for Customer) Instance to connect your existing SAP Cloud for Customer (Hybris Cloud for Customer) account to the Helpdesk Hub, allowing you to manage accounts, contacts, incidents, etc. across multiple Helpdesk Elements. You will need your SAP Cloud for Customer (Hybris Cloud for Customer) account information to add an instance."</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"elements/provider_sapc4c.png"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"deleted"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"typeOauth"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"trialAccount"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"resources"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+    </span><span class="s2">"transformationsEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"bulkDownloadEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"bulkUploadEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"cloneable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"extendable"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"beta"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"authentication"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"basic"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"extended"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"hub"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Helpdesk"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"protocolType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"odata"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"parameters"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3990</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"createdDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-05-17T09:37:05Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"subdomain"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"vendorName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"siteUrl"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"configuration"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"vendorType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"path"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"request"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"elementId"</span><span class="p">:</span><span class="w"> </span><span class="mi">5353</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"required"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"private"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"elementId"</span><span class="p">:</span><span class="w"> </span><span class="mi">5353</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"provisionInteractions"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+  </span><span class="s2">"valid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"disabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"maxCacheSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"cacheTimeToLive"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"configuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"eventsEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"eventsNotificationCallbackUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://mycoolapp.com"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"subscriptionId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1157990</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"traceLoggingEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"cachingEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"externalAuthentication"</span><span class="p">:</span><span class="w"> </span><span class="s2">"none"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

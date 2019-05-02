@@ -1,0 +1,89 @@
+h4.release-notes {
+    background-color: #4d82bf;
+    color: white;
+    width: 50%;
+    padding: 5px;
+}
+
+h5.release-notes {
+  font-weight: bold;
+}
+
+.next {
+  font-size: 1.5rem;
+      font-weight: 700;
+      -webkit-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
+      background-color: #4d82bf !important;
+      color: #ffffff !important;
+      font-weight: normal;
+      padding: 5px 3px;
+
+    }
+
+.previous {
+  font-size: 1.5rem;
+      font-weight: 700;
+      -webkit-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
+      background-color: #4d82bf !important;
+      color: #ffffff !important;
+      font-weight: normal;
+      padding: 5px 3px;
+
+    }
+
+.label {
+  float: left;
+  text-transform: uppercase;
+  font-weight: 700;
+  text-shadow: 0 -1px 0 rgba(0,0,0,.5);
+}
+
+a.prev-next {
+  color: #ffffff;
+}
+
+.right {
+  float: right;
+  border: solid;
+  border-width: 1 px;
+  border-color: #44c8f5;
+  background-color: white;
+  padding: 10px;
+  text-align: left;
+}
+
+.notification-form-wrapper {
+  background-color: #f6f6f6;
+}
+
+.notification-form-wrapper h3 {
+  background-color: #6EC6EB;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 0;
+  padding: 10px;
+}
+
+.notification-form-wrapper h3:hover {
+  text-decoration: underline;
+}
+
+.notification-form {
+  padding: 12px;
+  background-color: #f6f6f6;
+}
+
+.notification-form form{
+  margin: 0;
+}
+
+.notification-form form .actions {
+  margin: 0 !important;
+  padding: 0 !important;
+}

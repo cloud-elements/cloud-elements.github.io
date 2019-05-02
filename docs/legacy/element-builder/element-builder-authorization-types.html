@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/legacy/element-builder/element-builder-authorization-types.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> Element Builder </h2>
+          <!-- <h4> View example Authorization Types that can be built using the Element Builder UI. </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/?elementId=">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/create-via-api.html?elementId=">Create Element via API</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/create-via-element-builder-ui.html?elementId=">Create Element via Element Builder UI</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/enhance-existing-elements.html?elementId=">Enhance Element via Element Builder UI</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/create-database-element.html?elementId=">Create Database Element</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/element-builder-authorization-types.html?elementId=">Authorization Types</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/element-builder-hooks.html?elementId=">Hooks</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/element-builder-api-debugging.html?elementId=">API Debugging</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/tips.html?elementId=">Tips</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/api-documentation.html?elementId=">Platform Documentation</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <h2 id="authorization-types">Authorization Types</h2>
+
+<p>This section will provide some tech tips on authentication.</p>
+
+<p>Have a tech tip suggestion? Please contact <a href="mailto:support@cloud-elements.com">Support</a>.</p>
+
+<h4 id="authorization-tips">Authorization Tips</h4>
+
+<p>Element Builder supports 4 types of endpoint authorization:</p>
+
+<ul>
+<li>OAuth 1</li>
+<li>OAuth 2</li>
+<li>Basic Authorization</li>
+<li>Custom Authorization</li>
+</ul>
+
+<p>The purpose of the Authorization Tech Tip is to provide examples of each of the authentication.  OAuth 1 was demonstrated in the Element Builder UI guide with the Twitter endpoint under the Configuration.  Examples of the remaining auth types will be shown below.</p>
+
+<p>Cloud Elements strongly encourages researching the endpoint authorization prior to building a new Element. The authorization type can typically be found in the Overview or Authentication portion of the endpoint API documentation.</p>
+
+<h5 id="oauth-2">OAUTH 2</h5>
+
+<p>Box will be used to demonstrate the OAuth 2 authentication type.  As a best practice, researching the Box API documentation to see what the endpoint expects in terms of auth requests should be the first step.  The Box API documentation can be found here: <a href="https://box-content.readme.io/docs/oauth-20">https://box-content.readme.io/docs/oauth-20</a>.</p>
+
+<p>This excerpt is from the Box API docs:</p>
+
+<blockquote>
+<p>Before you can start using OAuth2 with your application, you’ll need to tell Box a bit of information about your application</p>
+
+<p>Register your application <a href="https://app.box.com/">here</a>.
+Set your redirect url
+Select your scope
+Make a note of both your client<em>id and client</em>secret.</p>
+</blockquote>
+
+<p>Box provides further information about scope in their docs as well.  It is important to choose what kind of functionality you want your application to have prior to starting work on your Element.</p>
+
+<p>Now that we familiar with the Box auth flow, let’s take a look at the Configuration tab in Element Builder – this is where the authentication type setup occurs.</p>
+
+<h6 id="configuration-tab">CONFIGURATION TAB</h6>
+
+<p>Add the base URL to the endpoint. The base URL is the endpoint where all API requests will be sent, e.g. <code>https://api.box.com/2.0</code>.
+The Base URL can be found in most endpoint API Documentation within the Overview, Authentication, or Resources/Entities sections.
+The Box Base URL can be found in the Get Started with the Box Content API section</p>
+
+<p>Select the page size, e.g. 100 objects per page and select the paging type.. Page is the default, but Offset is available to view portions of data, as well as, Cursor to move through large data sets.</p>
+
+<p>Input the following values:</p>
+
+<p><strong>Input the OAuth Authorization URL:</strong>  <code>https://app.box.com/api/oauth2/authorize</code>
+Most endpoints have this information in the Authentication section of the API Documentation.
+Box’s OAuth Authorization URL can be found at <a href="https://box-content.readme.io/docs/oauth-20">https://box-content.readme.io/docs/oauth-20</a>.</p>
+
+<p><strong>Input the OAuth API Key</strong>
+The API Key is generated when the connected app is created.</p>
+
+<p><strong>Input the OAuth API Secret</strong>
+The API Secret is generated when the connected app is created.</p>
+
+<p><strong>Input the OAuth Callback URL</strong>
+The same callback URL used when the connected app was created. In our example: <code>https://www.mycoolapp.com/oauth</code>.</p>
+
+<p><strong>Input the OAuth Token URL:</strong> <code>https://app.box.com/api/oauth2/token</code>
+Most endpoints have this information in the Authentication section of the API Documentation.
+Box’s OAuth Token URL can be found at <a href="https://box-content.readme.io/docs/oauth-20">https://box-content.readme.io/docs/oauth-20</a>.</p>
+
+<p><strong>Input the OAuth Scope (Optional):</strong> <code>Read and write all, files and folders</code>
+Some endpoints require read and write privileges to objects. Scope information for Box can be found here: <a href="https://box-content.readme.io/docs/oauth-20">https://box-content.readme.io/docs/oauth-20</a>.</p>
+
+<p><strong>Select Header and Content-Type:</strong> application/json
+Select the type that the endpoint expects.</p>
+
+<p>Let’s define what a <strong>Configuration, Parameter, and Hook</strong> are prior to moving on.</p>
+
+<ul>
+<li><strong>Configuration:</strong> A value which is stored when a connection to the endpoint is created. This value is populated via user input and will be used when invoking the API, e.g. an api<em>key and api</em>secret.</li>
+<li><strong>Parameter:</strong> A globally defined value that will apply to all API calls. Parameters can be sent as a header, path, query, body.</li>
+<li><strong>Hooks:</strong> Pre-Hook: Action you wish to execute prior to sending API calls e.g. manipulating or adding data (query, header, path, body, configuration).
+Post-Hook: Modify the response data (body, header, configuration) on the return call from the endpoint.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/AuthorizationFAQ1.png" alt="Element Builder OAuth2 1"></li>
+</ul>
+
+<p>Box does have some configurations that need to be stored, however, they do not need to visible for the User in the Elements Builder UI.  These values are necessary to track event data and support user functionality for the Box Element.  <strong>NOTE: This example may not be the same for other endpoints.</strong></p>
+
+<p>To add a configuration, begin by clicking “Add Configuration”</p>
+
+<p>Input values and select whether it is required and is visible in the Element Builder UI</p>
+
+<p>Click “Done”</p>
+
+<p>Continue to add additional configurations needed by the endpoint if applicable.</p>
+
+<p>Click “Next”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/AuthorizationFAQ2.png" alt="Element Builder OAuth2 2"></p>
+
+<p>This will take you to the Instance Tab where you can create a connection to the endpoint and test out the authentication.</p>
+
+<p>Box does not require any Parameters or Hooks be sent on authorization requests</p>
+
+<p>Tech Tips for adding Parameters and Hooks will be coming soon.</p>
+
+<h5 id="basic">BASIC</h5>
+
+<p>Close.io will be used to demonstrate the Basic authentication type.  As a best practice, researching the Close.io API documentation to see what the endpoint expects in terms of auth requests should be the first step.  The Close.io API documentation can be found here: <a href="http://developer.close.io/">http://developer.close.io/</a>.</p>
+
+<p>This excerpt is from the Close.io API docs:</p>
+
+<blockquote>
+<p>Authentication</p>
+
+<p>HTTP Basic authentication. The API key acts as the username. API keys are per-organization and can be generated and deleted in the Settings page.</p>
+
+<p>Example cURL request with an api key.
+<code>curl &quot;https://app.close.io/api/v1/me/&quot; -u yourapikey:</code></p>
+
+<p>notice the ‘:’ at the end of the api key. This is used because the key is sent as the username with a blank password.</p>
+
+<p>API Base URL:
+<code>https://app.close.io/api/v1</code></p>
+</blockquote>
+
+<p>Close.io provides further information about custom fields and supported objects in their docs as well.  It is important to choose what kind of functionality you want your application to have prior to starting work on your Element.</p>
+
+<p>Now that we familiar with the Close.io auth flow, let’s take a look at the Configuration tab in Element Builder – this is where the authentication type setup occurs.</p>
+
+<h6 id="configuration-tab">CONFIGURATION TAB</h6>
+
+<p>Add the base URL to the endpoint. The base URL is the endpoint where all API requests will be sent, e.g. <code>https://app.close.io.com/api/v1</code>.
+The Base URL can be found in most endpoint API Documentation within the Overview, Authentication, or Resources/Entities sections.
+The Close.io Base URL can be found in the Welcome section.</p>
+
+<p>Select the page size, e.g. 100 objects per page and select the paging type.. Page is the default, but Offset is available to view portions of data, as well as, Cursor to move through large data sets.</p>
+
+<p>Select <strong>Header</strong> and <strong>Content-Type:</strong> <code>application/json</code></p>
+
+<p>Let’s define what a <strong>Configuration, Parameter, and Hook</strong> are prior to moving on.</p>
+
+<ul>
+<li><strong>Configuration:</strong> A value which is stored when a connection to the endpoint is created. This value is populated via user input and will be used when invoking the API, e.g. an api<em>key and api</em>secret.</li>
+<li><strong>Parameter:</strong> A globally defined value that will apply to all API calls. Parameters can be sent as a header, path, query, body.</li>
+<li><strong>Hooks:</strong> Pre-Hook: Action you wish to execute prior to sending API calls e.g. manipulating or adding data (query, header, path, body, configuration).
+Post-Hook: Modify the response data (body, header, configuration) on the return call from the endpoint.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/AuthorizationFAQ3.png" alt="Element Builder Basic 1"></li>
+</ul>
+
+<p>If we look back at the authentication excerpt from the Close.io API docs:</p>
+
+<blockquote>
+<p>Example cURL request with an api key.
+<code>curl &quot;https://app.close.io/api/v1/me/&quot; -u yourapikey:</code></p>
+
+<p>notice the ‘:’ at the end of the api key. This is used because the key is sent as the username with a blank password.</p>
+</blockquote>
+
+<p>The user will need to provide an API key.  This will be sent as a configuration.</p>
+
+<p>To add a configuration, begin by clicking “Add Configuration”</p>
+
+<p>Input values the endpoint expects:
+* <strong>Key:</strong> username
+* <strong>Name:</strong> API Key
+* <strong>Type:</strong> Select TEXTFIELD<em>32
+* _</em>Description:__ The API key, needed to make API requests to Close.io
+* <strong>Default Value:</strong> Blank (Optional)
+* <strong>Is it Required?:</strong> Select “Yes” it is required by Close.io
+Hide from console?: Select “No” as we will need the user to input this value</p>
+
+<p>Click “Done”</p>
+
+<p>Referring back to the Close.io API docs, the password will be sent as a blank field – this input is not needed by the user, but must be sent with the request.  We need to add that configuration.</p>
+
+<p>Click “Add Configuration”</p>
+
+<p>Input values the endpoint expects:
+* <strong>Key:</strong> password
+* <strong>Name:</strong> Password
+* <strong>Type:</strong> Select TEXTFIELD<em>32
+* _</em>Description:__ This should always be blank for Close.io
+* <strong>Default Value:</strong> Blank (Optional)
+* <strong>Is it Required?:</strong> Select “No”
+* <strong>Hide from console?:</strong> Select “Yes” as we will not need the user to input this value</p>
+
+<p>Add any additional configurations needed.  The other two displayed in the screen shot are related to adding Bulk functionality to the Close.io Element.</p>
+
+<p>Click “Next”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/AuthorizationFAQ4.png" alt="Element Builder Basic 2"></p>
+
+<p>This will take you to the Instance Tab where you can create a connection to the endpoint and test out the authentication.</p>
+
+<p>Close.io does not require any Parameters or Hooks be sent on authorization requests</p>
+
+<p>Tech Tips for adding Parameters and Hooks will be coming soon.</p>
+
+<h5 id="custom">CUSTOM</h5>
+
+<p>Typeform will be used to demonstrate the Custom authentication type.  As a best practice, researching the Typeform API documentation to see what the endpoint expects in terms of auth requests should be the first step.  The Typeform API documentation can be found here: <a href="http://docs.typeform.io/docs/">http://docs.typeform.io/docs/</a>.</p>
+
+<p>This excerpt is from the Typeform API docs:</p>
+
+<blockquote>
+<p>Authentication</p>
+
+<p>To be able to authenticate your API calls, you need to sign up for an API-key. It’s a painless step and this documentation will be here waiting for you when you come back.</p>
+
+<p>You authenticate your API calls by adding a header to the requests you make. At this point in time, you will only be able to have a single API key per account (contact us if you need more). Be sure to keep your API key secret, since it will have access to perform actions on your behalf.</p>
+</blockquote>
+
+<p>Typeform provides further information about supported objects in their docs as well.  It is important to choose what kind of functionality you want your application to have prior to starting work on your Element.</p>
+
+<p>Now that we familiar with the Typeform auth flow, let’s take a look at the Configuration tab in Element Builder – this is where the authentication type setup occurs.</p>
+
+<h6 id="configuration-tab">CONFIGURATION TAB</h6>
+
+<p>Add the base URL to the endpoint. The base URL is the endpoint where all API requests will be sent, e.g. <code>https://api.typeform.io/v0.4</code>.
+The Base URL can be found in most endpoint API Documentation within the Overview, Authentication, or Resources/Entities sections.
+The Typeform Base URL can be found in the General &gt; Versioning section.</p>
+
+<p>Select the page size, e.g. 100 objects per page and select the paging type.. Page is the default, but Offset is available to view portions of data, as well as, Cursor to move through large data sets.</p>
+
+<p>Select <strong>Header</strong> and <strong>Content-Type:</strong> application/json</p>
+
+<p>Let’s define what a <strong>Configuration, Parameter, and Hook</strong> are prior to moving on.</p>
+
+<ul>
+<li><strong>Configuration:</strong> A value which is stored when a connection to the endpoint is created. This value is populated via user input and will be used when invoking the API, e.g. an api<em>key and api</em>secret.</li>
+<li><strong>Parameter:</strong> A globally defined value that will apply to all API calls. Parameters can be sent as a header, path, query, body.</li>
+<li><strong>Hooks:</strong> Pre-Hook: Action you wish to execute prior to sending API calls e.g. manipulating or adding data (query, header, path, body, configuration).
+Post-Hook: Modify the response data (body, header, configuration) on the return call from the endpoint.</li>
+</ul>
+
+<p>If we look back at the authentication excerpt from the Typeform API docs:</p>
+
+<blockquote>
+<p>You authenticate your API calls by adding a header to the requests you make. At this point in time, you will only be able to have a single API key per account (contact us if you need more). Be sure to keep your API key secret, since it will have access to perform actions on your behalf.</p>
+</blockquote>
+
+<p>The user will need to provide an API key.  This will be sent as a configuration.</p>
+
+<p>To add a configuration, begin by clicking “Add Configuration”</p>
+
+<p>Input values the endpoint expects:
+* <strong>Key:</strong> api.key
+* <strong>Name:</strong> API Key
+* <strong>Type:</strong> Select TEXTFIELD<em>128
+* _</em>Description:__ Typeform API Key
+* <strong>Default Value:</strong> Blank (Optional)
+* <strong>Is it Required?:</strong> Select “Yes” it is required by Close.io
+* <strong>Hide from console?:</strong> Select “No” as we will need the user to input this value</p>
+
+<p>Click “Done”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/AuthorizationFAQ5.png" alt="Element Builder Custom 1"></p>
+
+<p>Referring back to the Typeform API docs:</p>
+
+<blockquote>
+<p>You authenticate your API calls by adding a header to the requests you make.</p>
+</blockquote>
+
+<p>Since the API Key will need to be sent as a header, it must also be added as a parameter.  According to the Tyepform API docs, they refer to the API token as “X-API-TOKEN” in the header.  This will be inputted as such.</p>
+
+<p>Click “Add Parameter”</p>
+
+<p>Input the following Fields:
+* <strong>Name:</strong> api.key
+* <strong>Vendor Name:</strong> X-API-TOKEN
+* <strong>Type:</strong> CONFIGURATION
+* <strong>Vendor Type:</strong> HEADER
+* <strong>Data Type:</strong> String, Integer, etc
+* <strong>Vendor Data Type:</strong> String, Integer, etc
+* <strong>Parameter Source:</strong> REQUEST
+* <strong>Is it Required?:</strong> Select “NO”
+* <strong>Description:</strong> Token to be sent as a header</p>
+
+<p>Click “Done”</p>
+
+<p>Click “Next”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/AuthorizationFAQ6.png" alt="Element Builder Custom 2"></p>
+
+<p>This will take you to the Instance Tab where you can create a connection to the endpoint and test out the authentication.</p>
+
+<p>Typeform does not require any Hooks be sent on authorization requests</p>
+
+<p>Tech Tips for adding Hooks will be coming soon.</p>
+
+<p>Element Builder is currently in BETA.  We would love to hear about enhancements or concerns regarding the application.  Please don’t hesitate to get in touch.</p>
+
+<p>Need some help?  Don’t hesitate to reach out to <a href="mailto:support@cloud-elements.com">Cloud Elements Support</a> with any questions or concerns.</p>
+
+<p>The Cloud Elements Team</p>
+
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

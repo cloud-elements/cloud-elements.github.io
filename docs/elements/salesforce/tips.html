@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/elements/salesforce/tips.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> Salesforce Sales Cloud </h2>
+          <!-- <h4> Salesforce Sales Cloud Tips </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/elements/salesforce/?elementId=23">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/salesforce/salesforce-endpoint-setup.html?elementId=23">API Provider Setup</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/salesforce/salesforce-create-instance.html?elementId=23">Authenticate</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/salesforce/salesforce-events.html?elementId=23">Events</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/salesforce/bulk.html?elementId=23">Bulk APIs</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/salesforce/ceql.html?elementId=23">Querying</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/salesforce/tips.html?elementId=23">Tips</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/salesforce/api-documentation.html?elementId=23">API Docs</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <h2 id="tips">Tips</h2>
+
+<p>The Tips section includes more information about the element including FAQs, endpoint limitations, and general tips.</p>
+
+<div markdown="span" class="bs-callout bs-callout-info"><strong>On this page</strong></br><a href=#general>General</a></br><a href=#accounts-and-permissions>Accounts and Permissions</a></br><a href=#events>Events</a></br><a href=#authentication>Authentication</a></br><a href=#pagination>Pagination</a></br><a href=#bulk>Bulk</a></br><a href=#version>Version</a></div>
+
+<h3 id="general">General</h3>
+
+<ul>
+<li>Cloud elements supports your custom objects and fields in the Salesforce Sales Cloud Element. Use the <code>GET /objects</code> API to return all custom objects, the <code>GET /{objectName}</code> API to interact with the custom APIs, and the <code>GET /objects/{objectName}/metadata</code> API to expose metadata for fields associated with your custom object.</li>
+<li>When using transformations with Salesforce, only the mapped fields are returned. Salesforce requires all fields that need to be returned to be included in the request. To avoid issues with accounts that have a large number of custom fields, the transformation functionality is designed to only request the mapped fields. If a field needs to be included, or custom javascript needs to be written for a certain field, be sure to include it within your mapped fields.</li>
+<li>There is a setting in Salesforce that may lead to issues where calls return <code>“INVALID_SESSION_ID – Session expired or invalid”</code>. If this is occurring, clear the  the Session Setting <strong>Lock sessions to the IP address from which they originated</strong> check box.</li>
+<li>The SFDC query resource (object) can be accessed by using the <code>GET /query</code> API. e.g., <code>/query?q%3Dselect%20*%20from%20opportunity</code>.</li>
+</ul>
+
+<p><img src="img/Salesforce_Tips_SessionSettings.png" alt="Salesforce Tips Session Settings"></p>
+
+<h3 id="accounts-and-permissions">Accounts and Permissions</h3>
+
+<ul>
+<li>If you have different levels of permissions configured for users within your Salesforce application, those permissions will be inherited and remain unchanged through the OAuth flow as the Salesforce Sales Cloud element is integrated.</li>
+<li><p>Salesforce has multiple types of accounts and editions. Only these allow you to use the API:</p>
+
+<ul>
+<li>Enterprise Edition</li>
+<li>Unlimited Edition</li>
+<li>Developer Edition</li>
+<li>Performance Edition</li>
+</ul>
+
+<p>Visit <a href="https://help.salesforce.com/HTViewSolution?id=000005140&language=en_US">https://help.salesforce.com/HTViewSolution?id=000005140&amp;language=en_US</a> for more information.</p></li>
+</ul>
+
+<h3 id="salesforce-sandbox-environment">Salesforce Sandbox Environment</h3>
+
+<p>The Salseforce sandbox environment has a different base URL from the production environment. Instead of <a href="https://login.salesforce.com/">https://login.salesforce.com/</a>, you log in to <a href="https://test.salesforce.com/">https://test.salesforce.com/</a>. When you authenticate a Salesforce instance, you must pass a <code>siteAddress</code> query parameter with the sandbox URL when getting the redirect URL. See <a href="salesforce-create-instance.html#authenticate-through-api">Authenticate Through API</a>.</p>
+
+<h3 id="events">Events</h3>
+
+<p>Salesforce events support both Polling and Webhooks. When you authenticate an element instance with event type  <code>webhook</code>, it creates an Apex class and triggers in your Salesforce account. If your production account doesn’t allow customer Apex triggers or if your production account is blocked, authentication fails.</p>
+
+<h3 id="authentication">Authentication</h3>
+
+<ul>
+<li>The console will use default application permissions when asking for access to your Salesforce applications. If you would like custom application permissions, you will need to create your own connected app and configure the application access in your custom UI. This cannot be done in the Cloud Elements console. Follow instructions on <a href="https://developers.cloud-elements.com/docs/elements/salesforce/salesforce-endpoint-setup.html">Endpoint Setup</a></li>
+<li>If you create a custom application, you will need to create instances via the APIs to use this new app. You only need to create this application once and you can use it for all of your customers.</li>
+<li>Once an instance is created Cloud Elements will automatically refresh the token behind the scenes so that you will never have to connect your application again.</li>
+</ul>
+
+<h3 id="pagination">Pagination</h3>
+
+<p>Salesforce allows paging only up to 2000 records. If you need to go above 2000 records, you should use the orderBy function and select a unique parameter such as “Id ascending”. However the recommended approach is to use the bulk APIs</p>
+
+<h3 id="bulk">Bulk</h3>
+
+<ul>
+<li>Consider using the Bulk API if you are managing over 2000 records.</li>
+<li>The Salesforce bulk chunking mechanism allows you to use bulk on large data sets without limitations. If you use an orderBy clause, chunking is disabled. If chunking is enabled, it may take longer to get all the data. Also, be aware that Salesforce has daily upload and download limits.</li>
+<li>If you encounter record lock issues when performing bulk uploads, you can try serial mode instead of the default parallel node. See the Salesforce documentation topic <a href="https://developer.salesforce.com/docs/atlas.en-us.api_asynch.meta/api_asynch/asynch_api_planning_guidelines.htm">General Guidelines for Data Loads</a> for more information about parallel and serial modes. To switch to serial mode pass <code>&quot;concurrency&quot;:&quot;serial&quot;</code> in the request metadata.</li>
+</ul>
+
+<h3 id="version">Version</h3>
+
+<p>After you connect an instance to Salesforce, Cloud Elements remains up-to-date with the latest versions of REST APIs.</p>
+
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

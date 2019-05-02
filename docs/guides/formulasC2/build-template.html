@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- History.js -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/guides/formulasC2/build-template.html">
+
+  <script src="/api-docs/swagger-ui.js" type="text/javascript"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper">
+      <div markdown="span" class="bs-callout bs-callout-warning" role="alert">
+  <h4>The docs are moving! </h4><p>Find us at our new <a href ="https://docs.cloud-elements.com/">Help Center</a> where we've combined our documentation and knowledgebase articles in one easy-to-search location.</p><p>We aren't updating the Developer Portal anymore, except for the Element Docs &mdash; all updates happen in the <a href ="https://docs.cloud-elements.com/">Help Center</a>. We're retiring the Developer Portal as you know it in:</p><h4 id="demo"></h4>
+  <script>
+  // Set the date we're counting down to
+  var countDownDate = new Date("December 14, 2018 20:00:00").getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+
+      // Get todays date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now an the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Output the result in an element with id="demo"
+      document.getElementById("demo").innerHTML = days + " days " + hours + " hours " + minutes + "m " + seconds + "s ";
+
+      // If the count down is over, write some text
+      if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("demo").innerHTML = "EXPIRED";
+      }
+  }, 1000);
+  </script>
+
+</div>
+
+      <script src="/assets/js/application.js"></script>
+<link href="/assets/css/contentToggle.css" rel="stylesheet">
+
+
+
+      
+      <h1 id="formula-templates">Formula Templates</h1>
+
+<p>Formula templates enable you to build a single template for a formula that you can reuse with different elements and values. After you build a formula template, you can then create a formula instance where you replace the formula variable with actual element instances and values. This approach helps you build efficient and reusable formulas.</p>
+
+<div markdown="span" class="bs-callout bs-callout-info"><strong>On this page</strong></br><a href=#build-a-formula-template>Build a Formula Template</a></br><a href=#test-formula-templates>Test Formula Templates</a></br><a href=#create-variables>Create Variables</a></br><a href=#edit-and-delete-variables>Edit and Delete Variables</a></br><a href=#review-executions>Review Executions</a></br><a href=#copy-a-formula-template>Copy a Formula Template</a></br><a href=#import-and-export-formula-templates>Import and Export Formula Templates</a></br><a href=#parallel-executions>Parallel Executions</a></br><a href=#rename-a-formula-template>Rename a Formula Template</a></br><a href=#add-a-description-to-a-formula-template>Add a Description to a Formula Template</a></br><a href=#delete-a-formula-template>Delete a Formula Template</a></br><a href=#deactivate-a-formula-template>Deactivate a Formula Template</br><a href=#access-formula-information>Access Formula Information</a></div>
+
+<h2 id="build-a-formula-template">Build a Formula Template</h2>
+
+<p>Formula templates include a trigger that kicks off the formula, steps that execute as a result of the trigger, and variables to represent input required to run an instance of the formula. You can build formulas that use triggers that kick off when something happens to an element instance, you can schedule triggers, or you can manually kick off a trigger. See <a href="reference.html">Triggers, Steps, and Variables</a> for more information about each component.</p>
+
+<p>As you build a formula, you also build context consisting of triggers, variables, steps, and values created by steps. You can refer to that context in later steps in the formula. Consider each part as a building block that has a name and information that you can refer to. For example, in a formula that sends an email notification for a new contact, you build the body of the email in one step. In a later step when you actually send the message, refer to the step where you built the body.</p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Use these steps to get started building a formula template. Consider using some of <a href=examples.html>the example formulas</a> to get a deeper understanding of how to build a formula template.  </div>
+
+<p>To build a new formula template:</p>
+
+<ol>
+<li>Click <strong>Formulas</strong>, and then on the Formulas page, click <strong>Build New Formula Template</strong>.
+<img src="img/new-formula.png" alt="New Formula Template"></li>
+<li>Click <strong>Build New Formula</strong>.</li>
+<li><p>Enter a name for your formula, and then click <strong>Create</strong>.</p>
+
+<p>Cloud Elements provides you a list of triggers. For details about each trigger, see <a href="reference.html">Triggers, Steps, and Variables</a>.
+<img src="img/triggers.png" alt="Triggers"></p></li>
+<li><p>Select your trigger.</p>
+
+<ul>
+<li>Choose <strong>Event</strong> for a formula triggered by an event configured on an element instance.</li>
+<li>Choose <strong>Element Request</strong> for a formula triggered when a specific request is made to an element instance.</li>
+<li>Choose <strong>Scheduled</strong> for a formula to occur at a specific time or regular interval.</li>
+<li>Chose <strong>Manual</strong> to trigger the formula with an API call to <code>POST /formulas/instances/:id/executions</code>.</li>
+</ul>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> If you need to change a trigger in a formula template, you can delete it and start over. Deleting a trigger also deletes all following steps, so do so with caution. </div></li>
+<li><p>Complete the trigger properties, which vary based on the selected trigger.</p>
+
+<ul>
+<li>For <strong>Event</strong> provide an <a href="reference.html#formula-variables">Element Instance Variable</a>.</li>
+<li>For <strong>Element Request</strong> provide an <a href="reference.html#formula-variables">Element Instance Variable</a>, an API method, and API endpoint.</li>
+<li>For <strong>Scheduled</strong> provide a <a href="reference.html/#scheduled">Cron schedule</a>.</li>
+<li>For <strong>Manual</strong> you do not need to provide any more properties.</li>
+</ul></li>
+<li><p>Click <strong>Save</strong>.</p>
+
+<p>Cloud Elements shows the first trigger node in the formula visualization.
+<img src="img/viz-trigger.png" alt="Trigger"></p></li>
+<li><p>Add any variables that you will need to run the formula instance.</p>
+
+<ol>
+<li>Click <strong>Variables</strong>.
+<img src="img/variables.png" alt="Variables"></li>
+<li><p>Select the type of variable, and then enter a name.</p>
+
+<p>Takes note of the Formula Step Variable Name, which is how you will refer to the variable throughout the formula.</p></li>
+<li><p>Click <strong>Save</strong>.</p></li>
+</ol></li>
+<li><p>Add your first step. In the formula visualization, click <img src="img/btn-add-step.gif" alt="Add a Step" class="inlineImage">.</p></li>
+<li><p>Select the type of step that you want to add.</p></li>
+<li><p>Complete the step properties, and then click <strong>Save</strong>. For details on each step, see <a href="reference.html#formula-variables">Element Instance Variable</a>.</p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b>  Click Add From Existing to find a step to copy. </div>
+
+<p>Cloud Elements shows the first trigger node and the step that you just created in the formula visualization. The path from the trigger to the step defaults to On Success, but you can add failure steps later.
+<img src="img/viz-trigger-step.png" alt="Trigger"></p></li>
+<li><p>To add another step, click the step, and then select one of the following:</p>
+
+<ul>
+<li><strong>Insert Above</strong> adds a new step prior to the current step with an On Success path connecting the two.</li>
+<li><strong>Add On Success</strong> adds a step for the formula to continue to if the current step succeeds.</li>
+<li><strong>Add On Failure</strong> adds a step for the formula to continue to if the current step fails.</li>
+</ul></li>
+<li><p>Continue adding steps until you complete the formula template.</p></li>
+<li><p>Add a description by clicking <strong>Edit</strong>. See <a href="#add-a-description-to-a-formula-template">Add a Description to a Formula Template</a>.</p></li>
+<li><p>After you complete the formula, <a href="#test-formula-templates">test it</a>.</p></li>
+</ol>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Cloud Elements saves your formula template in the background as you add each component.</div>
+
+<h2 id="test-formula-templates">Test Formula Templates</h2>
+
+<p>You can test a formula template as you build it. When you test a formula template, you can either use an existing formula instance or build a new formula instance.</p>
+
+<div markdown="span" class="alert alert-success" role="alert"><i class="fa fa-check-square-o"></i> <b>Tip:</b>  If you plan to use the formula instance that you build while testing formulas only for testing, consider appending the name test to it. </div>
+
+<p>To test a formula template:</p>
+
+<ol>
+<li>At the top of the formula visualization, click <strong>Setup Test</strong>.
+<img src="img/set-up-test.png" alt="Setup Test"></li>
+<li>Click <strong>Select Instance</strong>.</li>
+<li>Either choose an existing formula instance (and skip down to the Select Trigger step) or click <strong>Add New Instance</strong>.
+
+<ol>
+<li>Enter a name for the new formula instance.</li>
+<li>For each variable, click the variable and add an element instance or enter a value.</li>
+<li>Click <strong>Create Instance</strong>.</li>
+<li>Select the instance that you just built.</li>
+</ol></li>
+<li>Click <strong>Select Trigger</strong>.</li>
+<li>Provide trigger information, depending on the type of trigger.</li>
+</ol>
+
+<h2 id="create-variables">Create Variables</h2>
+
+<p>You can create two types of variables: <strong>Element Instance</strong> variables &mdash; replaced by element instances in the formula instance &mdash; and <strong>Value</strong> variables &mdash; replaced by values entered in the formula instance. When you create a variable, note the Formula Step Variable Name which is how you refer to the variable in the formula context. See <a href="reference.html#formula-variables">Formula Variables</a> for more about variables in the formula context.</p>
+
+<p>To create a formula variable:</p>
+
+<ol>
+<li>Open the formula template. On the Formulas page, hover over the Formula Card, and then click <strong>Open</strong>.</li>
+<li>Click <strong>Variables</strong>.
+<img src="img/variables.png" alt="Variables"></li>
+<li>Select the type of variable to create.</li>
+<li>Enter a name for the variable. You can include spaces, but we remove the spaces to create the <strong>Formula Step Variable Name</strong> (identified as <code>key</code> in the JSON), which is how you refer to the variable in the formula context.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+
+<h2 id="edit-and-delete-variables">Edit and Delete Variables</h2>
+
+<p>You can edit the name of a variable or remove a variable from a formula template.</p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> You cannot delete a formula variable if an instance of the formula exists.  </div>
+
+<p>To edit or delete a formula variable:</p>
+
+<ol>
+<li>Open the formula template. On the Formulas page, hover over the Formula Card, and then click Open.</li>
+<li>Click <strong>Variables</strong>.
+<img src="img/variables.png" alt="Variables"></li>
+<li>Click <strong>Edit Variable</strong>.</li>
+<li>Select the variable to edit or delete, and then:
+
+<ul>
+<li>Edit the name, and then click <strong>Save</strong>. Or,</li>
+<li>Click <strong>Delete</strong>.</li>
+</ul></li>
+</ol>
+
+<h2 id="review-executions">Review Executions</h2>
+
+<p>You can troubleshoot formulas by reviewing executions. The executions appear in three columns from left to right:</p>
+
+<ul>
+<li>Formula Executions &mdash; the list of executions of the selected formula template. We identify failed executions in red.</li>
+<li>Steps &mdash;The steps in the formula and an icon showing their success <img src="img/icon-step-success.png" alt="Success" class="inlineImage"> or failure <img src="img/icon-step-failure.png" alt="Failure" class="inlineImage">.</li>
+<li>Execution Values &mdash;the request and response details associated with the selected step.
+<img src="img/instance-executions.png" alt="Formula Instance Executions"></li>
+</ul>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> To review executions, you must have a formula instance. Otherwise, the Executions button is unavailable.  </div>
+
+<p>To review executions</p>
+
+<ol>
+<li>Open the formula template. On the Formulas page, hover over the Formula Card, and then click <strong>Open</strong>.</li>
+<li>Click <strong>Executions</strong>.
+<img src="img/executions.png" alt="Variables"></li>
+<li>Click the execution to review.</li>
+<li>Click the step to review.</li>
+</ol>
+
+<h2 id="copy-a-formula-template">Copy a Formula Template</h2>
+
+<p>You can build a formula template based on an existing template or from a Cloud Elements sample formula, resulting in a copy of the template.</p>
+
+<p>To build a copy of a formula template:</p>
+
+<ol>
+<li>Click <strong>Formulas</strong>, and then on the Formulas page, click <strong>Build New Formula</strong>.
+<img src="img/new-formula.png" alt="New Formula Template"></li>
+<li>Click <strong>Build From Existing Formula</strong>.
+
+<ul>
+<li>To use one of your existing formula templates, select the template.</li>
+<li>To use a Cloud Elements formula template, click CE Sample Formulas, and then select the formula.</li>
+</ul></li>
+<li>Enter a name for your formula, and then click <strong>Create</strong>.</li>
+</ol>
+
+<h2 id="import-and-export-formula-templates">Import and Export Formula Templates</h2>
+
+<p>You can export a formula template as a JSON file and import other templates from their JSON source file.</p>
+
+<p>To import a formula template:</p>
+
+<ol>
+<li>Click <strong>Formulas</strong>, and then on the Formulas page, click <strong>Build New Formula</strong>.
+<img src="img/new-formula.png" alt="New Formula Template"></li>
+<li>Click <strong>Import</strong>.</li>
+<li>Select the JSON file to import.</li>
+<li>Optionally rename the file, and then click <strong>Create</strong>.</li>
+</ol>
+
+<p>To export a formula:</p>
+
+<ol>
+<li>Navigate to the Formulas page.</li>
+<li>Hover over the element card, and then click <strong>Export</strong>.</li>
+<li>Save the file.</li>
+</ol>
+
+<h2 id="parallel-executions">Parallel Executions</h2>
+
+<p>To help formula instances execute as efficiently as possible, they take advantage of multithreaded executions. That is, multiple executions of the same formula instance can make requests at the same time. Some API providers prevent multiple requests from the same account at the same time. If this happens, you can change a formula template or an individual formula instance to execute one step at a time. This makes the formula less efficient and results in an increase in the execution time.</p>
+
+<p>To change a formula from the default multithreaded execution to single threaded:</p>
+
+<ol>
+<li>Open the formula template. On the Formulas page, hover over the Formula Card, and then click <strong>Open</strong>.</li>
+<li>Click <strong>Edit</strong>.
+<img src="img/edit.png" alt="Edit"></li>
+<li>Click <strong>Show Advanced</strong>.</li>
+<li>Switch <strong>Single Threaded Execution</strong> on.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+
+<p>Alternatively, in the formula template or formula instance JSON, update <code>singleThreaded</code> to <code>true</code>:</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+</span><span class="s2">"singleThreaded"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<h2 id="rename-a-formula-template">Rename a Formula Template</h2>
+
+<p>To rename a formula template:</p>
+
+<ol>
+<li>Open the formula template. On the Formulas page, hover over the Formula Card, and then click <strong>Open</strong>.</li>
+<li>Click <strong>Edit</strong>.
+<img src="img/edit.png" alt="Edit"></li>
+<li>Rename the formula template.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+
+<h2 id="add-a-description-to-a-formula-template">Add a Description to a Formula Template</h2>
+
+<p>Descriptions provide more information about a formula template. Use the information to describe the formula template use case and anything another user might need when creating a formula instance.</p>
+
+<p>To add a description to a formula template:</p>
+
+<ol>
+<li>Open the formula template. On the Formulas page, hover over the Formula Card, and then click <strong>Open</strong>.</li>
+<li>Click <strong>Edit</strong>.
+<img src="img/edit.png" alt="Edit"></li>
+<li>Describe the formula template in <strong>Description</strong>.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+
+<h2 id="delete-a-formula-template">Delete a Formula Template</h2>
+
+<p>You can delete a formula template if the template has no instances associated with it. If the formula template includes instances, <a href="formula-instance.html#delete-a-formula-instance">delete those first</a>.</p>
+
+<p>To delete a formula template:</p>
+
+<ol>
+<li>Navigate to the Formulas page.</li>
+<li>Hover over the Formula Template card, and then click <strong>Delete</strong>.</li>
+<li>Confirm the deletion.</li>
+</ol>
+
+<h2 id="deactivate-a-formula-template">Deactivate a Formula Template</h2>
+
+<p>You can deactivate a formula template to prevent any executions of formula instances of the template.</p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> You can also deactivate a specific formula instance. See <a href=formula-instance.html#deactivate-a-formula-instance>Deactivate a Formula Instance</a>. </div>
+
+<p>To deactivate a formula:</p>
+
+<ol>
+<li>Open the formula template. From the Formulas page, hover over the Formula Template card, and then click <strong>Open</strong>.</li>
+<li>Click <strong>Edit</strong>.
+<img src="img/edit.png" alt="Edit"></li>
+<li>Switch the <strong>Active</strong> slider off.
+<img src="img/active.gif" alt="Active"></li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+
+<h2 id="access-formula-information">Access Formula Information</h2>
+
+<p>Each formula template and formula instance exposes information about itself through the <code>info</code> object.</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"info"</span><span class="p">:{</span><span class="w">
+   </span><span class="s2">"formulaId"</span><span class="p">:</span><span class="s2">"123"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"formulaName"</span><span class="p">:</span><span class="s2">"name"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"formulaInstanceId"</span><span class="p">:</span><span class="s2">"123"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"formulaInstanceName"</span><span class="p">:</span><span class="s2">"name"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"formulaExecutionId"</span><span class="p">:</span><span class="s2">"1234"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Formula information contributes to the formula context. You can access the information with <code>info.property</code>, such as <code>info.formulaInstanceId</code> or <code>info.formulaName</code>.</p>
+
+    </div>
+
+  </div>
+  <script src="/assets/js/chart.js"></script>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

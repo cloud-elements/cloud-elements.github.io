@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- History.js -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet"> <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/release-notes/page4/">
+
+<style>
+    /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+
+    /* this chunk of css is not part of the toolkit :) */
+
+    body {
+      width: 1px;
+      min-width: 100%;
+      *width: 100%;
+    }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+      <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper">
+      <link href="/assets/css/release-notes.css" rel="stylesheet">
+      <h1>Cloud Elements Release Notes</h1>
+      <div markdown="span" class="bs-callout bs-callout-warning" role="alert">
+  <h4>The docs are moving! </h4><p>Find us at our new <a href ="https://docs.cloud-elements.com/">Help Center</a> where we've combined our documentation and knowledgebase articles in one easy-to-search location.</p><p>We aren't updating the Developer Portal anymore, except for the Element Docs &mdash; all updates happen in the <a href ="https://docs.cloud-elements.com/">Help Center</a>. We're retiring the Developer Portal as you know it in:</p><h4 id="demo"></h4>
+  <script>
+  // Set the date we're counting down to
+  var countDownDate = new Date("December 14, 2018 20:00:00").getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+
+      // Get todays date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now an the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Output the result in an element with id="demo"
+      document.getElementById("demo").innerHTML = days + " days " + hours + " hours " + minutes + "m " + seconds + "s ";
+
+      // If the count down is over, write some text
+      if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("demo").innerHTML = "EXPIRED";
+      }
+  }, 1000);
+  </script>
+
+</div>
+
+      <div class="right">
+        <h5 class="release-notes">Recent Releases</h5> 
+        <p>
+          <a href="/2018/07/02/ReleaseNotes-2.176.html">Cloud Elements Version 2.172-2.176</a>
+        </p>
+        
+        <p>
+          <a href="/2018/06/11/ReleaseNotes-2.171.html">Cloud Elements Version 2.171</a>
+        </p>
+        
+        <p>
+          <a href="/2018/06/04/ReleaseNotes-2.170.html">Cloud Elements Version 2.170</a>
+        </p>
+        
+        <p>
+          <a href="/2018/05/28/ReleaseNotes-2.169.html">Cloud Elements Version 2.169</a>
+        </p>
+        
+        <p>
+          <a href="/2018/05/07/ReleaseNotes-2.165.html">Cloud Elements Version 2.165</a>
+        </p>
+        
+        <div class="notification-form-wrapper">
+          <h3 id="showPanel">Subscribe to Release Note updates</h3>
+          <div id="notificationForm" class="notification-form">
+            <!--[if lte IE 8]>
+<script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/v2-legacy.js"></script>
+<![endif]-->
+<!-- <script src="https://code.jquery.com/jquery-1.10.2.js"></script> -->
+<script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/v2.js"></script>
+<script>
+  hbspt.forms.create({
+    portalId: '440197',
+    formId: '7e428335-f944-4974-939e-45ceab2a8101',
+    target: "#notificationForm"
+  });
+</script>
+
+          </div>
+        </div>
+      </div>
+       <div class="p-b-md">
+
+</div>
+
+      <h2>
+        <a href="/2018/04/23/ReleaseNotes-2.163.html">Cloud Elements Version 2.163</a>
+      </h2>
+      <h4 class="release-notes"> April 23, 2018</h4> <h2 id="element-updates">Element Updates</h2>
+
+<h3 id="greenhouse-new-element">Greenhouse: New element</h3>
+
+<p>We added the Greenhouse element to the Human Capital hub. Use the Greenhouse element to manage candidates and jobs.</p>
+
+<h3 id="marketo-custom-objects-apis">Marketo: Custom objects APIs</h3>
+
+<p>We added the following endpoints to manage custom objects in Marketo:</p>
+
+<ul>
+<li>GET /custom-objects</li>
+<li>GET /custom-objects/{customObjectName}/custom-fields</li>
+<li>GET /custom-objects/{customObjectName}/custom-fields-templates</li>
+<li>POST /custom-objects/{customObjectName}/custom-fields</li>
+<li>GET /custom-objects/{customObjectName}/custom-fields/{id}</li>
+<li>PATCH /custom-objects/{customObjectName}/custom-fields/{id}</li>
+<li>DELETE /custom-objects/{customObjectName}/custom-fields/{id}</li>
+</ul>
+
+<h3 id="documents-hub-added-support-for-nextpage-token">Documents hub: Added support for nextPage token</h3>
+
+<p>Use nextPage to paginate response to <code>GET /folders/contents</code> and <code>GET /search</code> requests.</p>
+
+<h3 id="maximizer-added-the-maximizer-datacenter-configuration">Maximizer: Added the Maximizer Datacenter configuration</h3>
+
+<p>When you authenticate an element instance of Maximizer, include a value in Maximizer Datacenter (<code>maximizer.datacenter</code>). Use the data center where you access Maximizer if different than the default <code>caw</code>.</p>
+
+<h3 id="expensify-updated-get-reports-to-return-report-contents">Expensify: Updated <code>GET /reports</code> to return report contents</h3>
+
+<p>Previously <code>GET /reports</code> returned only the file name reports, but now returns the contents as well.</p>
+
+<h3 id="sage-one-added-update-and-delete-endpoints-for-bank-accounts-and-ledger-accounts">Sage One: Added update and delete endpoints for <code>/bank-accounts</code> and <code>/ledger-accounts</code></h3>
+
+<p>We added the following endpoints to Sage One:</p>
+
+<ul>
+<li>PUT /bank-accounts</li>
+<li>DELETE /bank-accounts</li>
+<li>PUT /ledger-accounts</li>
+</ul>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Sage One does not support <code>DELETE /ledger-accounts</code>. </div>
+
+<h3 id="citrix-sharefile-added-revisions-to-the-files-resource">Citrix Sharefile: Added <code>/revisions</code> to the <code>/files</code> resource</h3>
+
+<p>Use the following endpoints to interact with file revisions:</p>
+
+<ul>
+<li>GET /files/{id}/revisions</li>
+<li>GET /files/{id}/revisions/{revisionId}</li>
+<li>GET /files/revisions</li>
+<li>GET /files/revisions/{revisionId}</li>
+</ul>
+
+<h3 id="onedrive-authenticating-through-cloud-elements-2-0-supports-converged-apps">OneDrive: Authenticating through Cloud Elements 2.0 supports converged apps</h3>
+
+<p>We updated the scopes passed when you authenticate in Cloud Elements 2.0.</p>
+
+<h3 id="salesforce-files-added-revisions-to-the-files-resource">Salesforce Files: Added <code>/revisions</code> to the <code>/files</code> resource</h3>
+
+<p>Use the following endpoints to interaction with file revisions:</p>
+
+<ul>
+<li>GET /files/{id}/revisions</li>
+<li>GET /files/{id}/revisions/{revisionId}</li>
+<li>GET /files/revisions</li>
+<li>GET /files/revisions/{revisionId}</li>
+</ul>
+
+<h3 id="salesforce-files-fixed-a-bug-in-get-search">Salesforce Files: Fixed a bug in <code>GET /search</code></h3>
+
+<p>Previously <code>GET /search</code> returned incorrect file ids, while <code>GET /files/metadata</code> and <code>GET /folders/contents</code> returned the correct ids. Now <code>GET /search</code> returns the correct ids.</p>
+
+<h3 id="marketo-updated-get-objects-objectname-metadata-to-work-with-all-available-objects">Marketo: Updated <code>GET /objects/{objectName}/metadata</code> to work with all available objects</h3>
+
+<p>Previously <code>GET /objects/externalActivityTypes/metadata</code> and <code>GET /objects/externalActivityTypesAttributes/metadata</code> returned 400 errors.</p>
+
+<h3 id="act-on-corrected-bug-that-prevented-creating-and-updating-lists-and-bulk-lists">Act-On: Corrected bug that prevented creating and updating lists and bulk lists</h3>
+
+<p>Previously, we passed <code>content-type: application/json</code> in the request header, but Act-On expects <code>multipart/form-data</code>. We now pass the correct content type.</p>
+
+<h3 id="elements-general-fixed-a-bug-where-users-could-not-retrieve-object-metadata-for-certain-elements">Elements (general): Fixed a bug where users could not retrieve object metadata for certain elements</h3>
+
+<p><code>GET /objects/:name/metadata</code> requests did not work for certain elements. We fixed the bug and you can return the metadata for objects in elements.</p>
+
+<h2 id="platform-updates">Platform Updates</h2>
+
+<h3 id="callback-url-failure-emails-are-unique-to-element-instances">Callback URL failure emails are unique to element instances</h3>
+
+<p>When you receive Callback URL failure emails we specify the element instance related to the failure.</p>
+
+<h3 id="search-element-and-formula-instances">Search element and formula instances</h3>
+
+<p>Use the <code>searchText</code> query parameter with <code>GET /instances</code> or <code>GET /formulas/instances</code> to search on the element instance name, formula instance name, or element key.</p>
+
+      <!-- Pagination links -->
+       <div class="p-b-md">
+
+</div>
+
+      <h2>
+        <a href="/2018/04/16/ReleaseNotes-2.162.html">Cloud Elements Version 2.162</a>
+      </h2>
+      <h4 class="release-notes"> April 16, 2018</h4> <h2 id="element-updates">Element Updates</h2>
+
+<h3 id="box-added-support-for-all-webhook-event-triggers">Box: Added support for all webhook event triggers</h3>
+
+<p>We now support webhooks for webhook event triggers listed in the <a href="https://developer.box.com/reference#event-triggers">Box documentation</a>.</p>
+
+<h3 id="intacct-added-discovery-api">Intacct.: Added discovery API</h3>
+
+<p>Use <code>GET /objects/{objectName}/metadata</code> to view data about Intacct. version 3.0 objects.</p>
+
+<h3 id="google-drive-download-image-files-with-cloud-elements-api-docs">Google drive: Download image files with Cloud Elements API docs</h3>
+
+<p>Previously, downloading files with <code>GET /files</code> in the Cloud Elements 2.0 API docs resulted in an error. The download worked correctly with requests directly to the API outside of the API docs. We fixed the bug and you can download images using the Cloud Elements 2.0 API docs.</p>
+
+<h3 id="maximizer-added-the-appointments-resource">Maximizer: Added the <code>/appointments</code> resource</h3>
+
+<p>Use the following endpoints to work with appointments in Maximizer:</p>
+
+<ul>
+<li>POST /appointments</li>
+<li>GET /appointments</li>
+<li>PATCH /appointments/{id}</li>
+<li>DELETE /appointments/{id}</li>
+</ul>
+
+<h3 id="quickbooks-online-updated-messaging-when-failing-to-authenticate-with-a-sandbox-account">Quickbooks Online: Updated messaging when failing to authenticate with a sandbox account</h3>
+
+<p>Previously the Quickbooks Online created an element instance for an account with a sandbox account even if there was an error in authentications. Now when a problem occurs with sandbox authentication we return a an error message..</p>
+
+<h3 id="onenote-authenticated-instances-remain-authenticated-beyond-sixty-minutes">OneNote: Authenticated instances remain authenticated beyond sixty minutes</h3>
+
+<p>In some cases, after you authenticated an element instance and made successful requests, request made after sixty minutes resulted in errors. We corrected the element configuration to prevent this from happening.</p>
+
+<h3 id="autotask-elements-added-support-customfieldsonly-query-on-the-discovery-api">Autotask elements: Added support <code>customFieldsOnly</code> Query on the Discovery API</h3>
+
+<p>We enhanced <code>GET /objects/{objectName}/metadata</code> to support <code>customFieldsOnly</code> for Autotask CRM and Autotask Helpdesk.</p>
+
+<h3 id="quickbooks-online-added-patch-payments-id-void-endpoint">QuickBooks Online: Added <code>PATCH /payments/{id}/void</code> endpoint</h3>
+
+<p>Void payments in QuickBooks Online with <code>PATCH /payments/{id}/void</code>.</p>
+
+<h3 id="microsoft-dynamics-crm-pagination-for-get-cases-and-get-knowledge-articles">Microsoft Dynamics CRM: Pagination for <code>GET /cases</code> and <code>GET /knowledge-articles</code></h3>
+
+<p>We updated our API docs to clarify the pagination used for <code>GET /cases</code> and <code>GET /knowledge-articles</code> is via Next Page Tokens, not page numbers.</p>
+
+<h3 id="sugarcrm-added-discovery-api">SugarCRM: Added discovery API</h3>
+
+<p>Use <code>GET /objects/{objectName}/metadata</code> to view data about Sugar CRM objects.</p>
+
+<h3 id="all-added-an-endpoint-to-retrieve-the-open-api-specifications-for-an-object">All: Added an endpoint to retrieve the Open API specifications for an object</h3>
+
+<p>Use <code>/object/{objectName}/docs</code> to retrieve the Open API specifications (Swagger docs) for an object.</p>
+
+<h2 id="cloud-elements-platform-updates">Cloud Elements Platform Updates</h2>
+
+<h3 id="rename-vdrs">Rename VDRs</h3>
+
+<p>Change the name of a VDR at the organization, account and level by passing a new <code>objectName</code> in the request body of the following endpoints:</p>
+
+<ul>
+<li><code>PATCH /organizations/objects/{objectName}</code></li>
+<li><code>PATCH /accounts/objects/{objectName}</code></li>
+<li><code>PATCH /instances/objects/{objectName}</code></li>
+</ul>
+
+<p>If the VDR includes different level fields, those are not changed by this request. This essentially splits the VDR where the renamed VDR includes only the fields at the level of the endpoint while the previous name includes only fields at the other levels. Use the other endpoints to change the name of the VDR associated with the different level fields.</p>
+
+<h3 id="object-v2-endpoint-list-element-objects-and-their-sources">Object v2 Endpoint: List Element Objects and their Sources</h3>
+
+<p>Use GET /objects to retrieve a list of all data objects in an element and their source (the vendor, a VDR, or Cloud Element library). To specify the version 2 endpoint, pass <code>Elements-Version: Helium</code> in the request header.</p>
+<div class="highlight"><pre><code class="language-" data-lang="">curl -X GET \
+https://api.cloud-elements.com/elements/api-v2/objects \
+-H 'authorization: User sAfK7LJGNz5ZHcNrvdJvLI=f03WbTbH6aRKc0HJ3oOIi, Organization 58168435e3b9959a929eb04b6218b9a2, Token yCCtl7Pqx0E4Qf6MBFXxT+/QcbogS1q1Deyw+1vSW=A3' \
+-H 'Elements-Version: Helium ' \
+-H 'Content-Type: application/json' \
+</code></pre></div>
+      <!-- Pagination links -->
+      
+      <script>
+        $(document).ready(e => {
+          $('.box').addClass('active');
+          $("#notificationForm").hide()
+          $("#showPanel").click(function () {
+            if ($('#notificationForm').is(':hidden')) {
+              $("#notificationForm").show();
+            } else {
+              $("#notificationForm").hide();
+            }
+          });
+        });
+      </script>
+
+      
+      <div class="pagination">
+        
+        <span class="previous ">
+          <a class="prev-next" href="/docs/release-notes/page3">Next</a>
+        </span>   
+        <a href="/docs/release-notes/page3">1</a>   
+        <a href="/docs/release-notes/page2">2</a>   
+        <a href="/docs/release-notes/page3">3</a>   
+        <em>4</em>   
+        <a href="/docs/release-notes/page5">5</a>   
+        <a href="/docs/release-notes/page6">6</a>   
+        <a href="/docs/release-notes/page7">7</a>   
+        <a href="/docs/release-notes/page8">8</a>   
+        <a href="/docs/release-notes/page9">9</a>   
+        <a href="/docs/release-notes/page10">10</a>   
+        <a href="/docs/release-notes/page11">11</a>   
+        <a href="/docs/release-notes/page12">12</a>   
+        <a href="/docs/release-notes/page13">13</a>   
+        <a href="/docs/release-notes/page14">14</a>   
+        <a href="/docs/release-notes/page15">15</a>   
+        <a href="/docs/release-notes/page16">16</a>   
+        <a href="/docs/release-notes/page17">17</a>   
+        <a href="/docs/release-notes/page18">18</a>   
+        <span class="next ">
+          <a class="prev-next" href="/docs/release-notes/page5">Prev</a>
+        </span> 
+      </div>
+      
+
+    </div>
+
+
+
+
+  </div>
+  <script src="/assets/js/chart.js"></script>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <script src="/assets/js/ajaxLoading.js"></script> <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+ <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <script>
+    // execute/clear BS loaders for docs
+    $(function () {
+      while (window.BS && window.BS.loader && window.BS.loader.length) {
+        (window.BS.loader.pop())()
+      }
+    })
+  </script>
+</body>
+
+</html>

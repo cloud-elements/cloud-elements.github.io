@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- History.js -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/platform-api/usage/">
+
+  <script src="/api-docs/swagger-ui.js" type="text/javascript"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper">
+      <div markdown="span" class="bs-callout bs-callout-warning" role="alert">
+  <h4>The docs are moving! </h4><p>Find us at our new <a href ="https://docs.cloud-elements.com/">Help Center</a> where we've combined our documentation and knowledgebase articles in one easy-to-search location.</p><p>We aren't updating the Developer Portal anymore, except for the Element Docs &mdash; all updates happen in the <a href ="https://docs.cloud-elements.com/">Help Center</a>. We're retiring the Developer Portal as you know it in:</p><h4 id="demo"></h4>
+  <script>
+  // Set the date we're counting down to
+  var countDownDate = new Date("December 14, 2018 20:00:00").getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+
+      // Get todays date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now an the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Output the result in an element with id="demo"
+      document.getElementById("demo").innerHTML = days + " days " + hours + " hours " + minutes + "m " + seconds + "s ";
+
+      // If the count down is over, write some text
+      if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("demo").innerHTML = "EXPIRED";
+      }
+  }, 1000);
+  </script>
+
+</div>
+
+      <script src="/assets/js/application.js"></script>
+<link href="/assets/css/contentToggle.css" rel="stylesheet">
+
+
+
+      
+      <h2 id="usage-apis">Usage APIs</h2>
+
+<p>The Usage API method calls allow you to track Element activity within your Cloud Elements Service Account. Services include retrieving logs, analytics, API calls, response times, and status calls. Stay on top of your Elements with the Usage APIs.</p>
+
+<p>In order to access the Usage APIs, you must sign up for Cloud Elements Service. You will need your Organization and User Secrets to make success Usage API calls. These are generated for you when you sign up for our service. Details on how to sign up and where to find your Organization and User Secrets are documented in the next section.</p>
+
+<h3 id="where-to-find-the-usage-apis">WHERE TO FIND THE USAGE APIS</h3>
+
+<p>The Usage APIs can be accessed via <a href="#" data-toggle="tooltip" data-original-title="The Cloud Elements user interface that provides access to the features and APIs avalable with Cloud Elements.">Cloud Elements</a> at: <a href="https://console.cloud-elements.com/elements/jsp/login.jsp">https://console.cloud-elements.com/elements/jsp/login.jsp</a>. The console provides a Graphical User Interface (GUI) environment that formats data returned by each of the API calls into graphs. An example can be seen below. The Usage APIs can also be integrated right into you app.</p>
+
+<h3 id="sign-up-for-the-cloud-elements-service">SIGN UP FOR THE CLOUD ELEMENTS SERVICE</h3>
+
+<p>To sign up for the Cloud Elements service, using a web browser, go to <a href="https://console.cloud-elements.com/elements/jsp/signup.jsp">https://console.cloud-elements.com/elements/jsp/signup.jsp</a>.</p>
+
+<p>Sign up with Google, GitHub or fill out a short form to create a new account with Cloud Elements. If you choose not to use Google or GitHub to sign up, you will be asked to validate your new account via a confirmation link that will be sent to your email. You will reset your password to one of your choice after your initial login.
+<img src="http://cloud-elements.com/wp-content/uploads/bfi_thumb/ConsoleSignup-m7cde2lpyjexfapmzvn0rpkw24op0jn7mwipj6q2zk.png" alt="Cloud Elements Sign up 1"></p>
+
+<ol>
+<li><p>After completing this process, click “Secrets” in the top right corner of your dashboard as shown.</p></li>
+<li><p>Copy your User and Organization Secrets. They are needed to create a connection or “Element Instance”.</p></li>
+</ol>
+
+<p>NOTE: If you ever need to reset your Secrets, this action can be done by clicking on “My Settings” which will take you to your profile.
+<img src="http://cloud-elements.com/wp-content/uploads/bfi_thumb/ConsoleSignup22-m7ch2y2e2fak6ad3rqmz7knmq5beuc61n2yurd6md4.png" alt="Cloud Elements Sign up 2"></p>
+
+<h3 id="how-to-use-the-usage-apis">How to Use the Usage APIs</h3>
+
+<p>This document will show examples of how to retrieve usage data.  NOTE, not all supported calls are displayed - this is just a sample.</p>
+
+<p><code>GET/usage</code></p>
+
+<p>Retrieve the usage logs for your account.</p>
+
+<p>Below is an example cURL command demonstrating the <code>GET /usage API</code> call and successful response. Please make sure your quotes are straight in the cURL command.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> GET
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIZATION_SECRET&gt;'</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/usage'</span>
+</code></pre></div>
+<p>Input Definitions:</p>
+
+<p>`Input Definitions
+    hub     optional
+    The name of the hub. eg documents, messaging,crm. This is an optional input.</p>
+<div class="highlight"><pre><code class="language-" data-lang="">keys[]        optional
+A list of element keys. eg, keys[]=dropbox&amp;keys[]=googledrive&amp;keys[]=box
+
+tags[]      optional
+A list of tags. eg, tags[]=development&amp;tags[]=qa
+
+status      optional
+Filter by Status either SUCCCESS or FAILED
+
+from        optional
+Start time in the ISO8601 format '2014-04-14'T'00:00:00-4:00'
+if not supplied defaults to 7 days ago
+
+to      optional
+Start time in the ISO8601 format &lt;br&gt; eg '2014-04-14'T'00:00:00-4:00'
+if not supplied defaults current time
+
+searchText  optional
+Text to match in the usage.
+
+pageOffset  optional
+Starting page offset for pagination.
+Defaults to 0
+
+pageSize    optional
+Number of records per page
+defaults to 100`
+</code></pre></div>
+<p>Example of Successful Response:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">[
+        {
+            "id": "53e6df56e4b067fd19a9d69f",
+            "requestStatus": "SUCCESS",
+            "elementName": "GitHub OAuth",
+            "elementKey": "githuboauth",
+            "accountId": 1,
+            "instanceName": "production 2",
+            "usageDate": "2014-08-10T03:02:34.053+00:00",
+            "userId": 1,
+            "processTime": 992,
+            "requestURI": "/elements/api-v1/oauth/1/authenticate",
+            "requestIP": "172.31.28.13",
+            "elementTags": "production",
+            "elementApi": "authenticate",
+            "companyId": 1
+        },
+        {
+            "id": "53e6e0c8e4b067fd19a9d6ab",
+            "requestStatus": "SUCCESS",
+            "elementName": "GitHub OAuth",
+            "elementKey": "githuboauth",
+            "accountId": 1,
+            "instanceName": "production 2",
+            "usageDate": "2014-08-10T03:02:32.412+00:00",
+            "userId": 1,
+            "processTime": 317,
+            "requestURI": "/elements/api-v1/oauth/getRequestToken",
+            "requestIP": "172.31.28.13",
+            "elementTags": "production",
+            "elementApi": "getRequestToken",
+            "companyId": 1
+        }
+]
+</code></pre></div>
+<p><code>GET /usage/analytics/activity</code></p>
+
+<p>Retrieve the number of element API calls within a given date/time range.</p>
+
+<p>Below is an example cURL command demonstrating the <code>GET /usage/analytics/activity</code> API call and successful response. Please make sure your quotes are straight in the cURL command.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> GET
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIZATION_SECRET&gt;'</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type:application/json'</span>
+<span class="nt">-H</span> <span class="s1">'Cache-Control:no-cache'</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/usage/analytics/activity?from=2014-03-01T00:00:00Z&amp;to=2014-04-01T00:00:00Z&amp;interval=day'</span>
+</code></pre></div>
+<p>Input Definitions</p>
+<div class="highlight"><pre><code class="language-" data-lang="">`from     mandatory
+Start time in the ISO8601 format eg '2014-04-14'T'00:00:00-4:00'
+
+to       mandatory
+End time in the ISO8601 format eg '2014-04-14'T'00:00:00-4:00'
+
+interval optional
+The Interval is sent in order to return data.  The interval may be set to the
+    year, quarter, month, week, day, hour, minute, or second.  If the interval is
+    not supplied, the API call calculates the interval based on time difference.`
+</code></pre></div>
+<p>Example of Successful Response – example has been truncated.</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">[
+    {
+        "timestamp": "2014-03-01T00:00:00.000Z",
+        "count": 5760
+    },
+    {
+        "timestamp": "2014-03-02T00:00:00.000Z",
+        "count": 5762
+    },
+    {
+        "timestamp": "2014-03-03T00:00:00.000Z",
+        "count": 5837
+    },
+    {
+        "timestamp": "2014-03-04T00:00:00.000Z",
+        "count": 5767
+    },
+    {
+        "timestamp": "2014-03-05T00:00:00.000Z",
+        "count": 5923
+    },
+    {
+        "timestamp": "2014-03-06T00:00:00.000Z",
+        "count": 5763
+    },
+    {
+        "timestamp": "2014-03-15T00:00:00.000Z",
+        "count": 5760
+    },
+    {
+        "timestamp": "2014-03-28T00:00:00.000Z",
+        "count": 5335
+    },
+    {
+        "timestamp": "2014-03-31T00:00:00.000Z",
+        "count": 5325
+    },
+    {
+        "timestamp": "2014-04-01T00:00:00.000Z",
+        "count": 0
+    }
+    …
+]
+</code></pre></div>
+<p><code>GET /usage/analytics/activity/elements</code></p>
+
+<p>Retrieve the number of element API calls for each element within a given date/time range.</p>
+
+<p>Below is an example cURL command demonstrating the <code>GET /usage/analytics/activity/elements</code> API call and successful response. Please make sure your quotes are straight in the cURL command.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> GET
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIZATION_SECRET&gt;'</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type:application/json'</span>
+<span class="nt">-H</span> <span class="s1">'Cache-Control:no-cache'</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/usage/analytics/activity/elements?from=2014-03-01T00:00:00Z&amp;to=2014-04-01T00:00:00Z&amp;interval=month'</span>
+</code></pre></div>
+<p>Input Definitions:</p>
+
+<p>`from     mandatory
+    Start time in the ISO8601 format eg &#39;2014-04-14&#39;T&#39;00:00:00-4:00&#39;</p>
+<div class="highlight"><pre><code class="language-" data-lang="">to       mandatory
+End time in the ISO8601 format eg '2014-04-14'T'00:00:00-4:00'
+
+interval optional
+The Interval is sent in order to return data.  The interval may be set to the
+    year, quarter, month, week, day, hour, minute, or second.  If the interval is
+    not supplied, the API call calculates the interval based on time difference.`
+</code></pre></div>
+<p>Example Successful Response:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">[
+    {
+        "sendgrid": 3087,
+        "timestamp": "2014-03-01T00:00:00.000Z",
+        "count": 178886,
+        "githuboauth": 111,
+        "twilio": 175688
+    },
+    {
+        "timestamp": "2014-04-01T00:00:00.000Z",
+        "count": 0
+    }
+]
+</code></pre></div>
+<p><code>GET /usage/analytics/times</code></p>
+
+<p>Retrieve the response times of element API calls within a given date/time range.</p>
+
+<p>Below is an example cURL command demonstrating the <code>GET /usage/analytics/times</code> API call and successful response. Please make sure your quotes are straight in the cURL command.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> GET
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIZATION_SECRET&gt;'</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type:application/json'</span>
+<span class="nt">-H</span> <span class="s1">'Cache-Control:no-cache'</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/usage/analytics/times?from=2014-07-01T00:00:00Z&amp;to=2014-08-01T00:00:00Z&amp;interval=day'</span>
+</code></pre></div>
+<p>Input Definitions</p>
+
+<p>`from     mandatory
+    Start time in the ISO8601 format eg &#39;2014-04-14&#39;T&#39;00:00:00-4:00&#39;</p>
+<div class="highlight"><pre><code class="language-" data-lang="">to       mandatory
+End time in the ISO8601 format eg '2014-04-14'T'00:00:00-4:00'
+
+interval optional
+The Interval is sent in order to return data.  The interval may be set to the
+    year, quarter, month, week, day, hour, minute, or second.  If the interval is
+    not supplied, the API call calculates the interval based on time difference.`
+</code></pre></div>
+<p>Example of Successful Response:  Response has been truncated.</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">[
+    {
+        "min": 434,
+        "timestamp": "2014-07-01T00:00:00.000Z",
+        "max": 1512,
+        "count": 12,
+        "avg": 1069.4166666666667
+    },
+    {
+        "min": 234,
+        "timestamp": "2014-07-02T00:00:00.000Z",
+        "max": 1698,
+        "count": 2,
+        "avg": 966
+    },
+    {
+        "min": 186,
+        "timestamp": "2014-07-03T00:00:00.000Z",
+        "max": 2927,
+        "count": 11,
+        "avg": 860
+    },
+    {
+        "min": 222,
+        "timestamp": "2014-07-04T00:00:00.000Z",
+        "max": 1255,
+        "count": 5,
+        "avg": 513.2
+    },
+    {
+        "min": 242,
+        "timestamp": "2014-07-30T00:00:00.000Z",
+        "max": 4471,
+        "count": 10,
+        "avg": 2533.7
+    },
+    {
+        "min": 226,
+        "timestamp": "2014-07-31T00:00:00.000Z",
+        "max": 3790,
+        "count": 7,
+        "avg": 1631.857142857143
+    },
+    {
+        "timestamp": "2014-08-01T00:00:00.000Z",
+        "count": 0
+    }
+    …
+]
+</code></pre></div>
+<p><code>GET /usage/analytics/statuses</code></p>
+
+<p>Retrieve the number of successes and failures of element API calls within a given date/time range.</p>
+
+<p>Below is an example cURL command demonstrating the <code>GET /usage/analytics/statuses</code> API call and successful response. Please make sure your quotes are straight in the cURL command.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> GET
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIZATION_SECRET&gt;'</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type:application/json'</span>
+<span class="nt">-H</span> <span class="s1">'Cache-Control:no-cache'</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/usage/analytics/statuses?from=2014-08-01T00:00:00Z&amp;to=2014-08-27T00:00:00Z&amp;interval=day'</span>
+</code></pre></div>
+<p>Input Definitions:</p>
+
+<p>`from     mandatory
+    Start time in the ISO8601 format eg &#39;2014-04-14&#39;T&#39;00:00:00-4:00&#39;</p>
+<div class="highlight"><pre><code class="language-" data-lang="">to       mandatory
+End time in the ISO8601 format eg '2014-04-14'T'00:00:00-4:00'
+
+interval optional
+The Interval is sent in order to return data.  The interval may be set to the
+    year, quarter, month, week, day, hour, minute, or second.  If the interval is
+    not supplied, the API call calculates the interval based on time difference.`
+</code></pre></div>
+<p>Successful Example Response:  Response has been truncated.</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">[
+    {
+        "timestamp": "2014-07-01T00:00:00.000Z",
+        "count": 12,
+        "failed": 0,
+        "success": 12
+    },
+    {
+        "timestamp": "2014-07-02T00:00:00.000Z",
+        "count": 2,
+        "failed": 0,
+        "success": 2
+    },
+    {
+        "timestamp": "2014-07-03T00:00:00.000Z",
+        "count": 11,
+        "failed": 0,
+        "success": 11
+    },
+    {
+        "timestamp": "2014-07-04T00:00:00.000Z",
+        "count": 5,
+        "failed": 1,
+        "success": 4
+    },
+    {
+        "timestamp": "2014-07-28T00:00:00.000Z",
+        "count": 13,
+        "failed": 2,
+        "success": 11
+    },
+    {
+        "timestamp": "2014-08-01T00:00:00.000Z",
+        "count": 0,
+        "failed": 0,
+        "success": 0
+    }
+    …
+]
+</code></pre></div>
+<p><code>GET /usage/{id}</code></p>
+
+<p>Retrieve the usage record by id</p>
+
+<p>Below is an example cURL command demonstrating the <code>GET /usage/{id}</code> API call and successful response. Please make sure your quotes are straight in the cURL command.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> GET
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIZATION_SECRET&gt;'</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type:application/json'</span>
+<span class="nt">-H</span> <span class="s1">'Cache-Control:no-cache'</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/usage/id%20of%20log'</span>
+</code></pre></div>
+<p>Input Definitions:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">`id - id of the log record.  In the example response, the id is:
+    53e6e0c8e4b067fd19a9d6ab.  You would put this id at the end of the URL above in
+    place of id%20of%20log`
+</code></pre></div>
+<p>Example of Successful Response:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+            "id": "53e6e0c8e4b067fd19a9d6ab",
+            "requestStatus": "SUCCESS",
+            "elementName": "GitHub OAuth",
+            "elementKey": "githuboauth",
+            "accountId": 1,
+            "instanceName": "production 2",
+            "usageDate": "2014-08-10T03:02:32.412+00:00",
+            "userId": 1,
+            "processTime": 317,
+            "requestURI": "/elements/api-v1/oauth/getRequestToken",
+            "requestIP": "172.31.28.13",
+            "elementTags": "production",
+            "elementApi": "getRequestToken",
+            "companyId": 1
+}
+</code></pre></div>
+<p>If you need any support integrating our APIs, please let us know. You can <a href="mailto:support@cloud-elements.com">email</a> or give us a call at +1.866.830.3456. We will do our best to get back to you within 24 hours. Your success is our success.</p>
+
+    </div>
+
+  </div>
+  <script src="/assets/js/chart.js"></script>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

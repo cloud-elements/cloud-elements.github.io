@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/legacy/element-builder/enhance-existing-elements.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> Element Builder </h2>
+          <!-- <h4> Enhance existing Elements via the the Element Builder UI. </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/?elementId=">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/create-via-api.html?elementId=">Create Element via API</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/create-via-element-builder-ui.html?elementId=">Create Element via Element Builder UI</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/enhance-existing-elements.html?elementId=">Enhance Element via Element Builder UI</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/create-database-element.html?elementId=">Create Database Element</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/element-builder-authorization-types.html?elementId=">Authorization Types</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/element-builder-hooks.html?elementId=">Hooks</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/element-builder-api-debugging.html?elementId=">API Debugging</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/tips.html?elementId=">Tips</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/api-documentation.html?elementId=">Platform Documentation</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <h2 id="enhancing-existing-elements">Enhancing Existing Elements</h2>
+
+<p>Element Builder gives you the ability to create custom integrations to cloud services using the Cloud Elements API Management Platform.  We are currently testing our BETA version.  <strong>Currently only endpoints with a REST API can be built using Element Builder</strong>.  Please <a href="mailto:support@cloud-elements.com">contact us</a> if you are interested in participating in our round of BETA testing.</p>
+
+<p>This guide will demonstrate how to add resources/entities to existing Elements.  An existing Element is defined as an integration built by Cloud Elements and is currently present in our public catalog.</p>
+
+<p>The FreshBooks Element will be used for this demonstration.  In this guide, the expense resource will be added to the existing FreshBooks Element.  POST, GET, PATCH, DELETE, and GET by ID methods are available for the expense object.  All of these methods will be added.</p>
+
+<p>Cloud Elements strongly recommends researching the endpoint prior to starting any work in Element Builder.  It is important to answer the following questions about an endpoint:</p>
+
+<ul>
+<li>Is there public API Documentation?</li>
+<li>Is the public API REST?</li>
+<li>Does the endpoint require a connected app with an API key and secret be created?</li>
+<li>What type of Authentication is expected (Basic, OAuth 1, OAuth 2)?</li>
+</ul>
+
+<p>Prior to beginning work, research was done on the FreshBooks API.  The following was discovered:</p>
+
+<ul>
+<li>FreshBooks API Documentation: <a href="https://www.freshbooks.com/developers/">https://www.freshbooks.com/developers/</a></li>
+<li>API is REST</li>
+<li>Connected app required to connect to the endpoint</li>
+<li>Authentication Type: <strong>OAuth 1.0a</strong></li>
+</ul>
+
+<p>Let’s get started by cloning the current FreshBooks Element in Cloud Elements public catalog.</p>
+
+<h4 id="clone-existing-element">Clone Existing Element</h4>
+
+<p>Log in to <a href="https://console.cloud-elements.com/elements/jsp/login.jsp">Cloud Elements</a></p>
+
+<p>Click “Elements Catalog” and select “Finance”</p>
+
+<p>Under FreshBooks, click the gear and click “Clone”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/Clone1.png" alt="Element Builder UI Clone 1"></p>
+
+<p>This action will bring up the Elements Builder Admin Dashboard.</p>
+
+<p>Click the gear and select “Edit”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/Clone2.png" alt="Element Builder UI Clone 2"></p>
+
+<h4 id="info-tab">Info Tab</h4>
+
+<p>The Element Info Screen will render.</p>
+
+<p>The <strong>Hub, Name, Description, Image URL</strong>, and <strong>Authentication Type</strong> will be auto populated based on the settings within the Cloud Elements public catalog.  You are free to change these settings, however leaving them as is will ensure the default Element functionality.</p>
+
+<p>For this example, the <strong>Name</strong> attribute will be changed.</p>
+
+<p>Customize the Name of the Element, e.g. “FreshBooks Custom”</p>
+
+<p>Click “Next”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/InfoClone1.png" alt="Element Builder UI Info 1"></p>
+
+<h4 id="configuration-tab">Configuration Tab</h4>
+
+<p>The Configuration Tab contains all of the configs needed to create an instance or connection to the endpoint.  These configs are customizable, but leaving the default values intact will ensure the Element provisions as it currently does in the Cloud Elements public catalog.</p>
+
+<p>No configs will be changed, click “Next”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/ConfigClone11.png" alt="Element Builder UI Configuration 1"></p>
+
+<h4 id="instance-tab">Instance Tab</h4>
+
+<p>Test the connection to the endpoint by creating an instance.</p>
+
+<p>Name the Instance</p>
+
+<p>Input FreshBooks site address, e.g. ‘myfreshbookssite’</p>
+
+<p>In our example, this will take us through the FreshBooks OAuth 1.0a workflow.  A login screen will be presented, credentials inputted, and authorization of the app granting permission to the FreshBooks app.</p>
+
+<p>Click “Create Instance”</p>
+
+<p>Click “Next”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/InstanceClone1.png" alt="Element Builder UI Instance 1"></p>
+
+<h4 id="resources-tab">Resources Tab</h4>
+
+<p>Add or edit entities/resources to your Element within the Resources Tab.  Resources will need an HTTP verb like POST, GET, PATCH, PUT, or DELETE associated with it.  Since FreshBooks is a current public Element, the existing API resources are available to copy, then edit the information to speed up your workflow.  This guide will demonstrate copying a current resource, then editing it, as well as, adding a resource from scratch.</p>
+
+<p>Let’s begin by copying a current resource, then editing it</p>
+
+<p>As mentioned in the introduction, the <strong>expense</strong> resource will be used as our example.</p>
+
+<p>The FreshBooks expense API documentation can be found here: <a href="https://www.freshbooks.com/developers/docs/expenses">https://www.freshbooks.com/developers/docs/expenses</a></p>
+
+<p>After thoroughly reviewing the API documentation, the following methods are available:</p>
+
+<ul>
+<li>POST</li>
+<li>GET</li>
+<li>PATCH</li>
+<li>DELETE</li>
+<li>GET by ID</li>
+</ul>
+
+<p>FreshBooks responses are formatted as XML.  Cloud Elements expects responses and payloads be sent as JSON.  Elements Builder will handle the formatting of requests under the covers.</p>
+
+<h5 id="copying-a-current-resource-then-editing-that-resource">COPYING A CURRENT RESOURCE THEN EDITING THAT RESOURCE</h5>
+
+<p>The endpoint API documentation will be needed to find out the following:</p>
+
+<ul>
+<li>vendor path of the resource</li>
+<li>HTTP verb</li>
+<li>JSON/XML payload if applicable</li>
+</ul>
+
+<p>In our example, let’s copy the <code>GET /customers</code> resource and use it as a base to add the <code>GET /expenses</code> resource.</p>
+
+<p>Click the Copy Icon to copy the resource
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AddResourceClone1.png" alt="Element Builder UI Resources 1"></p>
+
+<p>The copy of the GET /customers API call will have some fields already populated.  Let’s take a look at the populated fields, as well as, which ones will need to be edited:</p>
+
+<p>Fields that can <strong>remain the same:</strong></p>
+
+<ul>
+<li><strong>Resource Type:</strong>  API</li>
+<li><strong>Vendor Path:</strong> <code>/xml-in</code>
+
+<ul>
+<li>The resource will be sent as a parameter (documented in next section)</li>
+</ul></li>
+<li><strong>Method:</strong> <code>GET</code></li>
+<li><strong>Vendor Method:</strong> <code>POST</code></li>
+<li><strong>Request Root Key:</strong> blank</li>
+</ul>
+
+<p>Fields that <strong>require editing:</strong></p>
+
+<ul>
+<li><strong>Path:</strong> <code>/hubs/finance/customers_copy</code></li>
+<li><strong>Response Root Key:</strong> <code>response.clients.client</code></li>
+<li><strong>Description:</strong> Search for customers
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AddResourceClone2.png" alt="Element Builder UI Resources 2"></li>
+</ul>
+
+<p>In order to complete the GET /expenses resource, and input the proper values for the API call, the endpoint documentation will be needed.</p>
+
+<p>In our example, FreshBooks provides API documentation for the expense.list resource here:  <a href="https://www.freshbooks.com/developers/docs/expenses#expense.get">https://www.freshbooks.com/developers/docs/expenses#expense.get</a></p>
+
+<p>The <strong>Response Root Key</strong> of the expense object is <code>response.expenses.expense</code>
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AddResourceClone3.png" alt="Element Builder UI Resources 3"></p>
+
+<p>The <strong>Path</strong> value must reflect the path to the resource, e.g. <code>GET /expenses</code>.  The correct Path is <code>/hubs/finance/expenses</code></p>
+
+<p>The <strong>Description</strong> must reflect the correct resource, e.g. expenses.
+The correct Description is <strong>Search for expenses</strong>.</p>
+
+<p><strong>Let’s update our values</strong>.</p>
+
+<p>Input the correct values for the following:</p>
+
+<ul>
+<li><strong>Path:</strong> <code>/hubs/finance/expenses</code></li>
+<li><strong>Response Root Key:</strong> <code>response.expenses.expense</code></li>
+<li><strong>Description:</strong> Search for expenses
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AddResourceClone5.png" alt="Element Builder UI Resources 4"></li>
+</ul>
+
+<p>The parameters will need to be edited next.  A parameter must be defined on the Cloud Elements side and the vendor side.</p>
+
+<p>In our example, the only parameter that needs to be edited is the Request/Body.  Let’s take a look at this example in the Element Builder UI.</p>
+
+<p>Click the pencil icon or “Edit” to view the parameter:
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AddResourceClone6.png" alt="Element Builder UI Resources 5"></p>
+
+<p>The column on the left is what Cloud Elements expects.  The column on the right is what the endpoint expects, in this case, FreshBooks.  Let’s take a look at the fields:</p>
+
+<ul>
+<li><strong>Name:</strong> Cloud Elements uses a JSON payload to indicate the FreshBooks method, as well as, FreshBooks paging parameters – the paging parameters can be found here: <a href="https://www.freshbooks.com/developers/pagination">https://www.freshbooks.com/developers/pagination</a></li>
+<li><strong>Vendor Name:</strong> What the endpoint expects.  In our example, FreshBooks expects the method and paging parameters to be sent in the body of the request, hence ‘body’ is the Vendor Name – this is based on the FreshBooks expense API documentation.</li>
+<li><strong>Type:</strong> Value – Cloud Elements is sending the endpoint this exact value.</li>
+<li><strong>Vendor Type:</strong> Body – the endpoint expects the resource as a parameter in the body of the request.</li>
+<li><strong>Data Type:</strong> string – the data type (string, integer, etc)</li>
+<li><strong>Vendor Data Type:</strong> string – data type the endpoint expects</li>
+<li><strong>Parameter Source:</strong> Request – the request is coming from Cloud Elements to the endpoint.  The reverse is also possible, Cloud Elements receives a response from the endpoint.  In our example, we are sending a <code>GET</code> request to FreshBooks.</li>
+<li><strong>Is it Required?:</strong>  If the endpoint expects this parameter on every API call, select “yes”.  If it is optional, select “no”.  In our example, it is required.</li>
+<li><strong>Description:</strong>  input a description of the parameter, e.g. the request body.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AddResourceClone7.png" alt="Element Builder UI Resources 6"></li>
+</ul>
+
+<p>The only field that requires updating is the Name field.  It currently has
+<code>{&quot;request&quot;:{&quot;@method&quot;:&quot;client.list&quot;, &quot;page&quot;: &quot;{page}&quot;, &quot;per_page&quot;: &quot;{pageSize}&quot;}}</code></p>
+
+<p>It must be updated with:</p>
+
+<p><code>{&quot;request&quot;:{&quot;@method&quot;:&quot;expense.list&quot;, &quot;page&quot;: &quot;{page}&quot;, &quot;per_page&quot;: &quot;{pageSize}&quot;}}</code></p>
+
+<p>Let’s update the Name field in the next step:</p>
+
+<p>Update <strong>Name</strong> with <code>{“request”:{“@method”:”expense.list”, “page”: “{page}”, “per_page”: “{pageSize}”}}</code></p>
+
+<p>Click “Done”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AddResourceClone8.png" alt="Element Builder UI Resources 7"></p>
+
+<p>Test out the newly created API call right from Elements Builder.</p>
+
+<p>Click “Try it out”</p>
+
+<p>This action will open the documentation panel.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AddResourceClone9.png" alt="Element Builder UI Resources 8"></p>
+
+<p>Scroll down and locate the “Try it out!” button and click
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AddResourceClone101.png" alt="Element Builder UI Resources 9"></p>
+
+<p>View the response to the <code>GET /expenses</code> call</p>
+
+<p>View Request, Pre-Hook (if applicable), and Vendor Request
+Cloud Elements provides some debugging features within the Docs Try it out panel. View the request Cloud Elements Sends, as well as, the Vendor Request. Pre-Hooks are also available for view if applicable.</p>
+
+<p>The same is true for the Vendor Response and Post-Hook which can be found below the Request, Pre-Hook, and Vendor Request.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AddResourceClone11.png" alt="Element Builder UI Resources 10"></p>
+
+<p>Cloud Elements supports the following parameter types:</p>
+
+<p>Configuration: value that has been saved to the instance
+Header: value to be added in the header of the API request
+Path: value to be added to the URL of the API request
+Body: value to be sent with as data such as a JSON payload with the API request
+Query: query request
+Form: needed when multiple items must be sent in parts such as an ID, followed by the body
+Multipart: needed when performing a file upload
+Value: an exact value to be sent with the API request
+Body Field: field sent in the body of the request
+Body Token: token sent in the body of the request</p>
+
+<h5 id="adding-a-resource-from-scratch">ADDING A RESOURCE FROM SCRATCH</h5>
+
+<p>Next we will add the <code>POST /expenses</code> API call.</p>
+
+<p>Click “Add”</p>
+
+<p>This will render a blank resource.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AddResourceClone12.png" alt="Element Builder UI Resources 11"></p>
+
+<p>Input values for the following fields:</p>
+
+<ul>
+<li><strong>Resource Type:</strong>  API</li>
+<li><strong>Path:</strong> <code>/hubs/finance/expenses</code></li>
+<li><strong>Vendor Path:</strong> <code>/xml-in</code></li>
+<li><strong>Method:</strong> <code>POST</code></li>
+<li><strong>Vendor Method:</strong> <code>POST</code></li>
+<li><strong>Request Root Key:</strong> blank</li>
+<li><strong>Response Root Key:</strong>  response</li>
+<li><strong>Description:</strong> Create an expense</li>
+</ul>
+
+<p>Click Add Parameter
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AddResourceClone132.png" alt="Element Builder UI Resources 12"></p>
+
+<p>FreshBooks expects the resource to be sent in the body of the request so we need to add two parameters to satisfy this requirement.</p>
+
+<p>Input values for the following fields:</p>
+
+<ul>
+<li><strong>Name:</strong> expenses</li>
+<li><strong>Vendor Name:</strong> expenses</li>
+<li><strong>Type:</strong> BODY</li>
+<li><strong>Vendor Type:</strong> BODY_TOKEN</li>
+<li><strong>Data Type:</strong> expenses</li>
+<li><strong>Vendor Data Type:</strong> expenses</li>
+<li><strong>Parameter Source:</strong> REQUEST</li>
+<li><strong>Is it Required?:</strong>  YES</li>
+<li><strong>Description:</strong>  The expense</li>
+</ul>
+
+<p>Click “Done”</p>
+
+<p>Click “Add Parameter”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AddResourceClone142.png" alt="Element Builder UI Resources 13"></p>
+
+<p>Input values for the following fields:</p>
+
+<ul>
+<li><strong>Name:</strong> <code>{“request”:{“@method”:”expense.create”, “expense”: {expenses}}}</code></li>
+<li><strong>Vendor Name:</strong> body</li>
+<li><strong>Type:</strong> VALUE</li>
+<li><strong>Vendor Type:</strong> BODY</li>
+<li><strong>Data Type:</strong> string</li>
+<li><strong>Vendor Data Type:</strong> string</li>
+<li><strong>Parameter Source:</strong> REQUEST</li>
+<li><strong>Is it Required?:</strong>  YES</li>
+<li><strong>Description:</strong>  The request body</li>
+</ul>
+
+<p>Click “Done”</p>
+
+<p>Click “Try it out”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AddResourceClone15.png" alt="Element Builder UI Resources 14"></p>
+
+<p>Test the creation of the expense object.  We will need the necessary key value pairs from the FreshBooks API documentation:  <a href="https://www.freshbooks.com/developers/docs/expenses#expense.create">https://www.freshbooks.com/developers/docs/expenses#expense.create</a></p>
+
+<p>The object is formatted in XML, Cloud Elements expects JSON.  View the JSON version of the expense object below.</p>
+
+<p>Input the expense JSON payload:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+    "date": "2016-02-09 00:00:00",
+    "amount": 100,
+    "compound_tax": 0,
+    "client_id": 0,
+    "folder": "active",
+    "category_id": 3051239,
+    "project_id": 0,
+    "vendor": "Acme",
+    "staff_id": 1,
+    "updated": "2016-02-09 12:52:49",
+    "status": 0,
+    "has_receipt": 0
+  }
+</code></pre></div>
+<p>Click “Try it out!”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AddResourceClone16.png" alt="Element Builder UI Resources 15"></p>
+
+<p>View the response</p>
+
+<p>View the Request, Pre-Hook (if applicable), Vendor Request, as well as, the Vendor Response, and Post-Hook (if applicable) for debugging purposes
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AddResourceClone17.png" alt="Element Builder UI Resources 16"></p>
+
+<p>Let’s finish up the CRUD cycle by adding the remaining API calls, <code>PATCH</code>, <code>DELETE</code>, and <code>GET by ID</code>.</p>
+
+<p><code>PATCH /expenses/{id}</code></p>
+
+<p>Click “Add”</p>
+
+<p>Input values for the following fields:</p>
+
+<ul>
+<li><strong>Resource Type:</strong>  API</li>
+<li><strong>Path:</strong> <code>/hubs/finance/expenses/{expenseId}</code></li>
+<li><strong>Vendor Path:</strong> <code>/xml-in</code></li>
+<li><strong>Method:</strong> <code>PATCH</code></li>
+<li><strong>Vendor Method:</strong> <code>POST</code></li>
+<li><strong>Request Root Key:</strong> blank</li>
+<li><strong>Response Root Key:</strong>  response</li>
+<li><strong>Description:</strong> Update an expense</li>
+</ul>
+
+<p>Click Add Parameter</p>
+
+<p>Input the following values:</p>
+
+<ul>
+<li><strong>Name:</strong> expenseId</li>
+<li><strong>Vendor Name:</strong> expense_id</li>
+<li><strong>Type:</strong> PATH</li>
+<li><strong>Vendor Type:</strong> QUERY</li>
+<li><strong>Data Type:</strong> string</li>
+<li><strong>Vendor Data Type:</strong> string</li>
+<li><strong>Parameter Source:</strong> REQUEST</li>
+<li><strong>Is it Required?:</strong>  YES</li>
+<li><strong>Description:</strong>  The expense ID</li>
+</ul>
+
+<p>Click “Done”</p>
+
+<p>Click Add Parameter</p>
+
+<p>Input the following values:</p>
+
+<ul>
+<li><strong>Name:</strong> expenses</li>
+<li><strong>Vendor Name:</strong> expenses</li>
+<li><strong>Type:</strong> BODY</li>
+<li><strong>Vendor Type:</strong> BODY_TOKEN</li>
+<li><strong>Data Type:</strong> expenses</li>
+<li><strong>Vendor Data Type:</strong> expenses</li>
+<li><strong>Parameter Source:</strong> REQUEST</li>
+<li><strong>Is it Required?:</strong>  YES</li>
+<li><strong>Description:</strong>  The expense</li>
+</ul>
+
+<p>Click “Done”</p>
+
+<p>Click Add Parameter</p>
+
+<p>Input the following values:</p>
+
+<ul>
+<li><strong>Name:</strong> <code>{“request”:{“@method”:”expense.update”, “expense”: {expenses}}}</code></li>
+<li><strong>Vendor Name:</strong> body</li>
+<li><strong>Type:</strong> VALUE</li>
+<li><strong>Vendor Type:</strong> BODY</li>
+<li><strong>Data Type:</strong> string</li>
+<li><strong>Vendor Data Type:</strong> string</li>
+<li><strong>Parameter Source:</strong> REQUEST</li>
+<li><strong>Is it Required?:</strong>  YES</li>
+<li><strong>Description:</strong>  The request body</li>
+</ul>
+
+<p>Click “Done”</p>
+
+<p><code>DELETE /expenses/{id}</code></p>
+
+<p>Click “Add”</p>
+
+<p>Input values for the following fields:</p>
+
+<ul>
+<li><strong>Resource Type:</strong>  API</li>
+<li><strong>Path:</strong> <code>/hubs/finance/expenses/{expenseId}</code></li>
+<li><strong>Vendor Path:</strong> <code>/xml-in</code></li>
+<li><strong>Method:</strong> <code>DELETE</code></li>
+<li><strong>Vendor Method:</strong> <code>POST</code></li>
+<li><strong>Request Root Key:</strong> blank</li>
+<li><strong>Response Root Key:</strong>  response</li>
+<li><strong>Description:</strong> Delete an expense</li>
+</ul>
+
+<p>Click Add Parameter</p>
+
+<p>Input the following values:</p>
+
+<ul>
+<li><strong>Name:</strong> expenseId</li>
+<li><strong>Vendor Name:</strong> expense_id</li>
+<li><strong>Type:</strong> PATH</li>
+<li><strong>Vendor Type:</strong> QUERY</li>
+<li><strong>Data Type:</strong> string</li>
+<li><strong>Vendor Data Type:</strong> string</li>
+<li><strong>Parameter Source:</strong> REQUEST</li>
+<li><strong>Is it Required?:</strong>  YES</li>
+<li><strong>Description:</strong>  The expense ID</li>
+</ul>
+
+<p>Click “Done”</p>
+
+<p>Click Add Parameter</p>
+
+<p>Input the following values:</p>
+
+<ul>
+<li><strong>Name:</strong> <code>{“request”:{“@method”:”expense.delete, “expense”: {expenses}}}</code></li>
+<li><strong>Vendor Name:</strong> body</li>
+<li><strong>Type:</strong> VALUE</li>
+<li><strong>Vendor Type:</strong> BODY</li>
+<li><strong>Data Type:</strong> string</li>
+<li><strong>Vendor Data Type:</strong> string</li>
+<li><strong>Parameter Source:</strong> REQUEST</li>
+<li><strong>Is it Required?:</strong>  YES</li>
+<li><strong>Description:</strong>  The request body</li>
+</ul>
+
+<p>Click “Done”</p>
+
+<p><code>GET /expenses/{id}</code></p>
+
+<p>Click “Add”</p>
+
+<p>Input values for the following fields:</p>
+
+<ul>
+<li><strong>Resource Type:</strong>  API</li>
+<li><strong>Path:</strong> <code>/hubs/finance/expenses/{expenseId}</code></li>
+<li><strong>Vendor Path:</strong> <code>/xml-in</code></li>
+<li><strong>Method:</strong> <code>GET</code></li>
+<li><strong>Vendor Method:</strong> <code>POST</code></li>
+<li><strong>Request Root Key:</strong> blank</li>
+<li><strong>Response Root Key:</strong>  response</li>
+<li><strong>Description:</strong> Retrieve an expense by ID</li>
+</ul>
+
+<p>Click Add Parameter</p>
+
+<p>Input the following values:</p>
+
+<ul>
+<li><strong>Name:</strong> expenseId</li>
+<li><strong>Vendor Name:</strong> expense_id</li>
+<li><strong>Type:</strong> PATH</li>
+<li><strong>Vendor Type:</strong> QUERY</li>
+<li><strong>Data Type:</strong> string</li>
+<li><strong>Vendor Data Type:</strong> string</li>
+<li><strong>Parameter Source:</strong> REQUEST</li>
+<li><strong>Is it Required?:</strong>  YES</li>
+<li><strong>Description:</strong>  The expense ID</li>
+</ul>
+
+<p>Click “Done”</p>
+
+<p>Click Add Parameter</p>
+
+<p>Input the following values:</p>
+
+<ul>
+<li><strong>Name:</strong> <code>{“request”:{“@method”:”expense.get, “expense”: {expenses}}}</code></li>
+<li><strong>Vendor Name:</strong> body</li>
+<li><strong>Type:</strong> VALUE</li>
+<li><strong>Vendor Type:</strong> BODY</li>
+<li><strong>Data Type:</strong> string</li>
+<li><strong>Vendor Data Type:</strong> string</li>
+<li><strong>Parameter Source:</strong> REQUEST</li>
+<li><strong>Is it Required?:</strong>  YES</li>
+<li><strong>Description:</strong>  The request body</li>
+</ul>
+
+<p>Click “Done”</p>
+
+<p>Continue to add resources by following the same steps outlined above.</p>
+
+<p>Click Next in the top right corner.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AddResourceClone18.png" alt="Element Builder UI Resources 17"></p>
+
+<h4 id="addendum-models-tab">ADDENDUM:  Models Tab</h4>
+
+<p>The Models Tab is an additional feature with some <strong>optional functionality</strong> to make resource creation more streamlined.</p>
+
+<p><strong>NOTE:</strong>  This functionality is only available for endpoints with JSON payloads.  SOAP endpoints or endpoints with XML payloads are not currently supported.</p>
+
+<p>The Freshdesk endpoint will be referenced in this portion of the documentation.</p>
+
+<p>The Models Tab allows the user to build resource models via customization, as well as, an import function.</p>
+
+<p>We will take a look at the Freshdesk Company endpoint which we will map to the Account resource.</p>
+
+<p>A review of the Freshdesk API documentation is needed prior to making any changes to the resource.  The docs can be found here:  <a href="https://developer.freshdesk.com/api/#view_company">https://developer.freshdesk.com/api/#view_company</a></p>
+
+<h5 id="model-customization">MODEL CUSTOMIZATION</h5>
+
+<p>Click on the Models Tab.  If you have any unsaved progress, an alert will appear asking if you want to save your changes.</p>
+
+<p>The current list of API resources will render.</p>
+
+<p>Select a model to edit.  In our example, we will be viewing the GET /accounts resource.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsCustomize1.png" alt="Element Builder Models 1"></p>
+
+<p>Looking at the “updated_at” field, we can see the value is a date.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsCustomize2.png" alt="Element Builder Models 2"></p>
+
+<p>In our model, the data type is set to string.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsCustomize3.png" alt="Element Builder Models 3"></p>
+
+<p>This can be modified within the code editor.</p>
+
+<p>Change “type” to “date”</p>
+
+<p>Click “Save Model” to update the resource
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsCustomize4.png" alt="Element Builder Models 4"></p>
+
+<h5 id="import-models">IMPORT MODELS</h5>
+
+<p>To import a model, head to the endpoint API documentation.  Navigate to the desired resource and locate the example response.</p>
+
+<p>Copy the response payload.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsImport1.png" alt="Element Builder Models 5"></p>
+
+<p>Select the resource in the list: GET /accounts</p>
+
+<p>Click “Generate from Payload”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsImport2.png" alt="Element Builder Models 6"></p>
+
+<p>Paste in the model</p>
+
+<p>Click “Generate Model”</p>
+
+<p>The model is now built. If you wish to make any changes, they can be made right in the code editor panel. Just remember to save your changes.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsImport3.png" alt="Element Builder Models 7"></p>
+
+<h4 id="events-tab">Events Tab</h4>
+
+<p>Events:  Cloud Elements currently supports building integrations with polling or webhooks capability.  Polling is a mechanism where Cloud Elements executes the configured query <strong>every n minutes</strong> and captures the changed information.</p>
+
+<p>Webhooks are when the provider lets Cloud Elements know what information has changed.</p>
+
+<ul>
+<li><p><strong>NOTE: 90% of the time polling will be used as the mechanism for capturing events.</strong>  Cloud Elements recommends not using webhook type events if the endpoint does not have an API for creating webhooks.</p></li>
+<li><p><strong>Polling:</strong>  In order to enable polling, the endpoint must support querying an object by last updated date.</p></li>
+<li><p><strong>Webhooks:</strong> In order to enable webhooks, the endpoint must support them.  Note additional endpoint setup may be required prior to creating your Element.  An event hook script must be defined that transforms the inbound event data to a format that Cloud Elements supports.</p></li>
+</ul>
+
+<p>While FreshBooks supports webhooks, they do not have an API to create them.  Polling will be used as our event mechanism in this case.</p>
+
+<p>Let’s take a look at the FreshBooks API documentation: <a href="https://www.freshbooks.com/developers/docs/expenses#expense.list">https://www.freshbooks.com/developers/docs/expenses#expense.list</a></p>
+
+<p>FreshBooks has a query API – expense.list which supports the date_from field:
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/EventsBlank1.png" alt="Element Builder UI Events 1"></p>
+
+<p>This information will be used to create our polling events.</p>
+
+<p>First let’s take a look at the expense object:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+    "date": "2016-02-11 00:00:00",
+    "amount": 200,
+    "compound_tax": 0,
+    "client_id": 0,
+    "folder": "active",
+    "category_id": 123456,
+    "project_id": 0,
+    "vendor": "Acme",
+    "staff_id": 1,
+    "expense_id": "00001234567",
+   ///////////////////////////////////
+   /"updated": "2016-02-11 12:40:51",/
+   ///////////////////////////////////
+    "status": 0,
+    "has_receipt": 0
+  }
+</code></pre></div>
+<p>FreshBooks supports an updated field.  However, they do not support a <code>created_at</code> field.  Since the <code>created_at</code> field is not supported, polling will occur on objects updated on or after a certain day and time.</p>
+
+<p>Using the following information:</p>
+
+<ul>
+<li><code>expense.list</code> query parameter <code>date_from</code></li>
+<li>updated field within the expense object</li>
+</ul>
+
+<p>The polling event query can be constructed.</p>
+
+<p>Select “Yes” for “Enable Events and setup events configuration”</p>
+
+<p>Select “Polling”</p>
+
+<p>Set Event Poller Refresh Interval to desired time in minutes</p>
+
+<p>Under the “expenses” resource click “Edit”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/EventsBlank2.png" alt="Element Builder UI Events 2"></p>
+
+<p>In the Where field with operator” field, input <code>date_from</code> with operator <code>=</code>, or <code>date_from=</code></p>
+
+<p>Select a date format that the endpoint expects
+This information is available under the endpoint API documentation.</p>
+
+<p>Input <code>expense_id</code> in the ID Field – <code>expense_id</code> is how FreshBooks references the object ID – must input what the endpoint expects</p>
+
+<p>Under the advanced section, input <code>updated</code> in the Update Date Field</p>
+
+<p>Select the same Date format as above to match what the endpoint expects</p>
+
+<p>Click “Done”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/EventsBlank3.png" alt="Element Builder UI Events 3"></p>
+
+<p>Events can be added to specific resources by repeating the steps outlined above.  When all desired events have been created, click “Next”.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/EventsBlank4.png" alt="Element Builder UI Events 4"></p>
+
+<h4 id="bulk-tab">Bulk Tab</h4>
+
+<p>Cloud Elements supports bulk download of objects in JSON format if the endpoint supports filter by date.</p>
+
+<p>The following fields are required to enable bulk download:</p>
+
+<ul>
+<li><strong>Bulk Query Time Format:</strong> Select a time format from the dropdown list. The time format must match the endpoint’s supported time format for queries.</li>
+<li><strong>Bulk Query Field Name:</strong> Provide an object and an operator in the Bulk Query Field Name, e.g. where orders &gt;= “{time_format}”. This field may be left blank if you wish to include bulk download on all objects.</li>
+<li><strong>Bulk Query Operator:</strong> The Bulk Query Operator can be set to “=” or “&gt;=”.</li>
+</ul>
+
+<p>Let’s take a look at the FreshBooks API documentation: <a href="https://www.freshbooks.com/developers/docs/expenses#expense.list">https://www.freshbooks.com/developers/docs/expenses#expense.list</a></p>
+
+<p>FreshBooks has a query API – <code>expense.list</code> which supports the <code>date_from</code> field:
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/EventsBlank1.png" alt="Element Builder UI Bulk 1"></p>
+
+<p>This information will be used to create our bulk query.</p>
+
+<p>First let’s take a look at the expense object:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+    "date": "2016-02-11 00:00:00",
+    "amount": 200,
+    "compound_tax": 0,
+    "client_id": 0,
+    "folder": "active",
+    "category_id": 123456,
+    "project_id": 0,
+    "vendor": "Acme",
+    "staff_id": 1,
+    "expense_id": "00001234567",
+   ///////////////////////////////////
+   /"updated": "2016-02-11 12:40:51",/
+   ///////////////////////////////////
+    "status": 0,
+    "has_receipt": 0
+  }
+</code></pre></div>
+<p>FreshBooks supports an updated field.  However, they do not support a <code>created_at</code> field.  Since the <code>created_at</code> field is not supported, bulk querying will occur on objects updated on or after a certain day and time.</p>
+
+<p>Using the following information:</p>
+
+<ul>
+<li><code>expense.list</code> query parameter <code>date_from</code></li>
+<li>updated field within the expense object</li>
+</ul>
+
+<p>The bulk query can be constructed.</p>
+
+<p>The Bulk Query Field Name will be blank so all objects can be queried</p>
+
+<p>Select the Bulk Query Date Format, the format the endpoint expects.  This can be found in the endpoint API documentation.</p>
+
+<p>Input a Bulk Query Operator.  The Bulk Query Operator can be set to <code>=</code> or <code>&gt;=</code>
+In our example, it will be set to <code>=</code> since we are querying <code>date_from</code>.</p>
+
+<p>Click “Next”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/BulkClone1.png" alt="Element Builder UI Bulk 2"></p>
+
+<h4 id="documentation-tab">Documentation Tab</h4>
+
+<p>View the newly created API documentation for your Element.  Try out the API calls right from Element Builder.</p>
+
+<p>View the new Element documentation by selecting an instance from the dropdown: “Change Instances”.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/DocsClone1.png" alt="Element Builder UI Documentation 1"></p>
+
+<p>Element Builder will present the option to create an instance of one has note been created.</p>
+
+<p>Try It Out:  Click on a resource, e.g. GET /customers</p>
+
+<p>Click “Try it out!”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/DocsClone2.png" alt="Element Builder UI Documentation 2"></p>
+
+<p>View the response.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/DocsClone3.png" alt="Element Builder UI Documentation 3"></p>
+
+<p>Continue to view resources as desired, then click “Done”.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/DocsClone4.png" alt="Element Builder UI Documentation 4"></p>
+
+<h4 id="admin-dashboard">Admin Dashboard</h4>
+
+<p>Within the in Admin Dashboard, the following functions are available to exercise on all Elements created using Element Builder:</p>
+
+<ul>
+<li><strong>Edit an Element:</strong> change a URL, add a resource, edit configurations</li>
+<li><strong>Deactivate:</strong> deactivates an Element, temporarily removing it from the catalog</li>
+<li><strong>Delete:</strong> deletes an Element, permanently removing it from the catalog</li>
+<li><strong>Export:</strong> exports Element JSON, this JSON can be imported at a later time</li>
+</ul>
+
+<p>To access the Element admin functions, click on the gear.</p>
+
+<p>To import Element JSON, click “Import Element” and follow the prompts.  All functionality will be available based on the last state of the Element prior to export.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AdminClone1.png" alt="Element Builder Admin Dashboard 1"></p>
+
+<h4 id="support">Support</h4>
+
+<p>Element Builder is currently in BETA.  We would love to hear about enhancements or concerns regarding the application.  Please don’t hesitate to get in touch.</p>
+
+<p>Need some help?  Don’t hesitate to reach out to <a href="mailto:support@cloud-elements.com">Cloud Elements Support</a> with any questions or concerns.</p>
+
+<p>The Cloud Elements Team</p>
+
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

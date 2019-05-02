@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/elements/salesforce-service-cloud/salesforce-service-cloud-events.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> Salesforce Service Cloud </h2>
+          <!-- <h4> Enable Salesforce Service Cloud events for your application. </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/elements/salesforce-service-cloud/?elementId=29">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/salesforce-service-cloud/salesforce-service-cloud-endpoint-setup.html?elementId=29">Endpoint Setup</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/salesforce-service-cloud/authentication.html?elementId=29">Authentication</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/salesforce-service-cloud/salesforce-service-cloud-create-instance.html?elementId=29">Create Instance</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/salesforce-service-cloud/salesforce-service-cloud-events.html?elementId=29">Events</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/salesforce-service-cloud/transformations.html?elementId=29">Transform Data</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/salesforce-service-cloud/bulk.html?elementId=29">Bulk APIs</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/salesforce-service-cloud/error-codes.html?elementId=29">Error Codes</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/salesforce-service-cloud/ceql.html?elementId=29">Querying</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/salesforce-service-cloud/api-documentation.html?elementId=29">API Docs</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <h2 id="events">Events</h2>
+
+<p>Cloud Elements currently supports events via <strong>polling</strong> or <strong>webhooks</strong> depending on the endpoint.</p>
+
+<ul>
+<li><strong>Polling</strong> is a mechanism where Cloud Elements executes the configured query every <code>n</code> minutes and captures the changed information.</li>
+<li><strong>Webhooks</strong> are when the provider lets Cloud Elements know what information has changed. Note that additional endpoint setup may be required prior to creating your Element Instance.</li>
+</ul>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Cloud Elements normalizes only the objectId, objectType, and eventType event data. Event data also contains raw data, which the provider returns. The raw data varies based on the endpoint.  </div>
+
+<p>If you would like to see more information on our Events framework, please see the <a href="/docs/platform/event-management/index.html">Event Management Guide</a>.</p>
+
+<p>Cloud Elements supports both webhooks and polling events for Salesforce.</p>
+
+<h3 id="polling">Polling</h3>
+
+<p>In order to enable polling, add these extra configurations to your instance JSON:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">"event.notification.enabled": "true",
+"event.notification.callback.url": "&lt;INSERT_YOUR_APPS_CALLBACK_URL&gt;"
+</code></pre></div>
+<p>instance JSON with polling events enabled:</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"element"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sfdcservicecloud"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"providerData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;Code_On_The_Return_URL&gt;"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"configuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"oauth.callback.url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.mycoolapp.com/auth"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.api.key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;Insert_Client_ID&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.api.secret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;Insert_Client_Secret&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event.notification.enabled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event.notification.callback.url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;INSERT_YOUR_APPS_CALLBACK_URL&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event.vendor.type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"polling"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event.objects"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;INSERT_COMMA_SEPARATED_LIST_OF_OBJECTS_e.g_Account,Contact&gt;"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"&lt;Add_Your_Tag&gt;"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;Insert_Instance_Name&gt;"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<h3 id="webhooks">Webhooks</h3>
+
+<p>When implementing webhooks for Salesforce, Cloud Elements creates APEX classes and triggers in order to send webhooks.  This can only be done in a Salesforce sandbox account.  If you want to support webhooks in a production Salesforce account, you&#39;ll have to make some modifications and migrate those classes to production according to the Salesforce specification. View more information regarding the <a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_qs_deploy.htm">Salesforce specification</a>.</p>
+
+<p>Follow these steps to setup your Salesforce application with the endpoint.</p>
+
+<p><strong>In order to create a Salesforce Element Instance you must have the Enterprise edition or Professional edition with API support is required. Also, to set up a new application in Salesforce, you must have Administrator privileges. Please contact your system administrator if you do not have those privileges.</strong></p>
+
+<p>Via a web browser, login to your Salesforce account:
+<a href="https://login.salesforce.com/">https://login.salesforce.com/</a></p>
+
+<ol>
+<li><p>Under &quot;Administer&quot; &gt; &quot;Security Controls&quot; &gt; select &quot;Remote Site Settings&quot;
+<img src="img/salesforce-webhook-1.png" alt="Salesforce Webhook step 1"></p></li>
+<li><p>Click “New Remote Site”
+<img src="img/salesforce-webhook-2.png" alt="Salesforce Webhook step 2"></p></li>
+<li><p>Input “Remote Site Name” e.g. Cloud Elements and the following URL: <code>https://api.cloud-elements.com</code></p></li>
+<li><p>Click “Save”
+<img src="img/salesforce-webhook-3.png" alt="Salesforce Webhook step 3"></p></li>
+</ol>
+
+<p><strong>NOTE: Our current support for Salesforce Events include listening for the following:
+Creating, Updating, and Deleting of any object in Salesforce.
+For example, when a new account is created, your application will receive a notification regarding the creation of the account.</strong></p>
+
+<p>The following JSON may be used to create a Salesforce Instance with webhooks enabled:</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"element"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sfdcservicecloud"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"providerData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;Code_On_The_Return_URL&gt;"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"configuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"oauth.callback.url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.mycoolapp.com/auth"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.api.key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;Insert_Client_ID&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.api.secret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;Insert_Client_Secret&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event.notification.enabled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event.notification.callback.url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;INSERT_YOUR_APPS_CALLBACK_URL&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event.vendor.type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"webhook"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event.objects"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;INSERT_COMMA_SEPARATED_LIST_OF_OBJECTS_e.g_Account,Contact&gt;"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"&lt;Add_Your_Tag&gt;"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;Insert_Instance_Name&gt;"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

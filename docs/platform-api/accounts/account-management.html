@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- History.js -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/platform-api/accounts/account-management.html">
+
+  <script src="/api-docs/swagger-ui.js" type="text/javascript"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper">
+      <div markdown="span" class="bs-callout bs-callout-warning" role="alert">
+  <h4>The docs are moving! </h4><p>Find us at our new <a href ="https://docs.cloud-elements.com/">Help Center</a> where we've combined our documentation and knowledgebase articles in one easy-to-search location.</p><p>We aren't updating the Developer Portal anymore, except for the Element Docs &mdash; all updates happen in the <a href ="https://docs.cloud-elements.com/">Help Center</a>. We're retiring the Developer Portal as you know it in:</p><h4 id="demo"></h4>
+  <script>
+  // Set the date we're counting down to
+  var countDownDate = new Date("December 14, 2018 20:00:00").getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+
+      // Get todays date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now an the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Output the result in an element with id="demo"
+      document.getElementById("demo").innerHTML = days + " days " + hours + " hours " + minutes + "m " + seconds + "s ";
+
+      // If the count down is over, write some text
+      if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("demo").innerHTML = "EXPIRED";
+      }
+  }, 1000);
+  </script>
+
+</div>
+
+      <script src="/assets/js/application.js"></script>
+<link href="/assets/css/contentToggle.css" rel="stylesheet">
+
+
+
+      
+      <div markdown="span" class="bs-callout bs-callout-info">The <i>Account Usage and Management Guide</i> is for Cloud Elements 1.0. Find Cloud Elements 2.0 documentation at <a href=../../guides/account-user-mgmt/index.html>Manage Accounts and Users</a>.</div>
+
+<h2 id="account-usage-and-management-guide">Account Usage and Management Guide</h2>
+
+<p>Accounts and Account-level Users provide a way within Cloud Elements to organize a group of related Element Instances together. Conceptually, you can think of an account as a way to organize Element Instances for “Your Customer”.</p>
+
+<p>You will need a Cloud Elements Login in order to call our APIs. If you do not have a login, the first step is to sign up. It’s free! Instructions are below</p>
+
+<p><strong>SIGNUP FOR THE CLOUD ELEMENTS SERVICE</strong></p>
+
+<p>To sign up for the Cloud Elements service, using a web browser, go to: <a href="https://console.cloud-elements.com/elements/jsp/signup.jsp">https://console.cloud-elements.com/elements/jsp/signup.jsp</a>.</p>
+
+<p>You can create a new account with Cloud Elements using your Google or GitHub Account. Or fill out a few fields and click “Sign up”. When signing up via GitHub, you must set a public email address in GitHub profile. Screen shots on how to set a public email are below. If you choose not to use Google or GitHub to sign up, you will then be required to validate your new account via a confirmation link that will be sent to your email. You will reset your password to one of your choice after your initial login.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/03/AccountSignup.png" alt="Cloud Elements Account Sign Up 1"></p>
+
+<p>Setting a Public Email in GitHub</p>
+
+<p>Navigate to your settings in GitHub.
+<img src="http://cloud-elements.com/wp-content/uploads/2014/08/gitHub2.gif" alt="Cloud Elements Account Sign Up 2"></p>
+
+<p>Type in your public email in the designated field and click “Update Profile”.
+<img src="http://cloud-elements.com/wp-content/uploads/2014/08/gitHub21.gif" alt="Cloud Elements Account Sign Up 3"></p>
+
+<p>After completing this process, click “Secrets” in the top right corner. Make note of the Org and User secrets as they needed to provision an Element Instance. The Secrets option is available from the top ribbon at all times.
+<img src="http://cloud-elements.com/wp-content/uploads/2014/09/Settings.png" alt="Cloud Elements Account Sign Up 3"></p>
+
+<h3 id="how-to-use-the-accounts-apis">How To Use the Accounts APIs</h3>
+
+<p>When you sign up for Cloud Elements, by default an Organization-level user is created, and a Default Account is created for you. All Elements provisioned by the Organization-level user associate to this Default Account.</p>
+
+<p>The Organization-level user is the same as the User ID you signed up with, and is the only User ID you will see in your Administration -&gt; Users screen until you provision other users into your environment:
+<img src="http://cloud-elements.com/wp-content/uploads/2015/03/Accounts1.png" alt="Cloud Elements Account Management 1"></p>
+
+<h4 id="adding-an-account">Adding An Account</h4>
+
+<p>Let’s say you have a customer, “Acme Publishing”, and you wish to organize all Element Instances provisioned by your App, within this Account. Or perhaps, you wish to add additional developer logins to your Cloud Elements Organization, and allow them to login using their own credentials, and manage his or her own dev/testing Instances.</p>
+
+<p>To accomplish these goals, you need to add an Account and an Account User, within your Cloud Elements Organization/Environment. Presently, the only way to do this is via the API. Here’s how:</p>
+
+<p>In <a href="#" data-toggle="tooltip" data-original-title="The Cloud Elements user interface that provides access to the features and APIs avalable with Cloud Elements.">Cloud Elements</a>, open <strong>API Docs &gt; Platform &gt; Accounts</strong>:
+<img src="http://cloud-elements.com/wp-content/uploads/2015/03/Accounts11.png" alt="Cloud Elements Account Management 2"></p>
+
+<p>Expand the <code>POST /accounts</code> section:
+<img src="http://cloud-elements.com/wp-content/uploads/2015/03/Accounts2.png" alt="Cloud Elements Account Management 3"></p>
+
+<p>Prepare your Provisioning JSON. This example shows the needed fields:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+  "name": "Acme Data",
+  "description": "Account for Acme Element Instances",
+  "externalId": "joe.johnson@acmedata.com"
+}
+</code></pre></div>
+<p>externalId (in this example, <code>joe.johnson@acmedata.com</code>) corresponds to the email address of the Account-level User you wish to associate to this Account.</p>
+
+<p>Paste the Account JSON into the Account text box:
+<img src="http://cloud-elements.com/wp-content/uploads/2015/03/Accounts3.png" alt="Cloud Elements Account Management 4"></p>
+
+<p>Scroll down and Click the “Try it out” button:
+<img src="http://cloud-elements.com/wp-content/uploads/2015/03/AccountsTryIT.png" alt="Cloud Elements Account Management 5"></p>
+
+<p>A successful POST will show Response JSON similar to left:</p>
+
+<p><strong>Make note of the id: 137690 for our Example.</strong> This is the Account ID of the new Account. You’ll need it to provision a User that associates to this Account.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/03/Accounts4.png" alt="Cloud Elements Account Management 6"></p>
+
+<p>Go to the <code>POST /accounts/{accountId}/users</code> section:
+<img src="http://cloud-elements.com/wp-content/uploads/2015/03/Accounts5.png" alt="Cloud Elements Account Management 7"></p>
+
+<p>Scroll to the User JSON Body section. First, paste the AccountID returned by your Account provisioning step above into the accountId field:</p>
+
+<p>Prepare your User Provisioning JSON (recommended simple version below):</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+  "username": "joe.johnson@acmedata.com",
+  "firstName": "Joe",
+  "lastName": "Johnson",
+  "email": "joe.johnson@acmedata.com",
+  "active": true
+}
+</code></pre></div>
+<p><img src="http://cloud-elements.com/wp-content/uploads/2015/03/Accounts6.png" alt="Cloud Elements Account Management 8"></p>
+
+<p>Scroll down and click the “Try It Out” button.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/03/Accounts7.png" alt="Cloud Elements Account Management 9"></p>
+
+<p>A successful response will be shown in the JSON body:</p>
+
+<p><strong>Important: Record/store the value of “secret” in the Response JSON!</strong> This is especially important if you are automating the provisioning workflow, and don’t intend for the account-level user to be able to login. For security reasons the secret is never returned by a follow-up call to GET /users/{userId}.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/03/Accounts8.png" alt="Cloud Elements Account Management 9"></p>
+
+<p>This user will then show up in the Administration -&gt; Users section when logged in as the primary Organization User:</p>
+
+<p>The User Token returned from the POST JSON body response is sufficient to go ahead and make API calls, etc.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/03/Accounts9.png" alt="Cloud Elements Account Management 10"></p>
+
+<p>If you wish for the user to be able to interactively login to the console, however, you’ll need to initiate a password reset email. Log out from Cloud Elements:
+<img src="http://cloud-elements.com/wp-content/uploads/2015/03/Accounts10.png" alt="Cloud Elements Account Management 11"></p>
+
+<p>Click the “Reset Password” button:
+<img src="http://cloud-elements.com/wp-content/uploads/2015/03/AccountsReset.png" alt="Cloud Elements Account Management 12"></p>
+
+<p>Enter the User ID of the new Account-level user into the User field, and click “Reset Password”:</p>
+
+<p>The new User will receive their initial Password via email. It is a good idea for them to change it after their first login for security reasons.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/03/Accounts111.png" alt="Cloud Elements Account Management 13"></p>
+
+<p>When the Account-level user logs in, you will notice that they do not have the “Administration” section of the console accessible to them (i.e. they have more limited permissions)
+<img src="http://cloud-elements.com/wp-content/uploads/2015/03/Accounts12.png" alt="Cloud Elements Account Management 14"></p>
+
+<p>You’ll also note that the Account-level user cannot see the provisioned Element Instances of the Default Org-level user, or, other Account-level users:</p>
+
+<p>The Account-level user will only be able to see, use, and Administer Element Instances that he or she has provisioned.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/03/Accounts13.png" alt="Cloud Elements Account Management 15"></p>
+
+<p>To create Account-level Instances via the API, Provision them using the User secret of the Account-level User:</p>
+
+<p>Account creation instructions via API can be seen in the next section.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/03/Accounts14.png" alt="Cloud Elements Account Management 16"></p>
+
+<h4 id="create-accounts-via-api">Create Accounts via API</h4>
+
+<p><code>POST /accounts</code></p>
+
+<p>Create an account within your organization (identified by your organization secret). The provided user secret must be that of the default admin user for the organization.</p>
+
+<p>This API call requires a JSON file with the required data to create your account. An example JSON file can be found below along with an example response from the API call.</p>
+
+<p><code>create-account.json</code> – these fields are required in your JSON file.  This data can also be passed in directly into the cURL command.  This method will be shown in the Example API Calls section of this documentation.</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+ "name": "&lt;Name of the Account&gt;",
+ "description": "&lt;Description of the Account&gt;",
+ "externalId": "&lt;ID of the Account&gt;"
+}
+</code></pre></div>
+<p>Example of Successful Response – data returned in JSON format</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+ "companyId": &lt;The ID of the organization that owns the account&gt;,
+ "name": "&lt;The name of the account&gt;",
+ "description": "&lt;The description of the account&gt;",
+ "externalId": "&lt;The external ID of the Account&gt;",
+ "id": &lt;The CE assigned ID of the Account&gt;
+}
+</code></pre></div>
+<p>Below is an example cURL command demonstrating the API call and response with example data.</p>
+
+<p><code>POST /accounts</code></p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> POST
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIZATION_SECRET&gt;'</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span>
+<span class="nt">-d</span> @create-account.json
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/accounts'</span>
+</code></pre></div>
+<p><code>create-account.json</code></p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+ "name": "Acme Data Services",
+ "description": "The Acme Data Services Account",
+ "externalId": "brie@acmedataservices.com"
+}
+</code></pre></div>
+<p>Example of Successful Response</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+ "companyId": 6523,
+ "name": "Acme Data Services",
+ "description": "The Acme Data Services Account",
+ "externalId": "acmedataservices.com",
+ "id": 8341
+}
+</code></pre></div>
+<p>After successful creation of the account. You may now add users to that account.
+Below are examples of how to create a new user for the newly created account.</p>
+
+<p><code>POST /accounts/{id}/users</code></p>
+
+<p>Create a new user for the newly created account.</p>
+
+<p>This API call requires a JSON file with the required data to create your user. An example JSON file can be found below along with an example response from the API call.</p>
+
+<p><code>create-account-user.json</code> – JSON file needed to create user.</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+   "email": "&lt;The user's email address&gt;",
+   "firstName": "&lt;The user's first name&gt;",
+   "lastName": "&lt;The user's last name&gt;"
+}
+</code></pre></div>
+<p>Example of Successful Response – object returned from the API call</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+   "id": &lt;The CE ID for the user&gt;,
+   "email": "&lt;The user's email address&gt;",
+   "firstName": "&lt;The user's first name&gt;",
+   "lastName": "&lt;The user's last name&gt;",
+   "secret": "&lt;The user's secret&gt;"
+}
+</code></pre></div>
+<p>Below is an example cURL command demonstrating the API call and response with example data.</p>
+
+<p><code>POST /accounts/{id}/users</code></p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> POST
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIZATION_SECRET&gt;'</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span>
+<span class="nt">-d</span> @create-account-user.json
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/accounts/{id}/users'</span>
+</code></pre></div>
+<p><code>create-account-user.json</code></p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+   "email": "brie@acmedataservices.com",
+   "firstName": "Brie",
+   "lastName": "Burns"
+}
+</code></pre></div>
+<p>Example of Successful Response – object returned from the API call</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+   "id": 12802,
+   "email": "brie@acmedataservices.com",
+   "firstName": "Brie",
+   "lastName": "Burns",
+   "secret": "KHh2387n2hk34/979283u012="
+}
+</code></pre></div>
+<p>NOTE: There may be other fields in the Response JSON.</p>
+
+<p>To provision Elements, use your Organization secret and the User Secret of the newly created account user. The provisioning flow will be the same using the /instances API. Element Provisioning is covered in the Create Instance section further down in this document.</p>
+
+<p>The Multiple Users and Accounts workflow gives you the flexibility to create instances for specific accounts. For example, if you wanted to create an instance for one of your customers, then you would create an account for that customer first.  After the account has been successfully created for that customer, you may create individual users, and Element instances for those users under the newly created account, using your own Organization secret and your customer’s new User secret.</p>
+
+<p>All APIs require a valid Organization and User secret to be on the HTTP header. Failure to pass these will result in a 401 exception. For all Accounts API operations, if the provided user does not belong to the default account of the organization, then a 401 error is returned.</p>
+
+<p>The Accounts APIs provide create, retrieve, update, delete and search functionality for accounts. The Accounts APIs can be accessed via the <code>https://api.cloud-elements.com/elements/api-v2/accounts</code> URL pattern.</p>
+
+<p>Below are examples of Accounts API calls and successful responses.</p>
+
+<p><code>POST /accounts</code></p>
+
+<p>Create an account within the organization. A request body defining the account to create is required.</p>
+
+<p>The required fields are:
+externalId – An external account identifier, typically an email address</p>
+
+<p>Optional fields are:
+name – The name of the account
+description – A description of the account</p>
+
+<p>Upon success, the created object will be returned.</p>
+
+<p>Below is an example cURL command demonstrating the POST /accounts API call and successful response.  The -d is the data needed for successful account creation.  This is test data that was created for this demonstration.  Please make sure your quotes are straight in the cURL command.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> POST
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIZATION_SECRET&gt;'</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span>
+<span class="nt">-d</span> <span class="s1">'{
+  "externalId": "test@company.com",
+  "name": "test_account",
+  "description": "A test account for an example organization."
+}'</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/accounts'</span>
+</code></pre></div>
+<p>Example of Successful Response</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+    "id": 14,
+    "name": "test_account",
+    "description": "A test account for an example organization.",
+    "active": true,
+    "createdDate": "2014-08-19",
+    "externalId": "test@company.com",
+    "defaultAccount": false,
+    "type": "CompanyAccount"
+}
+</code></pre></div>
+<p><code>GET /accounts</code></p>
+
+<p>Find accounts within the organization using a CEQL query.</p>
+
+<p>Optional query parameters:
+where – The CEQL search expression is a where clause, without the WHERE keyword, in a typical SQL query. For example, to search for accounts created on or after ‘Jan 15, 2014′, the search expression will be where=createdDate &gt;= ‘2014-01-15′. When this parameter is omitted, all accounts are returned in a paginated fashion.</p>
+
+<p>offset – The record offset at which to begin the paginated results, defaults to 0.</p>
+
+<p>pageSize – The page size for the paginated results, defaults to 200.</p>
+
+<p>Pagination metadata will be returned in totalCount and returnedCount headers.</p>
+
+<p>Below is an example cURL command demonstrating the GET /accounts API call and successful response.  Please make sure your quotes are straight in the cURL command.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> GET
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIZATION_SECRET&gt;'</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/accounts?where=createdDate%20&gt;%20%272014-08-01%27'</span>
+</code></pre></div>
+<p>Example of Successful Response:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">[
+    {
+        "id": 3,
+        "name": "Example Organization's  Company Default Account",
+        "description": "Auto created default account for the entire company",
+        "active": true,
+        "createdDate": "2014-08-19",
+        "externalId": "default@company.com",
+        "defaultAccount": true,
+        "type": "Default"
+    },
+    {
+        "id": 14,
+        "name": "test_account",
+        "description": "A test account for an example organization.",
+        "active": true,
+        "createdDate": "2014-08-19",
+        "externalId": "test@company.com",
+        "defaultAccount": false,
+        "type": "CompanyAccount"
+    }
+]
+</code></pre></div>
+<p><code>PATCH /accounts/{id}</code></p>
+
+<p>Update an account within the organization. A request body defining the updated account information is required.</p>
+
+<p>The fields that can be updated are:
+externalId – An external account identifier, typically an email address</p>
+
+<p>name – The name of the account</p>
+
+<p>description – A description of the account</p>
+
+<p>Upon success, the updated object will be returned.</p>
+
+<p>Below is an example cURL command demonstrating the PATCH /accounts/{id} API call and successful response. The -d is the data needed for a successful update of an account. This is test data that was created for this demonstration. Please make sure your quotes are straight in the cURL command.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> PATCH
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIZATION_SECRET&gt;'</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span>
+<span class="nt">-d</span> <span class="s1">'{
+  "name": "updated_test_account",
+  "description": "An updated test account for an example organization."
+}'</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/accounts/14'</span>
+</code></pre></div>
+<p>Example of Successful Response:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+    "id": 14,
+    "name": "updated_test_account",
+    "description": "An updated test account for an example organization.",
+    "active": true,
+    "createdDate": "2014-08-19",
+    "externalId": "test@company.com",
+    "defaultAccount": false,
+    "type": "CompanyAccount"
+}
+</code></pre></div>
+<p><code>DELETE /accounts/{id}</code></p>
+
+<p>Delete an account within the organization.</p>
+
+<p>Below is an example cURL command demonstrating the DELETE /accounts/{id} API call and successful response. The ID needs to be placed at the end of the URL. 14 is the ID of the example account. It can be seen at the end of URL in the cURL command below. Please make sure your quotes are straight in the cURL command.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> DELETE
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIZATION_SECRET&gt;'</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/accounts/14'</span>
+</code></pre></div>
+<p>Example of Successful Response:</p>
+
+<p><code>HTTP 200 on success</code></p>
+
+<p><code>GET /accounts/{id}</code></p>
+
+<p>Retrieve an account within the organization.</p>
+
+<p>Below is an example cURL command demonstrating the GET /accounts/{id} API call and successful response. The ID needs to be placed at the end of the URL. 14 is the ID of the example account. It can be seen at the end of URL in the cURL command below. Please make sure your quotes are straight in the cURL command.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> GET
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIZATION_SECRET&gt;'</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/accounts/14'</span>
+</code></pre></div>
+<p>Example of Successful Response:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+    "id": 14,
+    "name": "test_account",
+    "description": "A test account for an example organization.",
+    "active": true,
+    "createdDate": "2014-08-19",
+    "externalId": "test@company.com",
+    "defaultAccount": false,
+    "type": "CompanyAccount"
+}
+</code></pre></div>
+<p>After successful creation of the account. You may now add users to that account.
+Below are examples of how to create a new user for the newly created account.</p>
+
+<p><code>POST /accounts/{id}/users</code></p>
+
+<p>Create a new user for the newly created account.</p>
+
+<p>This API call requires JSON formatted with the correct data to be passed in order to create your user. Example JSON can be found below along with an example response from the API call.  Please make sure all of your quotes are straight in the cURL command.</p>
+
+<p>The {id} in the URL is the ID of the account under which the new user will be added.  Here is the URL with the {id} notated in curly brackets:</p>
+
+<p><code>https://api.cloud-elements.com/elements/api-v2/accounts/{id}/users</code></p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> POST <span class="s1">'https://api.cloud-elements.com/elements/api-v2/accounts/{id}/users'</span>
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIATION_SECRET&gt;'</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span>
+<span class="nt">-d</span> <span class="s1">'{
+   "email": "&lt;emailAddress&gt;",
+   "firstName": "&lt;firstName&gt;",
+   "lastName": "&lt;lastName&gt;"
+}'</span>
+</code></pre></div>
+<p>Example of the cURL command with an actual ID in the call.  The ID of 14 is from the POST /accounts call in the previous section.  The <code>-d</code> has the minimum required JSON data needed to create a new user.  This data can also be saved in a <code>.json</code> file.  The cURL command would notate the path to that <code>.json</code> file.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> POST <span class="s1">'https://api.cloud-elements.com/elements/api-v2/accounts/14/users'</span>
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIATION_SECRET&gt;'</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span>
+<span class="nt">-d</span> <span class="s1">'{
+   "email": "brie@acmedataservices.com",
+   "firstName": "Brie",
+   "lastName": "Burns"
+}'</span>
+</code></pre></div>
+<p>Example of  Successful Response:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+  "id": 13404,
+  "name": "OBJECT-SOBAUSER",
+  "firstName": "Brie",
+  "email": "brie@acmedataservices.com",
+  "active": true,
+  "lastName": "Burns",
+  "accountExpired": false,
+  "accountLocked": false,
+  "credentialsExpired": true,
+  "secret": "koZOU/KsYvfpigjyPe8nR0+KPJzMAB9dRmJKxWXF3XY=",
+  "accountNonExpired": true,
+  "accountNonLocked": true,
+  "credentialsNonExpired": false,
+  "emailValid": true,
+  "enabled": true,
+  "fullName": "Brie Burns"
+}
+</code></pre></div>
+<p>NOTE:  The new user <code>Brie</code> has been assigned an ID of <code>13404</code>.  This ID can be found in the top field of the JSON response.  This ID will be needed along with the account ID for the
+<code>GET /accounts/{accountId}/users</code>,
+<code>GET /accounts/{accountId}/users/{emailOrId:.+}</code>, and the
+<code>PATCH /accounts/{accountId}/users/{id}</code>.</p>
+
+<p><code>GET /accounts/{accountId}/users</code></p>
+
+<p>Retrieve users within the indicated account.</p>
+
+<p>Below is an example of the GET /accounts/{accountId}/users and an example of a successful response.  The URL contains the ID 14, this is the account ID assigned upon the successful creation of the account object.  This call will retrieve all users under the account ID.  In the example below, all users under the account ID of 14 will be returned.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> GET
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIATION_SECRET&gt;'</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/accounts/14/users'</span>
+</code></pre></div>
+<p>Example of Successful Response:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">[
+  {
+    "id": 132,
+    "name": "OBJECT-SOBAUSER",
+    "createdDate": "2014-08-29",
+    "username": "brie@acmedataservices.com",
+    "firstName": "Brie",
+    "email": "brie@acmedataservices.com",
+    "active": true,
+    "lastName": "Burns",
+    "accountExpired": false,
+    "accountLocked": false,
+    "credentialsExpired": false,
+    "accountNonExpired": true,
+    "accountNonLocked": true,
+    "credentialsNonExpired": true,
+    "emailValid": true,
+    "enabled": true,
+    "fullName": "Brie Burns"
+  },
+  {
+    "id": 143,
+    "name": "OBJECT-SOBAUSER",
+    "createdDate": "2014-08-29",
+    "username": "jon@acmedataservices.com",
+    "firstName": "Jon",
+    "email": "jon@acmedataservices.com",
+    "active": true,
+    "lastName": "Smith",
+    "accountExpired": false,
+    "accountLocked": false,
+    "credentialsExpired": true,
+    "accountNonExpired": true,
+    "accountNonLocked": true,
+    "credentialsNonExpired": false,
+    "emailValid": true,
+    "enabled": true,
+    "fullName": "Jon Smith"
+  }
+]
+</code></pre></div>
+<p><code>GET /accounts/{accountId}/users/{emailOrId:.+}</code></p>
+
+<p>Retrieve an account user by name or ID</p>
+
+<p>Below is an example of the <code>GET /accounts/{accountId}/users/{emailOrId:.+}</code> and an example of a successful response. The URL contains the ID <code>14</code>, this is the account ID assigned upon the successful creation of the account object. This call will retrieve a user associated with an ID or email address under the account ID. In the example below, a user with the email address <a href="mailto:jon@acmedataservices.com">jon@acmedataservices.com</a> under the account ID of <code>14</code> will be returned. The <code>GET /accounts/{accountId}/users/{email}</code> will be shown first. The <code>GET /accounts/{accountId}/users/{id}</code> will be shown in the second example.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> GET
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIATION_SECRET&gt;'</span>
+<span class="s2">"https://api.cloud-elements.com/elements/api-v2/accounts/14/users/'brie@acmedataservices.com'"</span>
+</code></pre></div>
+<p>Example of Successful Response:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+  "id": 143,
+  "name": "OBJECT-SOBAUSER",
+  "createdDate": "2014-08-29",
+  "username": "jon@acmedataservices.com",
+  "firstName": "Jon",
+  "email": "jon@acmedataservices.com",
+  "active": true,
+  "lastName": "Smith",
+  "accountExpired": false,
+  "accountLocked": false,
+  "credentialsExpired": false,
+  "secret": "c9MA7VNy6D7kxFcy8qlU7AbKbrHLJ4wsWvuKkFVo2zk=",
+  "accountNonExpired": true,
+  "accountNonLocked": true,
+  "credentialsNonExpired": true,
+  "emailValid": true,
+  "enabled": true,
+  "fullName": "Jon Smith"
+}
+</code></pre></div>
+<p>In the example below, the user with the ID of <code>143</code> under the account ID of <code>14</code> will be returned.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> GET
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIATION_SECRET&gt;'</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/accounts/14/users/143'</span>
+</code></pre></div>
+<p>Example of Successful Response:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+  "id": 143,
+  "name": "OBJECT-SOBAUSER",
+  "createdDate": "2014-08-29",
+  "username": "jon@acmedataservices.com",
+  "firstName": "Jon",
+  "email": "jon@acmedataservices.com",
+  "active": true,
+  "lastName": "Smith",
+  "accountExpired": false,
+  "accountLocked": false,
+  "credentialsExpired": false,
+  "secret": "c9MA7VNy6D7kxFcy8qlKkFVo2zk=",
+  "accountNonExpired": true,
+  "accountNonLocked": true,
+  "credentialsNonExpired": true,
+  "emailValid": true,
+  "enabled": true,
+  "fullName": "Jon Smith"
+}
+</code></pre></div>
+<p><code>PATCH /accounts/{accountId}/users/{id}</code></p>
+
+<p>Update an account user</p>
+
+<p>Below is an example of the <code>PATCH /accounts/{accountId}/users/{id}</code> and an example of a successful response. The URL contains the ID <code>14</code>, this is the account ID assigned upon the successful creation of the account object. This call will update the user associated with a user ID under the account ID. In the example below, a user with an ID of <code>143</code> under the account ID of <code>14</code> will be updated.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> PATCH
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIATION_SECRET&gt;'</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span>
+<span class="nt">-d</span> <span class="s1">'{
+  "email": "jane@acmedataservices.com",
+  "firstName": "Jane",
+  "lastName": "Smith"
+}'</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/accounts/14/users/143'</span>
+</code></pre></div>
+<p>Example of Successful Response:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+  "id": 143,
+  "name": "OBJECT-SOBAUSER",
+  "firstName": "Jane",
+  "email": "jane@acmedataservices.com",
+  "active": true,
+  "lastName": "Smith",
+  "accountExpired": false,
+  "accountLocked": false,
+  "credentialsExpired": true,
+  "accountNonExpired": true,
+  "accountNonLocked": true,
+  "credentialsNonExpired": false,
+  "emailValid": true,
+  "enabled": true,
+  "fullName": "Jane Smith"
+}
+</code></pre></div>
+<h4 id="support">Support</h4>
+
+<p>If you need any support integrating our APIs, please let us know. You can <a href="mailto:support@cloud-elements.com">email</a> or give us a call at +1.866.830.3456. We will do our best to get back to you within 24 hours. Your success is our success.</p>
+
+    </div>
+
+  </div>
+  <script src="/assets/js/chart.js"></script>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

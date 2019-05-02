@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- History.js -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/guides/ground-2-cloud/config.html">
+
+  <script src="/api-docs/swagger-ui.js" type="text/javascript"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper">
+      <div markdown="span" class="bs-callout bs-callout-warning" role="alert">
+  <h4>The docs are moving! </h4><p>Find us at our new <a href ="https://docs.cloud-elements.com/">Help Center</a> where we've combined our documentation and knowledgebase articles in one easy-to-search location.</p><p>We aren't updating the Developer Portal anymore, except for the Element Docs &mdash; all updates happen in the <a href ="https://docs.cloud-elements.com/">Help Center</a>. We're retiring the Developer Portal as you know it in:</p><h4 id="demo"></h4>
+  <script>
+  // Set the date we're counting down to
+  var countDownDate = new Date("December 14, 2018 20:00:00").getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+
+      // Get todays date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now an the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Output the result in an element with id="demo"
+      document.getElementById("demo").innerHTML = days + " days " + hours + " hours " + minutes + "m " + seconds + "s ";
+
+      // If the count down is over, write some text
+      if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("demo").innerHTML = "EXPIRED";
+      }
+  }, 1000);
+  </script>
+
+</div>
+
+      <script src="/assets/js/application.js"></script>
+<link href="/assets/css/contentToggle.css" rel="stylesheet">
+
+
+
+      
+      <h2 id="cloud-elements-on-prem-config-file">Cloud Elements On-Prem Config File</h2>
+
+<p>This document describes the On-Prem Connector toml config file which
+lives on the client. When the On-Prem Connector starts up (either
+the client or server), it will create a file with default values if one
+does not already exist. The &#39;init&#39; command for <code>petit-client</code> will do
+nothing but create this file.</p>
+
+<p>This document is for advanced users only, who wish to edit their
+configuration directly, either because they are using the command-line
+tools, or because they want greater control over their Ground2Cloud
+installation. Normal users shouldn&#39;t have to edit this file directly.
+Instead, most options can be set in the &quot;Config&quot; section of the
+Ground2Cloud GUI.</p>
+
+<p>All client commands, and the clientd daemon itself, accept a <code>-c
+{path}</code> command-line option to specify a config file. Otherwise, the
+default <code>{user_home}/.petit/config.toml</code> will be used. For example, most
+Windows installers put Ground2Cloud in <code>C:\Ground2Cloud</code>, so you can run
+(for example) <code>petit-client status -c C:\Ground2Cloud\config.toml</code>.</p>
+
+<h3 id="server">Server</h3>
+
+<p>As a user of the Ground2Cloud client, you shouldn&#39;t need to worry about
+anything in any <code>[server]</code> section of the configuration. If you&#39;d like
+to set up your own Ground2Cloud server installation, please contact
+Cloud Elements support.</p>
+
+<h3 id="client">Client</h3>
+
+<p>The client section of the config file is used only by Ground2Cloud
+client applications and is indicated by the section headers</p>
+<div class="highlight"><pre><code class="language-" data-lang="">[client]
+[client.vitae]
+[client.local]
+</code></pre></div>
+<h4 id="section-client">Section <code>[client]</code></h4>
+
+<p>The <code>[client]</code> header indicates general-purpose values for the client to
+start up.</p>
+
+<ul>
+<li><p><code>host</code>: The hostname of where the server is located. <code>localhost</code> is
+a good default for testing, but this should be changed to a valid
+server host in most environments.</p></li>
+<li><p><code>port</code>: The active <em>sshd</em> port on the server. This should almost
+always be set to <code>22</code>, the default value.</p></li>
+<li><p><code>backPort</code>: The active <em>backchannel</em> port on the server. This should
+match the <code>backPort</code> value on the server: default is <code>3014</code>.</p></li>
+<li><p><code>username</code>: The ssh username to connect to. In most situations, this
+should match the username the petit server is running as.</p></li>
+<li><p><code>listenPort</code>: The client will listen to commands on this port
+(<code>petit-client</code> will send commands to this port on localhost). This
+should be an open port on the server: <code>3015</code> is usually a good
+default.</p></li>
+<li><p><code>logLevel</code>: The startup log level, which must be one of <code>&quot;warn&quot;</code>,
+<code>&quot;info&quot;</code> or <code>&quot;debug&quot;</code>. This level takes effect immediately at startup.
+Runtime changes to the logging level (for example with <code>petit-client
+log [level]</code>) aren&#39;t permanent, since they don&#39;t save to the config
+file.</p></li>
+<li><p><code>bindAddr</code>: This specifies the client-specified Bind Address property
+of the reverse SSH tunnel, which determines what address connections
+are allowed to connect. The default is <code>0.0.0.0</code>, which permits all
+IPv4 addresses. Other values could be <code>localhost</code>, which permits only
+local connections (useful if you want to secure access via the HTTP
+proxy only); <code>::</code> to permit any IPv6 connection; or any specific IP to
+limit connections there.</p></li>
+</ul>
+
+<h4 id="section-client-vitae">Section <code>[client.vitae]</code></h4>
+
+<p>The <code>[client.vitae]</code> section contains information about the client&#39;s
+environment which is sent to the server. It currently has two useful
+properties:</p>
+
+<ul>
+<li><p><code>brand</code>: This is the name of the brand for &quot;branded&quot; clients, and is
+usually set to the customer name who is using the G2C client (e.g.
+<code>&quot;someclient&quot;</code>). Evaluation or Cloud-Elements branded clients should
+use the value <code>&quot;ce&quot;</code>.</p></li>
+<li><p><code>bundle</code>: Set to <code>&quot;quickbooks&quot;</code> for client applications distributed in
+the QuickBooks-bundled installer. Do not include at all for the
+unbundled version.</p></li>
+</ul>
+
+<h4 id="section-client-local">Section <code>[client.local]</code></h4>
+
+<p>The <code>[client.local]</code> section has values that correspond to the local
+service which a cloud element instance connects to. There are only two
+properties:</p>
+
+<ul>
+<li><p><code>host</code>: The hostname where the local service lives. <code>localhost</code> is a
+good default, since the On-Prem Connector is often installed on the
+same machine as the local service. However, any reachable hostname can
+be used, if for example, you want the On-Prem Connector to live in a
+different intranet zone.</p></li>
+<li><p><code>port</code>: The port where local service is reached. The default of <code>8080</code>
+is appropriate for other Cloud Elements connection services (for
+example, the native QuickBooks connector runs on port 8080), but might
+be changed for other services.</p></li>
+</ul>
+
+<p>These <code>[client.local]</code> values may be overriden per-tenant in each
+tenant&#39;s own <code>config.toml</code> file, which contains its own <code>[local]</code>
+section with a <code>host</code> and <code>port</code> value.</p>
+
+<h4 id="additional-values">Additional Values</h4>
+
+<p>In addition to these properties, there are some values that are fixed:
+they don&#39;t show up in the config file, nor can they be altered:</p>
+
+<ul>
+<li><p><code>./key</code>: The location of the client&#39;s private key. The <code>register</code>
+command, if successful, may write the key to this path, and the
+key will be used both for the initial backchannel handshake and ssh
+login when petit starts.</p></li>
+<li><p><code>./tenants</code>: The location of the tenant registration, which has a
+a list of directories, each of which has its own registration file.</p></li>
+<li><p><code>./upgrades</code>: A directory where the client temporarily stores
+downloaded patches to run.</p></li>
+<li><p><code>./client.lock</code> is the name of the file which is used to ensure that
+only one client daemon is running at a time. It is a zero-byte file
+whose mere existance indicates that a client is running.</p></li>
+<li><p><code>./client.pid</code> is a JSON file whose contents contain the PID and
+listen port of the currently running client daemon, like this:</p>
+
+<p>{&quot;pid&quot;:46510,&quot;listen&quot;:3016}</p></li>
+</ul>
+
+<p>Under normal circumstances, this file will exist if and only if its
+  sibling <code>./client.lock</code> also exists.</p>
+
+<ul>
+<li><p><code>./client.log</code> is the log file where logs are stored. This contains
+all logging and debugging info for particular client runs. While not
+strictly a JSON file, it is a
+<a href="https://github.com/winstonjs/winston">winston</a>-style JSON log output.
+For example:</p>
+
+<p>{&quot;address&quot;:&quot;::&quot;,&quot;family&quot;:&quot;IPv6&quot;,&quot;port&quot;:3015,&quot;level&quot;:&quot;info&quot;,&quot;message&quot;:&quot;Command listening on&quot;,&quot;timestamp&quot;:&quot;2016-01-22T18:55:24.259Z&quot;}
+  {&quot;level&quot;:&quot;info&quot;,&quot;message&quot;:&quot;Client listening.&quot;,&quot;timestamp&quot;:&quot;2016-01-22T18:55:24.260Z&quot;}
+  {&quot;level&quot;:&quot;warn&quot;,&quot;message&quot;:&quot;Unable to connect to server at \&quot;localhost:3014\&quot;.&quot;,&quot;timestamp&quot;:&quot;2016-01-22T18:55:24.266Z&quot;}
+  {&quot;level&quot;:&quot;info&quot;,&quot;message&quot;:&quot;Client closed.&quot;,&quot;timestamp&quot;:&quot;2016-01-22T18:55:24.266Z&quot;}
+  {&quot;level&quot;:&quot;info&quot;,&quot;message&quot;:&quot;Backchannel closed.&quot;,&quot;timestamp&quot;:&quot;2016-01-22T18:55:24.266Z&quot;}</p></li>
+</ul>
+
+<p>To minimize the installation footprint, if the log exceeds 50,000
+  bytes, then a new log file is started, and the previous one will be
+  suffixed with a counter (e.g. <code>./client1.log</code>), and only the last
+  three log files will be kept.</p>
+
+    </div>
+
+  </div>
+  <script src="/assets/js/chart.js"></script>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

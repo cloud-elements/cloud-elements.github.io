@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- History.js -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/guides/ground-2-cloud/faq.html">
+
+  <script src="/api-docs/swagger-ui.js" type="text/javascript"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper">
+      <div markdown="span" class="bs-callout bs-callout-warning" role="alert">
+  <h4>The docs are moving! </h4><p>Find us at our new <a href ="https://docs.cloud-elements.com/">Help Center</a> where we've combined our documentation and knowledgebase articles in one easy-to-search location.</p><p>We aren't updating the Developer Portal anymore, except for the Element Docs &mdash; all updates happen in the <a href ="https://docs.cloud-elements.com/">Help Center</a>. We're retiring the Developer Portal as you know it in:</p><h4 id="demo"></h4>
+  <script>
+  // Set the date we're counting down to
+  var countDownDate = new Date("December 14, 2018 20:00:00").getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+
+      // Get todays date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now an the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Output the result in an element with id="demo"
+      document.getElementById("demo").innerHTML = days + " days " + hours + " hours " + minutes + "m " + seconds + "s ";
+
+      // If the count down is over, write some text
+      if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("demo").innerHTML = "EXPIRED";
+      }
+  }, 1000);
+  </script>
+
+</div>
+
+      <script src="/assets/js/application.js"></script>
+<link href="/assets/css/contentToggle.css" rel="stylesheet">
+
+
+
+      
+      <h1 id="ground2cloud-f-a-q">Ground2Cloud F.A.Q.</h1>
+
+<ul>
+<li><a href="#fundamentals">Fundamentals</a>
+
+<ul>
+<li><a href="#what-are-some-other-use-cases-for-ground2cloud">What are some other use cases for Ground2Cloud?</a></li>
+<li><a href="#how-does-ground2cloud-work-with-cloud-elements">How does Ground2Cloud work with Cloud Elements?</a></li>
+</ul></li>
+<li><a href="#quickbooks">QuickBooks</a>
+
+<ul>
+<li><a href="#where-are-the-element-docs-for-quickbooks">Where are the element docs for QuickBooks?</a></li>
+<li><a href="#why-is-there-a-separate-quickbooks-installer">Why is there a separate QuickBooks installer?</a></li>
+<li><a href="#what-is-the-quickbooks-sdk">What is the QuickBooks SDK?</a></li>
+<li><a href="#what-versions-of-quickbooks-are-supported">What versions of QuickBooks are supported?</a></li>
+<li><a href="#what-is-the-quickbooks-connector">What is the QuickBooks Connector?</a></li>
+<li><a href="#does-quickbooks-have-to-be-running">Does QuickBooks have to be running?</a></li>
+<li><a href="#does-the-quickbooks-connector-support-multi-user-mode">Does the QuickBooks Connector support multi-user mode?</a></li>
+</ul></li>
+<li><a href="#using-ground2cloud">Using Ground2Cloud</a>
+
+<ul>
+<li><a href="#how-do-i-change-what-environment-im-connected-to">How do I change what environment I&#39;m connected to?</a></li>
+<li><a href="#when-authenticating-an-element-instance-what-endpoint-hostname-do-i-use">When authenticating an element instance what endpoint / hostname do I use?</a></li>
+</ul></li>
+<li><a href="#security-and-firewalls">Security and Firewalls</a>
+
+<ul>
+<li><a href="#what-security-features-are-in-g2c">What security features are in G2C?</a></li>
+<li><a href="#how-are-my-keys-created-used">How are my keys created / used?</a></li>
+<li><a href="#is-key-rotation-supported">Is key rotation supported?</a></li>
+<li><a href="#do-i-need-to-change-my-firewall-settings">Do I need to change my firewall settings?</a></li>
+<li><a href="#what-egress-filtering-should-i-know-about">What egress filtering should I know about?</a></li>
+</ul></li>
+<li><a href="#stability-and-recovery">Stability and Recovery</a>
+
+<ul>
+<li><a href="#what-happens-if-i-lose-my-internet-connection">What happens if I lose my internet connection?</a></li>
+<li><a href="#what-happens-if-my-computer-is-shut-down">What happens if my computer is shut down?</a></li>
+<li><a href="#what-happens-if-my-computer-goes-to-sleep">What happens if my computer goes to sleep?</a></li>
+<li><a href="#what-happens-if-my-service-is-halted">What happens if my service is halted?</a></li>
+<li><a href="#what-happens-if-the-initial-registration-could-not-complete">What happens if the initial registration couldn&#39;t complete?</a></li>
+<li><a href="#does-ground2cloud-support-queueing-retries">Does Ground2Cloud support queueing / retries?</a></li>
+</ul></li>
+<li><a href="#troubleshooting">Troubleshooting</a>
+
+<ul>
+<li><a href="#what-can-i-do-if-ground2cloud-isnt-working">What can I do if Ground2Cloud isn&#39;t working?</a></li>
+<li><a href="#how-to-i-check-the-ground2cloud-logs">How to I check the Ground2Cloud logs?</a></li>
+<li><a href="#how-can-i-test-my-internet-connection">How can I test my internet connection?</a></li>
+<li><a href="#how-can-i-test-my-service-directly">How can I test my service directly?</a></li>
+<li><a href="#how-can-i-test-my-service-through-ground2cloud">How can I test my service through Ground2Cloud?</a></li>
+<li><a href="#how-can-i-unregister-re-register-ground2cloud">How can I unregister / re-register Ground2Cloud?</a></li>
+<li><a href="#how-can-i-stop-and-start-the-ground2cloud-service">How can I stop and start the Ground2Cloud service?</a></li>
+<li><a href="#how-can-i-uninstall-re-install-ground2cloud">How can I uninstall / re-install Ground2Cloud?</a></li>
+</ul></li>
+</ul>
+
+<h2 id="fundamentals">Fundamentals</h2>
+
+<h3 id="what-are-some-other-use-cases-for-ground2cloud">What are some other use cases for Ground2Cloud?</h3>
+
+<p>In addition to QuickBooks Enterprise and the database element, you can use Ground2Cloud if you have a service that is difficult or impossible to access. Here are just a few sample use cases:</p>
+
+<ul>
+<li>You use enterprise software on your desktop computer.</li>
+<li>You have an enterprise document server on your firewall-protected corporate intranet.</li>
+<li>Your database might be nested deep in a private zone on your company cloud.</li>
+<li>All of your end users have downloaded and installed your product, but you don&#39;t know the internet addresses for all of them.</li>
+</ul>
+
+<p>In all of these cases, Ground2Cloud can bring your critical data easily and securely into the cloud.</p>
+
+<h3 id="how-does-ground2cloud-work-with-cloud-elements">How does Ground2Cloud work with Cloud Elements?</h3>
+
+<p>Ground2Cloud works great on its own (we call such a solution &quot;raw&quot; Ground2Cloud), and sometime all you need is a connection transport.
+However, it really shines when used in conjunction with other Cloud Elements products.</p>
+
+<p>The Cloud Elements Platform provides a rich suite of benefits--including error handling, transformation, normalization, ease-of-use, integration
+with other services, workflows, notifications and event management. With Ground2Cloud, these benefits can be applied to any service, anywhere.</p>
+
+<p>Imagine being notified when changes occur to your database table; integrating your accounting program with ecommerce systems; or pulling a
+uniform data feed from your users&#39; diverse CRM applications. This is just scratching the surface of what Cloud Elements Platform and Ground2Cloud can do.</p>
+
+<h2 id="quickbooks">QuickBooks</h2>
+
+<h3 id="where-are-the-element-docs-for-quickbooks">Where are the element docs for QuickBooks</h3>
+
+<p>The <a href="../../elements/quickbooksenterprise/">element documentation for QuickBooks Enterprise</a> includes installation instructions for Ground2Cloud as well as other details about the element.</p>
+
+<h3 id="why-is-there-a-separate-quickbooks-installer">Why is there a separate QuickBooks installer?</h3>
+
+<p>In addition to the normal Ground2Cloud application, the QuickBooks installer installs the QuickBooks SDK and the QuickBooks Connector;
+additional programs that are needed to communicate with QuickBooks.</p>
+
+<h3 id="what-is-the-quickbooks-sdk">What is the QuickBooks SDK?</h3>
+
+<p>The QuickBooks SDK is provided by Intuit Software, the makers of QuickBooks. It is a special set of routines that is used to access
+QuickBooks data.</p>
+
+<h3 id="what-versions-of-quickbooks-are-supported">What versions of QuickBooks are supported?</h3>
+
+<p>Ground2Cloud uses the QuickBooks SDK, and supports every version of QuickBooks that is supported by that SDK. This includes all United
+States, Canada and UK versions of QuickBooks since 2012.</p>
+
+<h3 id="what-is-the-quickbooks-connector">What is the QuickBooks Connector?</h3>
+
+<p>The QuickBooks Connector is a translator program that converts between the standard REST API requests of the Cloud Elements Platform and the SDK calls needed to talk to QuickBooks.</p>
+
+<h3 id="does-the-quickbooks-connector-need-to-be-running-for-ground2cloud-to-work-with-quickbooks">Does the QuickBooks Connector need to be running for Ground2Cloud to work with QuickBooks?</h3>
+
+<p>Yes. If the QuickBooks Connector is not running, then there&#39;s nothing listing for REST requests made to QuickBooks; from the Ground2Cloud perspective, it&#39;s as if QuickBooks itself isn&#39;t running.</p>
+
+<h3 id="does-quickbooks-have-to-be-running">Does QuickBooks have to be running?</h3>
+
+<p>Yes. In general, a service has to be running for Ground2Cloud to connect to it. See &quot;What happens if my service is halted?&quot; below.</p>
+
+<h3 id="does-the-quickbooks-connector-support-multi-user-mode">Does the QuickBooks Connector support multi-user mode?</h3>
+
+<p>Yes. When you first start up and authorize the QuickBooks Connector, QuickBooks must be running in either (1) single-user mode, or (2)
+multi-user mode logged in as Admin. After that point, as long as QuickBooks is running, the Connector will be able to read and write its
+data.</p>
+
+<h2 id="using-ground2cloud">Using Ground2Cloud</h2>
+
+<h3 id="how-do-i-change-what-environment-im-connected-to">How do I change what environment I&#39;m connected to?</h3>
+
+<p>Maybe you want to switch to our staging environment to debug a problem. Maybe you&#39;re a Ground2Cloud developer, and you want to connect to a
+local server for testing. In any case, if you want to connect to a different Ground2Cloud server, follow these steps:</p>
+
+<ol>
+<li>Unregister the current connection on the Manage tab.</li>
+<li>Change the &quot;host&quot; (and possibly &quot;user&quot;) in the Config tab to the server. If you don&#39;t know the host or IP of the server you want to
+connect to, contact Cloud Elements support.</li>
+<li>Register in the Manage tab.</li>
+</ol>
+
+<p>As with every time you re-register, you may receive a new key, tunnel port and/or registration ID. When switching to a new Ground2Cloud
+server, you will almost certainly get a new endpoint.</p>
+
+<h3 id="when-authenticating-an-element-instance-what-endpoint-hostname-do-i-use">When authenticating an element instance what endpoint / hostname do I use?</h3>
+
+<p>When creating an element instance (or when using &quot;raw&quot; Ground2Cloud), you need an API endpoint to access your service. If your Ground2Cloud is
+registered, then this endpoint is shown in the Manage tab in the Ground2Cloud GUI. (This value is also written to a file named <code>C:\Ground2Cloud\endpoint</code>, in case you want to access it programmatically.)</p>
+
+<p>If you&#39;re using an element that <strong>doesn&#39;t</strong> use a HTTP-based API (such as the MySql and PostgreSQL elements), you need to instead use the
+tunnel port number. This port number is also shown in the Ground2Cloud GUI. You can only connect to this port using the Cloud Elements
+Platform: direct connections to the tunnel port from outside the Cloud Elements environment are disallowed.</p>
+
+<h2 id="security-and-firewalls">Security and Firewalls</h2>
+
+<h3 id="what-security-features-are-in-g2c">What security features are in G2C?</h3>
+
+<p>G2C is a port forwarding mechanism that uses an SSH reverse tunnel to forward connections to a private hosted service, and provides a simple
+HTTP/HTTPS proxy to make forwarding those requests easier. In addition to whatever application-level authorization / authentication mechanism
+the service itself provides, G2C adds the following security features:</p>
+
+<ul>
+<li>Secure generation and storage of individual private keys on the client.</li>
+<li>TLS 1.2 protection of the data stream through the tunnel.
+
+<ul>
+<li>Uses elliptic curve25519 cipher, allowing for perfect forward secrecy.</li>
+<li>This is done in addition to whatever encryption (if any) is supported by the service.</li>
+</ul></li>
+<li>Server validation via certificate authentication.</li>
+<li>Client validation via certificate authentication</li>
+<li>Standard HTTPS on the proxy with a certificate signed by a trusted public authority.</li>
+<li>Server multi-tenant enforcement to prevent cross-client contamination.</li>
+<li>The client installer, uninstaller, and updater(s) are signed by a trusted public authority.</li>
+</ul>
+
+<h3 id="how-are-my-keys-created-used">How are my keys created / used?</h3>
+
+<p>During Ground2Cloud registration, the client on your machine generates a 2048-bit RSA asymmetric key pair, and sends the public half of that pair
+to the server; the private half is kept on your machine, and is never shared. Once the server verifies the integrity of the key, it responds
+with a unique <strong>registration ID</strong>. From that point forward, all service communication is identified by that ID, and protected via the TLS 2.0
+protocol using those keys.</p>
+
+<h3 id="is-key-rotation-supported">Is key rotation supported?</h3>
+
+<p>Currently, you can rotate your key manually by unregistering, and then re-registering the client in the Manage tab of the GUI. When you do
+this, there is a small window of time during which Ground2Cloud is not active. Also, there is a slight chance that when you re-register, you
+will not be granted the same registration ID, endpoint, and/or tunnel port.</p>
+
+<h3 id="do-i-need-to-change-my-firewall-settings">Do I need to change my firewall settings?</h3>
+
+<p>Ground2Cloud is not a server in the traditional sense: it does not receive incoming socket connections, and thus doesn&#39;t require any
+firewall configuration changes, either on its host machine, or on its network edges. The local service that it connects to <strong>also</strong> requires
+no firewall settings, because Ground2Cloud is designed to connect to it from inside its firewall.</p>
+
+<p>The only exception is if your router or firewall has restrictive egress (outgoing) filtering enabled. Most Windows Home and Windows Pro
+configurations do not have to worry about this: see the next question for details.</p>
+
+<h3 id="what-egress-filtering-should-i-know-about">What egress filtering should I know about?</h3>
+
+<p>Most personal computer configurations don&#39;t have to worry about the kind of egress filtering mentioned here. However, if your client machine or
+network is configured to restrict outgoing connections, you should read this.</p>
+
+<p>The Ground2Cloud client works by making long-lived outgoing connections to a server, through which traffic can be funneled back into a specified
+local service. If your firewall, router or similar edge device has egress (outgoing) filtering enabled, you may need to adjust your rules to allow the following:</p>
+
+<ul>
+<li>Allow TCP connections from the client to port 22 (the standard <code>ssh</code>port) of the server.</li>
+<li>Allow TCP connections from the client to port 3014 (the Ground2Cloud backchannel port) of the server.</li>
+</ul>
+
+<p>Additionally, the client software makes periodic &quot;full loop&quot; checks to the server&#39;s front door, to verify and keep alive the entire
+Ground2Cloud pipeline. The host and port used for these belong to the endpoint shown in the GUI Manage tab (if the port is not shown, it is
+port 80 for http connections, and port 443 for https connections). You may need to allow this outgoing connection as well, or accept the
+consequences of the loop check failing.</p>
+
+<p>All connections established by Cloud Elements are standard TCP or TLS using configurable port numbers; using a proxy here should be possible.
+Contact Cloud Elements if you want the Ground2Cloud client to operate through a proxy, if you have other advanced network configuration needs,
+or if you have further questions about Ground2Cloud network usage.</p>
+
+<h2 id="stability-and-recovery">Stability and Recovery</h2>
+
+<h3 id="what-happens-if-i-lose-my-internet-connection">What happens if I lose my internet connection?</h3>
+
+<p>If your network connection fails for any reason, a registered Ground2Cloud client will detect this, and periodically attempt to reconnect to its server. While the network is down, attempts to make API calls to the endpoint or tunnel port may result in a connection timeout, an empty message, or an HTTP 500-class error (depending on the nature of the lost connection). After the network is restored, Ground2Cloud will return to normal operation automatically.</p>
+
+<h3 id="what-happens-if-my-computer-is-shut-down">What happens if my computer is shut down?</h3>
+
+<p>If the computer that is running a registered Ground2Cloud client is powered off for any reason (user or scheduled shutdown, restart,
+upgrade, crash, etc.), then the Ground2Cloud client will restart and attempt to reconnect when the computer is rebooted normally.</p>
+
+<p>Ground2Cloud will <strong>not</strong> restart if the machine is rebooted into network-restricted, service-restricted, or &quot;safe&quot; mode.</p>
+
+<p>While the computer is shutdown, attempts to make API calls to the endpoint or tunnel port may result in a connection timeout, an empty
+message, or an HTTP 500-class error, depending on network connectivity and type of shutdown.</p>
+
+<p>Note that when you computer is restarted, you may need to also restart the backend service that Ground2Cloud connects to; see &quot;What happens if
+my service is halted?&quot;</p>
+
+<h3 id="what-happens-if-my-computer-goes-to-sleep">What happens if my computer goes to sleep?</h3>
+
+<p>From the perspective of most Windows services (including the Ground2Cloud service), your computer going into sleep or hibernate mode
+is just like your computer shutting down; see the previous question. If you want your service to be available continuously, you should prevent
+your computer from going to sleep.</p>
+
+<p>It is still allowable for your computer&#39;s display to be turned off, so long as the computer does not sleep; the Ground2Cloud service doesn&#39;t
+depend on display output in any way.</p>
+
+<h3 id="what-happens-if-my-service-is-halted">What happens if my service is halted?</h3>
+
+<p>Ground2Cloud exists to shuttle connections to an otherwise private service. If the service is shut down, then Ground2Cloud can&#39;t do
+anything, even though it is still running and connected to the Ground2Cloud server.</p>
+
+<p>While the service is unavailable, any attempt to use the Ground2Cloud or an Element that uses Ground2Cloud will result in a specific 500-class
+HTTP error. When the service is restored, Ground2Cloud will return to normal operation automatically.</p>
+
+<h3 id="what-happens-if-the-initial-registration-could-not-complete">What happens if the initial registration could not complete?</h3>
+
+<p>If you did not have a solid internet connection during Ground2Cloud installation, it&#39;s possible that Ground2Cloud was unable to register or
+start. If that&#39;s the case, wait until your internet connection is restored; then open the GUI, go to the Manage tab, and click &quot;Register&quot;.
+The registration process will complete, you will be assigned a registration ID, and the connection to the server will be established.</p>
+
+<h3 id="does-ground2cloud-support-queueing-retries">Does Ground2Cloud support queueing / retries?</h3>
+
+<p>When a service is unavailable, Ground2Cloud returns with a predictable response that can be parsed by applications to perform any further actions deemed necessary, which may include the user or application retrying the request.</p>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+
+<h3 id="what-can-i-do-if-ground2cloud-isnt-working">What can I do if Ground2Cloud isn&#39;t working?</h3>
+
+<p>If Ground2Cloud doesn&#39;t seem to be giving you access to your service, here are some simple steps you can take to try to remedy the problem.</p>
+
+<ul>
+<li>Check the logs</li>
+<li>Test your internet connection</li>
+<li>Test your service</li>
+<li>(Re-)register Ground2Cloud</li>
+<li>(Re-)start Ground2Cloud</li>
+<li>Reinstall Ground2Cloud</li>
+</ul>
+
+<p>Details on how to do these things are listed below.</p>
+
+<h3 id="how-to-i-check-the-ground2cloud-logs">How to I check the Ground2Cloud logs?</h3>
+
+<p>If you can start the Ground2Cloud GUI, then you can open the Logs tab to see the most recent log entries. Even if you can&#39;t understand all of
+their content, the presence of red or orange entries (these are entries listed with &quot;warning&quot; or &quot;error&quot; log levels) might indicate a known
+problem.</p>
+
+<p>If you can&#39;t start the GUI, or if you want to look at less recent logs, the <code>C:\Ground2Cloud\logs</code> directory will contain more logging data to
+look over. If you decide to contact Cloud Elements about your issue, you may be asked to read out or send over these log files; they contain
+valuable information to help debug your problem.</p>
+
+<h3 id="how-can-i-test-my-internet-connection">How can I test my internet connection?</h3>
+
+<p>One reason that Ground2Cloud might not be running is if the internet can&#39;t be reached. Make sure that you can open a web browser to your
+favorite website from the Ground2Cloud host computer, or use other internet services. If you&#39;re on a computer with a restrictive firewall,
+make sure that the proper egress rules are enabled. (Read about firewall rules above.)</p>
+
+<h3 id="how-can-i-test-my-service-directly">How can I test my service directly?</h3>
+
+<p>Make sure that your service is running locally. Use a web browser or utility program to directly reach the service at the same host and port
+that Ground2Cloud uses, which is listed in the &quot;Local Service&quot; section of the Config tab in the GUI.</p>
+
+<p>For example, if the GUI lists <code>localhost</code> and <code>8080</code> as the local host and port, then you can point a web browser to <code>http://localhost:8080/</code>,
+and you should get some response, even if it&#39;s an error. If you get nothing, or if the connection times out, then the problem might reside
+with your local service, and not Ground2Cloud.</p>
+
+<h3 id="how-can-i-test-my-service-through-ground2cloud">How can I test my service through Ground2Cloud?</h3>
+
+<p>A simple solution to test Ground2Cloud is to simply try to connect to a
+service API that you think should be available, using a web browser or
+utility program. You can use an API path that starts with the endpoint
+listed on the Manage tab of the GUI.</p>
+
+<h3 id="how-can-i-unregister-re-register-ground2cloud">How can I unregister / re-register Ground2Cloud?</h3>
+
+<p>If the Ground2Cloud client is not showing the registration ID on the
+Manage tab, but the &quot;Register&quot; button is active, try clicking it; this
+will attempt to negotiate the connection terms with the server, and
+reconnect if all goes well.</p>
+
+<p>If you do see this information, you can still click &quot;Unregister&quot;,
+followed by &quot;Register&quot; to force renegotiation and reconnect, which may
+clean up lingering connection problems. Note that you will get a new
+key, and there is a chance you will get a new registration ID when you
+re-register.</p>
+
+<h3 id="how-can-i-stop-and-start-the-ground2cloud-service">How can I stop and start the Ground2Cloud service?</h3>
+
+<p>In the Windows Services control panel, you should see the service named
+Ground2Cloud. You should be able to stop and then start this service
+like any other Windows service, which may remedy lingering process
+issues. If the control panel complains that the service cannot be
+started, then you may need to contact Cloud Elements support to help
+further investigate the problem.</p>
+
+<h3 id="how-can-i-uninstall-re-install-ground2cloud">How can I uninstall / re-install Ground2Cloud?</h3>
+
+<p>Uninstalling and re-installing Ground2Cloud may remove some persistent
+errors you might be having, especially if you are upgrading Ground2Cloud
+to a newer version.</p>
+
+<p>To uninstall Ground2Cloud, just go to the Windows &quot;Applications&quot; control
+panel (sometimes call &quot;Apps and Features&quot;), find the Ground2Cloud
+application, and click &quot;Uninstall&quot;. You&#39;ll be walked through some
+dialogs until Ground2Cloud is uninstalled.</p>
+
+<p>When uninstallation is done, you may be notified that &quot;some files may be
+removed manually&quot;, or a similar message. This is not a problem: it just
+indicates that the log files were not deleted along with the rest of
+Ground2Cloud. You can keep the logs for the next time you install
+Ground2Cloud, or delete the entire <code>C:\Ground2Cloud</code> directory to finish
+the uninstallation.</p>
+
+<p>If you installed Ground2Cloud using the QuickBooks bundled installer,
+you should also uninstall the QuickBooks Connector application, listed
+as &quot;CE Connect&quot; in your applications listing.</p>
+
+<p>If you authorized the Connector with QuickBooks, you can unauthorize it
+with QuickBooks; use either single-user mode, or the Admin user in
+multi-user mode, and go to <code>Edit</code> -&gt; <code>Preferences</code> -&gt; <code>Integrated
+Applications</code> -&gt; <code>Company Preferences</code>. Select the &quot;CloudElements&quot;
+application, and click &quot;Remove&quot;.</p>
+
+<p>Once Ground2Cloud is uninstalled, you are free to re-install using the
+same procedure as before: run the latest installer and follow the
+on-screen instructions.</p>
+
+    </div>
+
+  </div>
+  <script src="/assets/js/chart.js"></script>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

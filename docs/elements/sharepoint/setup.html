@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/elements/sharepoint/setup.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> Sharepoint </h2>
+          <!-- <h4> Setup tasks required to authenticate an element instance </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/elements/sharepoint/?elementId=30">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/sharepoint/setup.html?elementId=30">API Provider Setup</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/sharepoint/authentication.html?elementId=30">Authentication</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/sharepoint/sharepoint-create-instance.html?elementId=30">Create Instance</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/sharepoint/events.html?elementId=30">Events</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/sharepoint/error-codes.html?elementId=30">Error Codes</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/sharepoint/ceql.html?elementId=30">Querying</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/sharepoint/api-documentation.html?elementId=30">API Docs</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <h1 id="api-provider-setup">API Provider Setup</h1>
+
+<p>To authenticate a Sharepoint element instance you must register an app with Microsoft. When you authenticate, use the <strong>Client Id</strong>, <strong>Client Secret</strong>, and <strong>Redirect URI</strong> as the <strong>API Key</strong> (<code>oauth.api.key</code>), <strong>API Secret</strong> (<code>oauth.api.secret</code>), and <strong>Callback URL</strong> (<code>oauth.callback.url</code>). You&#39;ll also need your Sharepoint Site Collection URL as the <strong>Sharepoint Site Address</strong> (<code>sharepoint.site.address</code>).  The Sharepoint Site Collection URL is the initial portion of your URL, for example in <code>https://cloudelements1.sharepoint.com/SitePages/DevHome.aspx</code>, <code>cloudelements1</code> is the Sharepoint Site Collection URL.</p>
+
+<p>Note the following:
+* Even though OAuth has security inherent in the protocol, OAuth authentication with SharePoint must use https, so your version of Sharepoint must have https enabled for OAuth to work. You can use OAuth internally as a dev environment without https, but it will not connect externally to the SharePoint element.
+* Note that our SharePoint Element works with the Sharepoint REST API. Not all versions of SharePoint support the 2013 API so verify the level supported by the endpoint you’re connecting to.</p>
+
+<p>See the latest setup instructions in the <a href="https://docs.microsoft.com/en-us/sharepoint/dev/sp-add-ins/register-sharepoint-add-ins#to-register-by-using-appregnewaspx">Microsoft documentation</a>.</p>
+
+<h2 id="register-an-application">Register an Application</h2>
+
+<p>These steps include instruction to register by using AppRegNew.aspx. Microsoft provides other ways, including registration through Microsoft Visual Studio. See their <a href="https://docs.microsoft.com/en-us/sharepoint/dev/sp-add-ins/register-sharepoint-add-ins#to-register-by-using-appregnewaspx">documentation</a> for more details.</p>
+
+<p>To register an application:</p>
+
+<ol>
+<li>Go to <code>https://&lt;site collection url&gt;/_layouts/15/AppRegNew.aspx</code>, replacing <code>&lt;site collection url&gt;</code> with your actual url. For example in <code>https://cloudelements1.sharepoint.com/SitePages/DevHome.aspx</code>, <code>cloudelements1.sharepoint.com</code> is the Sharepoint Site Collection URL.</li>
+<li>Complete the forms by entering your information or generating the id and secret.</li>
+<li>Enter the callback URL for your application in Redirect URI.</li>
+<li>Click <strong>Create</strong>.</li>
+<li>Record the <strong>Client Id</strong> and <strong>Client Secret</strong>.</li>
+<li>Record the <strong>Redirect URI</strong> for your app.
+<img src="https://dyzz9obi78pm5.cloudfront.net/app/image/id/5b1aeaf88e121c604bf5ed0c/n/sharepoint-creds.png" alt="Key secret and URL"></li>
+</ol>
+
+<h2 id="enable-sharing">Enable Sharing</h2>
+
+<p>When enabling the Microsoft SharePoint Element, be sure that sharing is enabled by your admin in the instance of SharePoint you are connecting with. Sharing is disabled by default when Sharepoint is initially started.</p>
+
+<p>For detailed steps from Microsoft, see <a href="https://support.office.com/en-us/article/turn-external-sharing-on-or-off-for-sharepoint-online-6288296a-b6b7-4ea4-b4ed-c297bf833e30">https://support.office.com/en-us/article/turn-external-sharing-on-or-off-for-sharepoint-online-6288296a-b6b7-4ea4-b4ed-c297bf833e30</a>.</p>
+
+<p>To turn on External Sharing:</p>
+
+<ol>
+<li>Select the app launcher icon <img src="https://support.content.office.net/en-us/media/3b8a317e-13ba-4bd4-864e-1ccd47af39ee.png" alt="launcher" class="inlineImage">, and the click <strong>Admin</strong> to open the Office 365 admin center.</li>
+<li>In the left pane, choose <strong>Admin centers &gt; SharePoint</strong>.
+<img src="https://dyzz9obi78pm5.cloudfront.net/app/image/id/5b1af5406e121c383f20b40b/n/admin-sharepoint.png" alt="Admin"></li>
+<li>On the Sharepoint Admin Center page, click <strong>sharing</strong> in the left menu.</li>
+<li>Under <strong>Sharing outside your organization</strong>, select <strong>Allow sharing to authenticated external users and using anonymous access links</strong>.</li>
+<li>Set up any additional settings that you want, and then click <strong>OK</strong>.</li>
+</ol>
+
+<p>In the left pane, click sharing.</p>
+
+<p>Next <a href="authenticate.html">authenticate an element instance with Microsoft</a>.</p>
+
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/elements/twitter/events.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> Twitter </h2>
+          <!-- <h4> Enable Twitter events for your application. </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/elements/twitter/?elementId=1359">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/twitter/twitter-endpoint-setup.html?elementId=1359">Endpoint Setup</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/twitter/authentication.html?elementId=1359">Authentication</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/twitter/twitter-create-instance.html?elementId=1359">Create Instance</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/twitter/transformations.html?elementId=1359">Transform Data</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/twitter/events.html?elementId=1359">Events</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/twitter/error-codes.html?elementId=1359">Error Codes</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/twitter/ceql.html?elementId=1359">Querying</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/twitter/api-documentation.html?elementId=1359">API Docs</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <h2 id="events">Events</h2>
+
+<p>Cloud Elements currently supports events via <strong>polling</strong> or <strong>webhooks</strong> depending on the endpoint.</p>
+
+<ul>
+<li><strong>Polling</strong> is a mechanism where Cloud Elements executes the configured query every <code>n</code> minutes and captures the changed information.</li>
+<li><strong>Webhooks</strong> are when the provider lets Cloud Elements know what information has changed. Note that additional endpoint setup may be required prior to creating your Element Instance.</li>
+</ul>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Cloud Elements normalizes only the objectId, objectType, and eventType event data. Event data also contains raw data, which the provider returns. The raw data varies based on the endpoint.  </div>
+
+<p>If you would like to see more information on our Events framework, please see the <a href="/docs/platform/event-management/index.html">Event Management Guide</a>.</p>
+
+<p>Things to be aware of when enabling events for Twitter:</p>
+
+<ol>
+<li>There are no updated dates so all <code>event_types</code> are <code>CREATED</code></li>
+<li>For <code>statuses</code> and <code>users</code>, there are some things you have to specify the username or screenname</li>
+<li>And you can’t query by <code>created_time</code> so we are just querying the full thing and then parsing through the response, (potentially super messy)</li>
+</ol>
+
+<p>In order to enable polling, add these extra configurations to your instance JSON:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">"event.notification.enabled": "true",
+"event.notification.callback.url": "&lt;INSERT_YOUR_APPS_CALLBACK_URL&gt;",
+"event.poller.configuration": "&lt;SEE_BELOW&gt;"
+</code></pre></div>
+<p>instance JSON with polling events enabled:</p>
+
+<p>Twitter Follows the OAuth1 Authorization protocol.</p>
+
+<p>For more information about the Twitter API, please view their <a href="https://dev.twitter.com/overview/api">API documentation</a>.</p>
+
+<h3 id="step-1-get-elements-oauth-token">Step 1. Get Elements OAuth Token</h3>
+
+<ul>
+<li>HTTP Header: None</li>
+<li>HTTP Verb: GET</li>
+<li>Request URL: /elements/{keyOrId}/oauth/token</li>
+<li>Request Body: None</li>
+<li><p>Query Parameters:</p></li>
+<li><p><strong>key</strong> - twitter</p></li>
+<li><p><strong>apiKey–</strong> - the key obtained from registering your app with the provider</p></li>
+<li><p><strong>apiSecret</strong> – the secret obtained from registering your app with the provider</p></li>
+<li><p><strong>callbackUrl</strong> – the URL that you supplied to the provider when registering your app</p></li>
+</ul>
+
+<p>Description: The result of this API invocation returns a requestToken and Secret from the endpoint, which are used to retrieve the redirect URL.  The requestToken is used in the GET /elements/{keyOrId}/oauth/url call.</p>
+
+<p>Each of the OAuth API calls will be shown below.</p>
+
+<p>Example cURL Command:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> GET
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/elements/twitter/oauth/token?apiKey=insert_fake_api_key&amp;apiSecret=insert_fake_api_secret&amp;callbackUrl=https://www.mycoolapp.com/oauth&amp;state=twitter'</span>
+</code></pre></div>
+<p>Response:</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"qyprd1Twij60MH06lKGUZTJwx7tbzpPQx6aZnvKe0xI7"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"secret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"KKSbL0J2wLGMqhMXTEh1ERkSx9tsIbAHUevF"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Twitter expects a token and secret. These are contained in the response to the initial GET request. Please make note of the token and secret. The token is needed in the GET /elements/{keyOrId}/oauth/url call which is shown below.</p>
+
+<h3 id="step-2-get-elements-oauth-url">Step 2. Get Elements OAuth URL</h3>
+
+<ul>
+<li>HTTP Header: None</li>
+<li>HTTP Verb: GET</li>
+<li>Request URL: /elements/{keyOrId}/oauth/url</li>
+<li>Request Body: None</li>
+<li><p>Query Parameters:</p></li>
+<li><p><strong>key</strong> - twitter</p></li>
+<li><p><strong>apiKey–</strong> - the key obtained from registering your app with the provider</p></li>
+<li><p><strong>apiSecret</strong> – the secret obtained from registering your app with the provider</p></li>
+<li><p><strong>callbackUrl</strong> – the URL that you supplied to the provider when registering your app,</p></li>
+<li><p><strong>requestToken</strong> - the token obtained from the GET /elements/{keyOrId}/oauth/token call (previous step).</p></li>
+</ul>
+
+<p>Description: The result of this API invocation is an OAuth redirect URL from the endpoint. Your application should now redirect to this URL, which in turn will present the OAuth authentication and authorization page to the user. When the provided callback URL is executed, a code value will be returned, which is required for the Create Instance API.</p>
+
+<p>Example cURL Command:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> GET
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/elements/twitter/oauth/url?apiKey=insert_fake_api_key&amp;apiSecret=insert_fake_api_secret&amp;callbackUrl=https://www.mycoolapp.com/oauth&amp;requestToken=insert_fake_request_token&amp;state=twitter'</span>
+</code></pre></div>
+<p>Response:</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+    </span><span class="s2">"element"</span><span class="p">:</span><span class="w"> </span><span class="s2">"twitter"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauthUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://appcenter.intuit.com/Connect/Begin?oauth_token=qyprdJHtIbwm3sGOoOCvXuv2Cs8fsQrZFjJWe4HEZAyb0&amp;oauth_callback=http%3A%2F%2Fwww.cloud-elements.com%3Fstate%3Dtwitter"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<h3 id="step-3-create-an-instance">Step 3. Create an Instance</h3>
+
+<p>Your application should now redirect to the oauthUrl returned in step 2, which in turn will present the OAuth authentication and authorization page to the user.</p>
+
+<p>HANDLE CALLBACK FROM THE ENDPOINT</p>
+
+<p>After the user successfully authenticates, the provided callback URL is executed. The callback URL will contain several parameters, listed below.  These additional parameters, along with the original API key and API secret are required for the Create Instance API.</p>
+
+<p>The parameters that you will need to parse from the callback URL are listed below, along with an example of what the callback URL should look like.
+<strong>oauth_token</strong>
+<strong>oauth_verifier</strong></p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">https://www.mycoolapp.com/oauth?state<span class="o">=</span>twitter&amp;oauth_token<span class="o">=</span>qyprdlGChtClXwBpAw1vm1fJSC3mQqS3dGX0PPphEzNEUI9s&amp;oauth_verifier<span class="o">=</span>br6qctk
+</code></pre></div>
+<p>These values will be used to create an Instance. An example of this process along with sample JSON will be shown in the next section.</p>
+
+<p>To provision your Twitter Element, use the /instances API.</p>
+
+<p>Below is an example of the provisioning API call.</p>
+
+<ul>
+<li><strong>HTTP Headers</strong>: Authorization- User <user secret>, Organization <organization secret></li>
+<li><strong>HTTP Verb</strong>: POST</li>
+<li><strong>Request URL</strong>: /instances</li>
+<li><strong>Request Body</strong>: Required – see below</li>
+<li><strong>Query Parameters</strong>: none</li>
+</ul>
+
+<p>Description: An Element token is returned upon successful execution of this API. This token needs to be retained by the application for all subsequent requests involving this element instance.</p>
+
+<p>A sample request illustrating the /instances API is shown below.</p>
+
+<p>HTTP Headers:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIZATION_SECRET&gt;
+
+</code></pre></div>
+<p>This instance.json file must be included with your instance request.  Please fill your information to provision.  The “key” into Cloud Elements Twitter is “twitter”.  This will need to be entered in the “key” field below depending on which Element you wish to instantiate.</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"element"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"twitter"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"providerData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"oauth_token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;OAUTH_TOKEN_RETURNED_IN_OAUTH_EXCHANGE&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth_verifier"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;OAUTH_VERIFIER_RETURNED_IN_OAUTH_EXCHANGE&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"secret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;SECRET_RETURNED_IN_OAUTH_EXCHANGE&gt;"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"configuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"oauth.api.key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;INSERT_QUICKBOOKS_API_KEY&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.api.secret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;INSERT_QUICKBOOKS_API_SECRET&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.callback.url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;SAME CALLBACK URL USED IN STEP 2&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event.poller.configuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"direct-messages/received-messages"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/social/direct-messages/received-messages?where=created_at='${date:MM/dd/yyy'T'HH:mm:ssXXX}'"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"idField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"id_str"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"datesConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"updatedDateField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"created_at"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"updatedDateFormat"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EEE, dd MMM yyyy HH:mm:ss Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"updatedDateTimezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GMT"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"createdDateField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"created_at"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"createdDateFormat"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EEE, dd MMM yyyy HH:mm:ss Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"createdDateTimezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GMT"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"direct-messages/sent-messages"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/social/direct-messages/sent-messages?where=created_at='${date:MM/dd/yyy'T'HH:mm:ssXXX}'"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"idField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"id_str"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"datesConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"updatedDateField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"created_at"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"updatedDateFormat"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EEE, dd MMM yyyy HH:mm:ss Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"updatedDateTimezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GMT"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"createdDateField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"created_at"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"createdDateFormat"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EEE, dd MMM yyyy HH:mm:ss Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"createdDateTimezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GMT"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"lists"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/social/lists?where=created_at='${date:MM/dd/yyy'T'HH:mm:ssXXX}'"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"idField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"id_str"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"datesConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"updatedDateField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"created_at"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"updatedDateFormat"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EEE, dd MMM yyyy HH:mm:ss Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"updatedDateTimezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GMT"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"createdDateField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"created_at"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"createdDateFormat"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EEE, dd MMM yyyy HH:mm:ss Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"createdDateTimezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GMT"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"statuses"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/social/statuses?where=q='&lt;EXAMPLE_SCREEN_NAME&gt;'"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"idField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"id_str"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"datesConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"updatedDateField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"created_at"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"updatedDateFormat"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EEE, dd MMM yyyy HH:mm:ss Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"updatedDateTimezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GMT"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"createdDateField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"created_at"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"createdDateFormat"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EEE, dd MMM yyyy HH:mm:ss Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"createdDateTimezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GMT"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"users"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/social/users?where=q='&lt;EXAMPLE&gt;'"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"idField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"id_str"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"datesConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"updatedDateField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"created_at"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"updatedDateFormat"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EEE, dd MMM yyyy HH:mm:ss Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"updatedDateTimezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GMT"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"createdDateField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"created_at"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"createdDateFormat"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EEE, dd MMM yyyy HH:mm:ss Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"createdDateTimezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GMT"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"&lt;INSERT_TAGS&gt;"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;INSERT_INSTANCE_NAME&gt;"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Here is an example cURL command to create an instance using /instances API.</p>
+
+<p>Example Request:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> POST
+<span class="nt">-H</span> <span class="s1">'Authorization: User &lt;INSERT_USER_SECRET&gt;, Organization &lt;INSERT_ORGANIZATION_SECRET&gt;'</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span>
+<span class="nt">-d</span> @instance.json
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/instances'</span>
+</code></pre></div>
+<p>If the user does not specify a required config entry, an error will result notifying her of which entries she is missing.</p>
+
+<p>Below is a successful JSON response:</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1234</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3sU/S/kZC46BaABPS7EAuhT+ukiEHkI="</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"element"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1359</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Twitter"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"twitter"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Add a Twitter Instance to connect your existing Twitter account to the Social Hub, allowing you to manage statuses and followers across multiple Social Elements. You will need your Twitter account information to add an instance."</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://abs.twimg.com/a/1426096855/images/oauth_application.png"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"deleted"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"typeOauth"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"trialAccount"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"resources"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+    </span><span class="s2">"transformationsEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"bulkDownloadEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"bulkUploadEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"cloneable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"authentication"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oauth1"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"hub"</span><span class="p">:</span><span class="w"> </span><span class="s2">"social"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"protocolType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"parameters"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+    </span><span class="s2">"private"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"provisionInteractions"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+  </span><span class="s2">"valid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"disabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"maxCacheSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"cacheTimeToLive"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"configuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"base.url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.twitter.com/1.1"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.api.secret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DYLgpG9rFNzW34X0LU4Ik2ZSgvK0rkltOniDKk4GzAy6kqrsXi"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.token.url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.twitter.com/oauth/access_token"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.user.token.secret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"lPibXGVLtgURx9TwJcstN9dZkGBEriO2VyT7aicXbmWex"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"pagination.max"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event.vendor.type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"polling"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.request.url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.twitter.com/oauth/request_token"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.user.token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"794566698309472260-Ro9v0o4q8HXgmyS5aoOqs2mwQHK3Bga"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.authorization.url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.twitter.com/oauth/authorize"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"pagination.type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"page"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event.poller.refresh_interval"</span><span class="p">:</span><span class="w"> </span><span class="s2">"15"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event.notification.callback.url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.request.authorization.type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"query"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.callback.url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/elements/jsp/home.jsp"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"oauth.api.key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"kN7fdmMLD0XMU2Fqvbadww8mi"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event.poller.configuration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{</span><span class="se">\"</span><span class="s2">direct-messages/received-messages</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">url</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">/hubs/social/direct-messages/received-messages?where=created_at='${date:MM/dd/yyy'T'HH:mm:ssXXX}'</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">idField</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">id_str</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">datesConfiguration</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">updatedDateField</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">created_at</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">updatedDateFormat</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">EEE, dd MMM yyyy HH:mm:ss Z</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">updatedDateTimezone</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">GMT</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">createdDateField</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">created_at</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">createdDateFormat</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">EEE, dd MMM yyyy HH:mm:ss Z</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">createdDateTimezone</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">GMT</span><span class="se">\"</span><span class="s2">}},</span><span class="se">\"</span><span class="s2">direct-messages/sent-messages</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">url</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">/hubs/social/direct-messages/sent-messages?where=created_at='${date:MM/dd/yyy'T'HH:mm:ssXXX}'</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">idField</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">id_str</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">datesConfiguration</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">updatedDateField</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">created_at</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">updatedDateFormat</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">EEE, dd MMM yyyy HH:mm:ss Z</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">updatedDateTimezone</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">GMT</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">createdDateField</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">created_at</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">createdDateFormat</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">EEE, dd MMM yyyy HH:mm:ss Z</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">createdDateTimezone</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">GMT</span><span class="se">\"</span><span class="s2">}},</span><span class="se">\"</span><span class="s2">lists</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">url</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">/hubs/social/lists?where=created_at='${date:MM/dd/yyy'T'HH:mm:ssXXX}'</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">idField</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">id_str</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">datesConfiguration</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">updatedDateField</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">created_at</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">updatedDateFormat</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">EEE, dd MMM yyyy HH:mm:ss Z</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">updatedDateTimezone</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">GMT</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">createdDateField</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">created_at</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">createdDateFormat</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">EEE, dd MMM yyyy HH:mm:ss Z</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">createdDateTimezone</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">GMT</span><span class="se">\"</span><span class="s2">}},</span><span class="se">\"</span><span class="s2">statuses</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">url</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">/hubs/social/statuses?where=q='Example Screen Name'</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">idField</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">id_str</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">datesConfiguration</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">updatedDateField</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">created_at</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">updatedDateFormat</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">EEE, dd MMM yyyy HH:mm:ss Z</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">updatedDateTimezone</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">GMT</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">createdDateField</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">created_at</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">createdDateFormat</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">EEE, dd MMM yyyy HH:mm:ss Z</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">createdDateTimezone</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">GMT</span><span class="se">\"</span><span class="s2">}},</span><span class="se">\"</span><span class="s2">users</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">url</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">/hubs/social/users?where=q='example'</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">idField</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">id_str</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">datesConfiguration</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">updatedDateField</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">created_at</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">updatedDateFormat</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">EEE, dd MMM yyyy HH:mm:ss Z</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">updatedDateTimezone</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">GMT</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">createdDateField</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">created_at</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">createdDateFormat</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">EEE, dd MMM yyyy HH:mm:ss Z</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">createdDateTimezone</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">GMT</span><span class="se">\"</span><span class="s2">}}}"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"pagination.page.startindex"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event.notification.enabled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"eventsEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"traceLoggingEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"cachingEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"externalAuthentication"</span><span class="p">:</span><span class="w"> </span><span class="s2">"none"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">9723</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Note:  Make sure you have straight quotes in your JSON files and cURL commands.  Please use plain text formatting in your code.  Make sure you do not have spaces after the in the cURL command.</p>
+
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

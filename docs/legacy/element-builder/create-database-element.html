@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/legacy/element-builder/create-database-element.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> Element Builder </h2>
+          <!-- <h4> Create Database Element via the the Element Builder UI. </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/?elementId=">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/create-via-api.html?elementId=">Create Element via API</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/create-via-element-builder-ui.html?elementId=">Create Element via Element Builder UI</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/enhance-existing-elements.html?elementId=">Enhance Element via Element Builder UI</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/create-database-element.html?elementId=">Create Database Element</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/element-builder-authorization-types.html?elementId=">Authorization Types</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/element-builder-hooks.html?elementId=">Hooks</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/element-builder-api-debugging.html?elementId=">API Debugging</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/tips.html?elementId=">Tips</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/api-documentation.html?elementId=">Platform Documentation</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <h2 id="create-a-database-element">Create a Database Element</h2>
+
+<p>Element Builder gives you the ability to create custom integrations to cloud services using the Cloud Elements API Management Platform.  <strong>Currently only endpoints with a REST API, PostgreSql, MySql and SqlServer database elements can be built using Element Builder</strong>.  Please <a href="mailto:support@cloud-elements.com">contact us</a> if you have questions or need help getting started.</p>
+
+<p>This guide will demonstrate how to build a <strong>Database Element only</strong>.
+Please view the <a href="index.html">Element Builder Documentation</a> for more information on how to build Elements for endpoints with a REST API.</p>
+
+<p><strong>For this guide, a sample database was created called <code>mydb</code>.  This database contains two tables: <code>customers</code> and <code>addresses</code>.  This guide will demonstrate creating <code>CRUD</code> (Create, Read, Update, and Delete) customer API calls, as well as, creating a <code>C</code> addresses API call and complex query API call.</strong></p>
+
+<p><strong>NOTE: We currently limit result sets to 50 rows for all Database Elements</strong></p>
+
+<ul>
+<li><a href="#element-builder-tabs">Element Builder Tabs</a>
+
+<ul>
+<li><a href="#info-tab">Info Tab</a></li>
+<li><a href="#configuration-tab">Configuration Tab</a></li>
+<li><a href="#instance-tab">Instance Tab</a></li>
+<li><a href="#resources-tab">Resources Tab</a></li>
+<li><a href="#models-tab">Models Tab</a></li>
+<li><a href="#events-tab">Events Tab</a></li>
+<li><a href="#bulk-tab">Bulk Tab</a></li>
+<li><a href="#documentation-tab">Documentation Tab</a></li>
+</ul></li>
+<li><a href="#admin-dashboard">Admin Dashboard</a>
+
+<ul>
+<li><a href="#import-our-sample-element">Import our Sample Element</a></li>
+</ul></li>
+<li><a href="#support">Support</a></li>
+</ul>
+
+<p>PostGreSQL will be used for this demonstration.</p>
+
+<p>In order to create a PostgreSQL Database Element, the following steps are required:</p>
+
+<ol>
+<li>Create a Database</li>
+<li>Obtain the following for creating a connection to that Database:</li>
+</ol>
+
+<ul>
+<li>Database Host: e.g. <code>123.123.1.123:5432</code></li>
+<li>Database Name</li>
+<li>Database Username</li>
+<li>Database Password</li>
+</ul>
+
+<p>The PostgreSQL Element leverages the tables contained within your PostgreSQL database and transforms them into a collection of resources. RESTful methods (POST, GET, PATCH, DELETE) are used to interact with these resources (accounts, contacts, files). The columns in the table become the modeling attributes used to send payloads with each API call.
+For example a database with the following columns of data:</p>
+
+<table><thead>
+<tr>
+<th>name</th>
+<th>phone</th>
+<th>address</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Jon Doe</td>
+<td>333-333-3333</td>
+<td>123 Main</td>
+</tr>
+</tbody></table>
+
+<p>transforms to this JSON body:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+  "name": "Jon Doe",
+  "phone": 333-333-3333,
+  "address": "123 Main"
+}
+</code></pre></div>
+<p>If the table <strong>contains</strong> a <strong>primary key</strong>, the Retrieve, Update, and Delete by ID APIs can be generated.
+If a table <strong>does not</strong> have a primary key or <strong>contains multiple</strong> primary keys, the Retrieve, Update, and Delete by ID APIs cannot be generated.</p>
+
+<h4 id="new-database-element">New Database Element</h4>
+
+<h5 id="element-builder-tabs">Element Builder Tabs</h5>
+
+<p>Log in to the <a href="https://console.cloud-elements.com/elements/jsp/login.jsp">Cloud Elements API Manager</a></p>
+
+<p>Click “Elements Builder”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Info1.png" alt="Element Builder Info 1"></p>
+
+<p>Click “Build Element”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Info2.png" alt="Element Builder Info 2"></p>
+
+<h4 id="info-tab">Info Tab</h4>
+
+<p>Select a Hub e.g. DB
+Hubs map resources from a collection of endpoints (What we call Elements) into a uniform set of APIs.
+Add a new hub from the dropdown menu to create a new collection if our defaults do not meet your needs.</p>
+
+<p>Name of the new Element, e.g. MyPostGreSQL Element</p>
+
+<p>Add a description for the new Element.
+e.g. Add a MyPostGreSQL Instance to connect your existing MyPostGreSQL Database to the Database Hub, allowing you to manage your objects across multiple Database Elements. You will need your PostgreSQL account information to add an instance.</p>
+
+<p>Add a URL to an image or logo to represent the new Element.</p>
+
+<p>Select the type of authentication the endpoint expects. The four types supported by Cloud Elements are Basic, OAuth 1, OAuth 2, and Custom.
+When building Database Elements, select the <code>Custom</code> auth type.
+<strong>Custom</strong> authentication is completely user defined, such as a username and password exchanged for an API key with some type of expiration involved.</p>
+
+<p>Select <code>JDBC</code> protocol</p>
+
+<p>Click “Next”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseInfo1.png" alt="Database Info 1"></p>
+
+<h4 id="configuration-tab">Configuration Tab</h4>
+
+<p>By selecting <code>JDBC</code> protocol, this will load the default values needed to configure the Element.
+Select the appropriate JDBC URL.  In our example: <code>jdbc:postgresql://{db.host}/{db.name}</code></p>
+
+<p>Select the page size, e.g. 100 objects per page.</p>
+
+<p>Select the paging type.
+Page is the default, but Offset is available to view portions of data, as well as, Cursor to move through large data sets.</p>
+
+<p>Select the Accept Header and the Content Type Header
+Cloud Elements supports two types: JSON and XML.
+Please select the type the endpoint expects. In our example, Cloud Elements expects JSON payloads.</p>
+
+<p>Under the Add Configuration panel &gt; <code>Key: jdbc.driver.classname</code> &gt; click <code>Edit</code></p>
+
+<p><img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseConfiguration1.png" alt="Database Configuration 1"></p>
+
+<p>In the &#39;Default Value&#39; Field, input: <code>org.postgresql.Driver</code></p>
+
+<p>Click Done</p>
+
+<p>Click “Next”</p>
+
+<p><img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseConfiguration2.png" alt="Database Configuration 1"></p>
+
+<p>Configurations, Parameters, and Hooks will not be covered in this guide as the defaults have been set.</p>
+
+<p>However, here are some definitions:</p>
+
+<ul>
+<li><strong>Configuration</strong>: A value which is stored when a connection to the endpoint is created. This value is populated via user input and will be used when invoking the API, e.g. an api<em>key and api</em>secret.</li>
+<li><strong>Parameter</strong>: A globally defined value that will apply to all API calls. Parameters can be sent as a header, path, query, body.</li>
+<li><strong>Hooks</strong>: Pre-Hook: Action you wish to execute prior to sending API calls e.g. manipulating or adding data (query, header, path, body, configuration).
+Post-Hook: Modify the response data (body, header, configuration) on the return call from the endpoint.</li>
+</ul>
+
+<h4 id="instance-tab">Instance Tab</h4>
+
+<p>Test the connection to the endpoint by creating an instance.</p>
+
+<p>Input a name for the instance, e.g. MyPostGreSQL Element Instance 1</p>
+
+<ul>
+<li>Database Host: e.g. <code>localhost:5432</code></li>
+<li>Database Username</li>
+<li>Database Password</li>
+<li>Database Name</li>
+</ul>
+
+<p>Click “Create Instance”</p>
+
+<p><img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseElement1.png" alt="Database Instance 1"></p>
+
+<h4 id="resources-tab">Resources Tab</h4>
+
+<p>Add entities/resources to your Element within the Resources Tab.  Resources will need an HTTP verb like POST, GET, PATCH, PUT, or DELETE associated with it.  If the Element being created can be identified with one of Cloud Elements current hubs, pre-built resources can be used to get started in mapping out resources.</p>
+
+<h5 id="adding-resource-get-customers">ADDING RESOURCE: GET /customers</h5>
+
+<p>For this example, the GET /customers resource will be added to our PostgreSQL Element.</p>
+
+<p>Click “+ Add” &gt; API</p>
+
+<p>Input the Path: <code>/customers</code></p>
+
+<p>Input the Vendor Path: <code>select * from customer offset :offset limit :limit</code> – this can be any valid named SQL query</p>
+
+<p>Input the Method: <code>GET</code></p>
+
+<p>Input the Description – what your users will see when they view the API documentation, e.g. &quot;Retrieve a list of customers&quot;</p>
+
+<p>Click “Add Parameter” &gt; Page
+<img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseResources1.png" alt="Database Resources 1"></p>
+
+<p>Input the Parameter Fields:</p>
+
+<ul>
+<li><strong>Name:</strong> page</li>
+<li><strong>Vendor Name:</strong> offset</li>
+<li><strong>Type:</strong> Query</li>
+<li><strong>Vendor Type:</strong> Query</li>
+<li><strong>Data Type:</strong> string</li>
+<li><strong>Vendor Data Type:</strong> string</li>
+<li><strong>Parameter Source:</strong> Request</li>
+<li><strong>Is it Required:</strong> NO</li>
+<li><strong>Description:</strong> The text of your status update</li>
+</ul>
+
+<p>Click “Done”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseResources2.png" alt="Database Resources 2"></p>
+
+<p>Click “Add Parameter” &gt; pageSize</p>
+
+<p>Input the Parameter Fields:</p>
+
+<ul>
+<li><strong>Name:</strong> page</li>
+<li><strong>Vendor Name:</strong> offset</li>
+<li><strong>Type:</strong> Query</li>
+<li><strong>Vendor Type:</strong> Query</li>
+<li><strong>Data Type:</strong> string</li>
+<li><strong>Vendor Data Type:</strong> string</li>
+<li><strong>Parameter Source:</strong> Request</li>
+<li><strong>Is it Required:</strong> NO</li>
+<li><strong>Description:</strong> The number of resources to return in a given page</li>
+</ul>
+
+<p>Click “Done”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseResources3.png" alt="Database Resources 3"></p>
+
+<p>Click “Try it out!”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseResources4.png" alt="Database Resources 4"></p>
+
+<p>This will open up the API Documentation sliding Panel.</p>
+
+<p><strong>NOTE:  The default pageSize will be 50 if not populated with a number of your choice.</strong>
+Click the Try it out button to test the call.</p>
+
+<p>View the response on the left hand side panel.</p>
+
+<p>View the vendor request and response on the right hand side panel.  This is very useful when debugging and API call.  This guide will not go into debugging, however you can view tips <a href="element-builder-api-debugging.html">debugging tips</a> in the general Element Builder documentation.
+Click the &#39;X&#39; in the corner to close the sliding panel.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseResources5.png" alt="Database Resources 5"></p>
+
+<h5 id="adding-resource-post-customers">ADDING RESOURCE: POST /customers</h5>
+
+<p>Click “+ Add” &gt; API</p>
+
+<p>Input the Path: <code>/customers</code></p>
+
+<p>Input the Vendor Path: <code>insert into customer
+(
+  first_name, last_name, email, mobile_phone
+)
+values
+  (
+      :first_name,
+      :last_name,
+      :email,
+      :mobile_phone
+  )
+returning first_name, last_name, email, mobile_phone, customer_id, created_dt</code> – this can be any valid named SQL query</p>
+
+<p>Input the Method: <code>POST</code></p>
+
+<p>Input the Description – what your users will see when they view the API documentation, e.g. &quot;Create a customer&quot;</p>
+
+<p>Click “Add Parameter” &gt; Blank</p>
+
+<p>Input the Parameter Fields:</p>
+
+<ul>
+<li><strong>Name:</strong> body</li>
+<li><strong>Vendor Name:</strong> body</li>
+<li><strong>Type:</strong> BODY</li>
+<li><strong>Vendor Type:</strong> QUERY</li>
+<li><strong>Data Type:</strong> customers</li>
+<li><strong>Vendor Data Type:</strong> customers</li>
+<li><strong>Parameter Source:</strong> Request</li>
+<li><strong>Is it Required:</strong> No</li>
+<li><strong>Description:</strong> The customer body</li>
+</ul>
+
+<p>Click “Done”</p>
+
+<p>Click “Try it out!”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseResources6.png" alt="Database Resources 6"></p>
+
+<p>This will open up the API Documentation sliding Panel.</p>
+
+<p>Input the following customer JSON body:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+  "last_name": "Snow",
+  "first_name": "Jon",
+  "email": "jonsnow@got.com"
+}
+</code></pre></div>
+<p>Click the Try it out button to test the call.</p>
+
+<p>View the response on the left hand side panel.</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+  "created_dt": 1464096203573,
+  "last_name": "Snow",
+  "customer_id": 102,
+  "first_name": "Jon",
+  "email": "jonsnow@got.com"
+}
+</code></pre></div>
+<p>View the vendor request and response on the right hand side panel.  This is very useful when debugging and API call.
+<strong>NOTE:  Since we did not populate all customer values, i.e. <code>mobile_phone</code>, the value will be captured as <code>null</code></strong>
+Click the &#39;X&#39; in the corner to close the sliding panel.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseResources7.png" alt="Database Resources 7"></p>
+
+<h5 id="adding-resource-get-customers-id">ADDING RESOURCE: GET /customers/{id}</h5>
+
+<p>Click “+ Add” &gt; API</p>
+
+<p>Input the Path: <code>/customers/{id}</code></p>
+
+<p>Input the Vendor Path: <code>select * from customer where customer_id = :id</code> – this can be any valid named SQL query</p>
+
+<p>Input the Method: <code>GET</code></p>
+
+<p>Input the Description – what your users will see when they view the API documentation, e.g. &#39;Get a customer by ID&#39;</p>
+
+<p>Click “Add Parameter” &gt; Id</p>
+
+<p>Input the Parameter Fields:</p>
+
+<ul>
+<li><strong>Name:</strong> id</li>
+<li><strong>Vendor Name:</strong> id</li>
+<li><strong>Type:</strong> PATH</li>
+<li><strong>Vendor Type:</strong> QUERY</li>
+<li><strong>Data Type:</strong> number</li>
+<li><strong>Vendor Data Type:</strong> number</li>
+<li><strong>Parameter Source:</strong> Request</li>
+<li><strong>Is it Required:</strong> Yes</li>
+<li><strong>Description:</strong> The ID of the customer</li>
+</ul>
+
+<p>Click “Done”</p>
+
+<p>Click “Try it out!”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseResources8.png" alt="Database Resources 8"></p>
+
+<p>This will open up the API Documentation sliding Panel.</p>
+
+<p>Input the ID of the customer.  In our example: <code>102</code></p>
+
+<p>Click the Try it out button to test the call.</p>
+
+<p>View the response on the left hand side panel.</p>
+
+<p>View the vendor request and response on the right hand side panel.  This is very useful when debugging and API call.
+Click the &#39;X&#39; in the corner to close the sliding panel.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseResources9.png" alt="Database Resources 9"></p>
+
+<h5 id="adding-resource-put-customers-id">ADDING RESOURCE: PUT /customers/{id}</h5>
+
+<p>Click “+ Add” &gt; API</p>
+
+<p>Input the Path: <code>/customers/{id}</code></p>
+
+<p>Input the Vendor Path: <code>update customer set first_name = :first_name, last_name = :last_name, email= :email,
+  mobile_phone =:mobile_phone where customer_id = :customer_id
+returning first_name, last_name, email, mobile_phone, customer_id;</code> – this can be any valid named SQL query</p>
+
+<p>Input the Method: <code>PUT</code></p>
+
+<p>Input the Description – what your users will see when they view the API documentation, e.g. &quot;Update a customer&quot;</p>
+
+<p>Click “Add Parameter” &gt; Blank</p>
+
+<p>Input the Parameter Fields:</p>
+
+<ul>
+<li><strong>Name:</strong> body</li>
+<li><strong>Vendor Name:</strong> body</li>
+<li><strong>Type:</strong> BODY</li>
+<li><strong>Vendor Type:</strong> QUERY</li>
+<li><strong>Data Type:</strong> customers</li>
+<li><strong>Vendor Data Type:</strong> customers</li>
+<li><strong>Parameter Source:</strong> Request</li>
+<li><strong>Is it Required:</strong> No</li>
+<li><strong>Description:</strong> The customer object</li>
+</ul>
+
+<p>Click “Done”</p>
+
+<p>Click “Add Parameter” &gt; Id</p>
+
+<p>Input the Parameter Fields:</p>
+
+<ul>
+<li><strong>Name:</strong> id</li>
+<li><strong>Vendor Name:</strong> customer_id</li>
+<li><strong>Type:</strong> PATH</li>
+<li><strong>Vendor Type:</strong> QUERY</li>
+<li><strong>Data Type:</strong> number</li>
+<li><strong>Vendor Data Type:</strong> number</li>
+<li><strong>Parameter Source:</strong> Request</li>
+<li><strong>Is it Required:</strong> Yes</li>
+<li><strong>Description:</strong> The customer ID</li>
+</ul>
+
+<p>Click “Done”</p>
+
+<p>Click “Try it out!”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseResources10.png" alt="Database Resources 10"></p>
+
+<p>This will open up the API Documentation sliding Panel.</p>
+
+<p>Input the ID of the customer.  In our example: <code>102</code>
+Input the customer JSON to update the object:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+  "last_name": "Snow",
+  "first_name": "Jon",
+  "email": "jonsnow@got.com",
+  "mobile_phone": "303-333-3333"
+}
+</code></pre></div>
+<p>Click the Try it out button to test the call.</p>
+
+<p>View the response on the left hand side panel.</p>
+
+<p>View the vendor request and response on the right hand side panel.  This is very useful when debugging and API call.
+Click the &#39;X&#39; in the corner to close the sliding panel.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseResources11.png" alt="Database Resources 11"></p>
+
+<h5 id="adding-resource-delete-customers-id">ADDING RESOURCE: DELETE /customers/{id}</h5>
+
+<p>Click “+ Add” &gt; API</p>
+
+<p>Input the Path: <code>/customers/{id}</code></p>
+
+<p>Input the Vendor Path: <code>select * from customer where customer_id = :id</code> – this can be any valid named SQL query</p>
+
+<p>Input the Method: <code>DELETE</code></p>
+
+<p>Input the Description – what your users will see when they view the API documentation, e.g. &#39;Delete a customer by ID&#39;</p>
+
+<p>Click “Add Parameter” &gt; Id</p>
+
+<p>Input the Parameter Fields:</p>
+
+<ul>
+<li><strong>Name:</strong> id</li>
+<li><strong>Vendor Name:</strong> id</li>
+<li><strong>Type:</strong> PATH</li>
+<li><strong>Vendor Type:</strong> QUERY</li>
+<li><strong>Data Type:</strong> number</li>
+<li><strong>Vendor Data Type:</strong> number</li>
+<li><strong>Parameter Source:</strong> Request</li>
+<li><strong>Is it Required:</strong> Yes</li>
+<li><strong>Description:</strong> The ID of the customer</li>
+</ul>
+
+<p>Click “Done”</p>
+
+<p>Click “Try it out!”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseResources12.png" alt="Database Resources 12"></p>
+
+<p>This will open up the API Documentation sliding Panel.</p>
+
+<p>Input the ID of the customer.  In our example: <code>102</code></p>
+
+<p>Click the Try it out button to test the call.</p>
+
+<p>View the response on the left hand side panel.</p>
+
+<p>View the vendor request and response on the right hand side panel.  This is very useful when debugging and API call.
+Click the &#39;X&#39; in the corner to close the sliding panel.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseResources13.png" alt="Database Resources 13"></p>
+
+<h5 id="adding-resource-post-addresses">ADDING RESOURCE: POST /addresses</h5>
+
+<p>Click “+ Add” &gt; API</p>
+
+<p>Input the Path: <code>/addresses</code></p>
+
+<p>Input the Vendor Path: <code>insert into address
+(
+  street1, street2, state, postal_code, country, customer_id
+)
+values
+  (
+      :street1,
+      :street2,
+      :state,
+      :postal_code,
+      :country,
+      :customer_id
+  )
+returning street1, street2, state, postal_code, country, customer_id, address_id, created_dt</code> – this can be any valid named SQL query</p>
+
+<p>Input the Method: <code>POST</code></p>
+
+<p>Input the Description – what your users will see when they view the API documentation, e.g. &quot;Create an address&quot;</p>
+
+<p>Click “Add Parameter” &gt; Blank</p>
+
+<p>Input the Parameter Fields:</p>
+
+<ul>
+<li><strong>Name:</strong> body</li>
+<li><strong>Vendor Name:</strong> body</li>
+<li><strong>Type:</strong> BODY</li>
+<li><strong>Vendor Type:</strong> QUERY</li>
+<li><strong>Data Type:</strong> addresses</li>
+<li><strong>Vendor Data Type:</strong> addresses</li>
+<li><strong>Parameter Source:</strong> Request</li>
+<li><strong>Is it Required:</strong> No</li>
+<li><strong>Description:</strong> The address body</li>
+</ul>
+
+<p>Click “Done”</p>
+
+<p>Click “Try it out!”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseResources14.png" alt="Database Resources 14"></p>
+
+<p>This will open up the API Documentation sliding Panel.</p>
+
+<p>Input the following customer JSON body:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+  "street1": "123 Main",
+  "street2": "PO Box 123",
+  "state": "CO",
+  "country": "USA",
+  "customer_id": 104
+}
+</code></pre></div>
+<p>Click the Try it out button to test the call.</p>
+
+<p>View the response on the left hand side panel.</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+  "country": "USA",
+  "created_dt": 1464111347732,
+  "address_id": 109,
+  "street1": "123 Main",
+  "street2": "PO Box 123",
+  "state": "CO",
+  "customer_id": 104
+}
+</code></pre></div>
+<p>View the vendor request and response on the right hand side panel.  This is very useful when debugging and API call.
+<strong>NOTE:  Since we did not populate all address values, i.e. <code>postal_code</code>, the value will be captured as <code>null</code></strong>
+Click the &#39;X&#39; in the corner to close the sliding panel.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseResources15.png" alt="Database Resources 15"></p>
+
+<h5 id="adding-complex-queries-get-customersdetails">ADDING COMPLEX QUERIES: GET /customersDetails</h5>
+
+<p>Click “+ Add” &gt; API</p>
+
+<p>Input the Path: <code>/customersDetails</code></p>
+
+<p>Input the Vendor Path: <code>select c.*, a.* from customer c
+  inner join address a on a.customer_id = c.customer_id
+{where}
+offset :offset limit :limit</code> – this can be any valid named SQL query
+<strong>NOTE The <code>{where}</code> indicates a place holder.  This will replace the placeholder with an empty value so the script works correctly on our side.  The <code>where</code> is a standard Cloud Elements placeholder.  If a where does not exist, this will satisfy that requirement.</strong></p>
+
+<p>Input the Method: <code>GET</code></p>
+
+<p>Input the Description – what your users will see when they view the API documentation, e.g. &#39;Retrieve a list of customer details including address&#39;</p>
+
+<p>Click “Add Parameter” &gt; Page</p>
+
+<p>Input the Parameter Fields:</p>
+
+<ul>
+<li><strong>Name:</strong> page</li>
+<li><strong>Vendor Name:</strong> offset</li>
+<li><strong>Type:</strong> QUERY</li>
+<li><strong>Vendor Type:</strong> QUERY</li>
+<li><strong>Data Type:</strong> string</li>
+<li><strong>Vendor Data Type:</strong> string</li>
+<li><strong>Parameter Source:</strong> Request</li>
+<li><strong>Is it Required:</strong> NO</li>
+<li><strong>Description:</strong> The text of your status update</li>
+</ul>
+
+<p>Click “Done”</p>
+
+<p>Click “Add Parameter” &gt; pageSize</p>
+
+<p>Input the Parameter Fields:</p>
+
+<ul>
+<li><strong>Name:</strong> page</li>
+<li><strong>Vendor Name:</strong> offset</li>
+<li><strong>Type:</strong> QUERY</li>
+<li><strong>Vendor Type:</strong> QUERY</li>
+<li><strong>Data Type:</strong> string</li>
+<li><strong>Vendor Data Type:</strong> string</li>
+<li><strong>Parameter Source:</strong> Request</li>
+<li><strong>Is it Required:</strong> NO</li>
+<li><strong>Description:</strong> The number of resources to return in a given page</li>
+</ul>
+
+<p>Click “Done”</p>
+
+<p>Click “Add Parameter” &gt; Where</p>
+
+<p>Input the Parameter Fields:</p>
+
+<ul>
+<li><strong>Name:</strong> where</li>
+<li><strong>Vendor Name:</strong> where</li>
+<li><strong>Type:</strong> QUERY</li>
+<li><strong>Vendor Type:</strong> PATH</li>
+<li><strong>Data Type:</strong> string</li>
+<li><strong>Vendor Data Type:</strong> string</li>
+<li><strong>Parameter Source:</strong> Request</li>
+<li><strong>Is it Required:</strong> NO</li>
+<li><strong>Description:</strong> The CEQL search expression</li>
+</ul>
+
+<p>Click “Done”</p>
+
+<p>Click “Try it out!”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseResources16.png" alt="Database Resources 16"></p>
+
+<p>This will open up the API Documentation sliding Panel.</p>
+
+<p>Input the search expression in the where field:  <code>last_name=&#39;Snow&#39;</code></p>
+
+<p>Click the Try it out button to test the call.</p>
+
+<p>View the complex query response on the left hand side panel.</p>
+
+<p>View the vendor request and response on the right hand side panel.  This is very useful when debugging and API call.
+Click the &#39;X&#39; in the corner to close the sliding panel.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/05/DatabaseResources17.png" alt="Database Resources 17"></p>
+
+<h4 id="models-tab">Models Tab</h4>
+
+<p>Below is an excerpt from our general Element Builder documentation.
+It will cover Model functionality</p>
+
+<p>The Models Tab is an additional feature with some <strong>optional functionality</strong> to make resource creation more streamlined.</p>
+
+<p><strong>NOTE:</strong>  This functionality is only available for endpoints with JSON payloads.  SOAP endpoints or endpoints with XML payloads are not currently supported.</p>
+
+<p>The Freshdesk endpoint will be referenced in this portion of the documentation.</p>
+
+<p>The Models Tab allows the user to build resource models via customization, as well as, an import function.</p>
+
+<p>We will take a look at the Freshdesk Company endpoint which we will map to the Account resource.</p>
+
+<p>A review of the Freshdesk API documentation is needed prior to making any changes to the resource.  The docs can be found here:  <a href="https://developer.freshdesk.com/api/#view_company">https://developer.freshdesk.com/api/#view_company</a></p>
+
+<h5 id="model-customization">MODEL CUSTOMIZATION</h5>
+
+<p>Click on the Models Tab.  If you have any unsaved progress, an alert will appear asking if you want to save your changes.</p>
+
+<p>The current list of API resources will render.</p>
+
+<p>Select a model to edit.  In our example, we will be viewing the GET /accounts resource.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsCustomize1.png" alt="Element Builder Models 1"></p>
+
+<p>Looking at the “updated_at” field, we can see the value is a date.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsCustomize2.png" alt="Element Builder Models 2"></p>
+
+<p>In our model, the data type is set to string.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsCustomize3.png" alt="Element Builder Models 3"></p>
+
+<p>This can be modified within the code editor.</p>
+
+<p>Change “type” to “date”</p>
+
+<p>Click “Save Model” to update the resource
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsCustomize4.png" alt="Element Builder Models 4"></p>
+
+<h5 id="import-models">IMPORT MODELS</h5>
+
+<p>To import a model, head to the endpoint API documentation.  Navigate to the desired resource and locate the example response.</p>
+
+<p>Copy the response payload.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsImport1.png" alt="Element Builder Models 5"></p>
+
+<p>Select the resource in the list: GET /accounts</p>
+
+<p>Click “Generate from Payload”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsImport2.png" alt="Element Builder Models 6"></p>
+
+<p>Paste in the model</p>
+
+<p>Click “Generate Model”</p>
+
+<p>The model is now built. If you wish to make any changes, they can be made right in the code editor panel. Just remember to save your changes.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsImport3.png" alt="Element Builder Models 7"></p>
+
+<h4 id="events-tab">Events Tab</h4>
+
+<p>Events are currently not supported for Database Elements.  We&#39;ll keep you posted on this feature.</p>
+
+<h4 id="bulk-tab">Bulk Tab</h4>
+
+<p>Below is an excerpt from our general Element Builder documentation.
+It will cover Bulk functionality</p>
+
+<p>Cloud Elements supports bulk download of objects in JSON format if the endpoint supports filter by date.</p>
+
+<p>The following fields are required to enable bulk download:</p>
+
+<ul>
+<li><strong>Bulk Query Time Format:</strong> Select a time format from the dropdown list. The time format must match the endpoint’s supported time format for queries.</li>
+<li><strong>Bulk Query Field Name:</strong> Provide an object and an operator in the Bulk Query Field Name, e.g. where orders &gt;= “{time_format}”. This field may be left blank if you wish to include bulk download on all objects.</li>
+<li><strong>Bulk Query Operator:</strong> The Bulk Query Operator can be set to “=” or “&gt;=”.</li>
+</ul>
+
+<p>Let’s take a look at the FreshBooks API documentation: <a href="https://www.freshbooks.com/developers/docs/expenses#expense.list">https://www.freshbooks.com/developers/docs/expenses#expense.list</a></p>
+
+<p>FreshBooks has a query API – <code>expense.list</code> which supports the <code>date_from</code> field:
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/EventsBlank1.png" alt="Element Builder UI Bulk 1"></p>
+
+<p>This information will be used to create our bulk query.</p>
+
+<p>First let’s take a look at the expense object:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+    "date": "2016-02-11 00:00:00",
+    "amount": 200,
+    "compound_tax": 0,
+    "client_id": 0,
+    "folder": "active",
+    "category_id": 123456,
+    "project_id": 0,
+    "vendor": "Acme",
+    "staff_id": 1,
+    "expense_id": "00001234567",
+   ///////////////////////////////////
+   /"updated": "2016-02-11 12:40:51",/
+   ///////////////////////////////////
+    "status": 0,
+    "has_receipt": 0
+  }
+</code></pre></div>
+<p>FreshBooks supports an updated field.  However, they do not support a <code>created_at</code> field.  Since the <code>created_at</code> field is not supported, bulk querying will occur on objects updated on or after a certain day and time.</p>
+
+<p>Using the following information:</p>
+
+<ul>
+<li><code>expense.list</code> query parameter <code>date_from</code></li>
+<li>updated field within the expense object</li>
+</ul>
+
+<p>The bulk query can be constructed.</p>
+
+<p>The Bulk Query Field Name will be blank so all objects can be queried</p>
+
+<p>Select the Bulk Query Date Format, the format the endpoint expects.  This can be found in the endpoint API documentation.</p>
+
+<p>Input a Bulk Query Operator.  The Bulk Query Operator can be set to <code>=</code> or <code>&gt;=</code>
+In our example, it will be set to <code>=</code> since we are querying <code>date_from</code>.</p>
+
+<p>Click “Next”
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/BulkClone1.png" alt="Element Builder UI Bulk 2"></p>
+
+<h4 id="documentation-tab">Documentation Tab</h4>
+
+<p>Below is an excerpt from our general Element Builder documentation.
+It will cover Documentation functionality</p>
+
+<p>View the newly created API documentation for Element.  Try out the API calls right from Element Builder.</p>
+
+<p>View the new Element documentation by selecting an instance from the dropdown: “Change Instances”.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Documentation2.png" alt="Element Builder Documentation 1"></p>
+
+<p>If an instance has not been created, click “Add Instance”.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Documentation1.png" alt="Element Builder Documentation 2"></p>
+
+<p>Try It Out:  Click on a resource, e.g. GET /users</p>
+
+<p>Input the query parameter: q=’jonsmith’</p>
+
+<p>Click “Try it out!”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Documentation3.png" alt="Element Builder Documentation 3"></p>
+
+<p>View the response.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Documentation4.png" alt="Element Builder Documentation 4"></p>
+
+<p>Click “Done”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Admin1.png" alt="Element Builder Documentation 5"></p>
+
+<h4 id="admin-dashboard">Admin Dashboard</h4>
+
+<p>Within the in Admin Dashboard, the following functions are available to exercise on all Elements created using Element Builder:</p>
+
+<ul>
+<li><strong>Edit an Element:</strong> change a URL, add a resource, edit configurations</li>
+<li><strong>Deactivate:</strong> deactivates an Element, temporarily removing it from the catalog</li>
+<li><strong>Delete:</strong> deletes an Element, permanently removing it from the catalog</li>
+<li><strong>Export:</strong> exports Element JSON, this JSON can be imported at a later time</li>
+</ul>
+
+<p>To access the Element admin functions, click on the gear.</p>
+
+<p>To import Element JSON, click “Import Element” and follow the prompts.  All functionality will be available based on the last state of the Element prior to export.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AdminClone1.png" alt="Element Builder Admin Dashboard 1"></p>
+
+<h4 id="import-our-sample-element">Import our Sample Element</h4>
+
+<p>Below is the JSON needed to create our sample DB Element.</p>
+
+<p><a href="https://developers.cloud-elements.com/download/sampleDbElement.json">Download Sample JSON</a></p>
+
+<p><img src="http://cloud-elements.com/wp-content/uploads/2016/05/ImportElement1.png" alt="Element Builder Import Element"></p>
+
+<h4 id="ground2cloud-connector">Ground2Cloud Connector</h4>
+
+<p>Cloud Elements supports two ways of connecting a Database:
+* Connect Directly via IP Address and Port Number
+* Use Cloud Elements <a href="/docs/products/ground-2-cloud/index.html">Ground2Cloud</a> service</p>
+
+<div class="p-a-md">
+
+</div>
+
+<h3 id="option-1-connecting-directly-via-ip-address-and-port-number">Option 1: Connecting Directly via IP Address and Port Number</h3>
+
+<p>This method would require a port be exposed so a connection can be made with Cloud Elements.
+When creating an instance, the user would input the IP Address and Port Number exposed publicly.</p>
+
+<div class="p-a-md">
+
+</div>
+
+<h3 id="option-2-connecting-via-ground2cloud">Option 2: Connecting via Ground2Cloud</h3>
+
+<p>The Ground2Cloud integration consists of two parts: Client and Server.
+The Ground2Cloud Client creates a tunnel to a public Ground2Cloud Server, and enables requests from the Cloud Elements Production Cloud to transparently pass through that tunnel to reach the Client Service.
+<img src="/assets/img/ground2cloud/how-it-works.png" alt="Cloud Elements Ground2Cloud 1"></p>
+
+<p>The Ground2Cloud Client installation program is a self-unpacking executable. Once it finishes running, the Ground2Cloud Client is installed as Windows Service which constantly runs to keep this tunnel open. You generally don’t have to worry about this; once installed, the service automatically restarts in case of failure, or when your Windows machine is rebooted.</p>
+
+<p>The installer also installs a GUI (Graphical User Interface) program, which can be used to monitor and manage the Ground2Cloud Client. When launched, it opens a window with simple dialogs that let you browse logs files, change configuration, and perform other management operations. Details on how to use the GUI is described in the <a href="/docs/products/ground-2-cloud/index.html">User’s Manual</a>.</p>
+
+<p>If you are interested in using our Ground2Cloud Service, please <a href="mailto:info@cloud-elements.com">contact us</a> for details.</p>
+
+<h4 id="support">Support</h4>
+
+<p>We would love to hear about enhancements or concerns regarding Cloud Elements.  Please don’t hesitate to get in touch.</p>
+
+<p>Need some help?  Don’t hesitate to reach out to <a href="mailto:support@cloud-elements.com">Cloud Elements Support</a> with any questions or concerns.</p>
+
+<p>The Cloud Elements Team</p>
+
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

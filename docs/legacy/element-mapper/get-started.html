@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/legacy/element-mapper/get-started.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> Element Mapper </h2>
+          <!-- <h4> Videos and help walking through the different features of Element Mapper. </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-mapper/?elementId=">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-mapper/definitions.html?elementId=">Definitions</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-mapper/get-started.html?elementId=">Getting Started</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-mapper/advanced.html?elementId=">Advanced</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-mapper/javascript.html?elementId=">Using Javascript</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-mapper/migrate-objects-and-transformations.html?elementId=">Migrate Object Definitions and Transformations</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-mapper/faqs.html?elementId=">FAQs</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-mapper/api-documentation.html?elementId=">Transformations API Reference</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <div markdown="span" class="bs-callout bs-callout-info">The documentation in this section is for Cloud Elements 1.0. Find Cloud Elements 2.0 documentation at <a href=../../guides/common-resources/index.html>Defining Common Resources & Transformations</a>.</div>
+
+<h1 id="first-time-using-element-mapper">First Time Using Element Mapper</h1>
+
+<p>To get started using Element Mapper, you can use the Element Mapper UI or our platform object definition/transformation APIs.  If you are just getting started, we would recommend using the UI to help familiarize yourself with the different pieces that make up Element Mapper and how they work.</p>
+
+<h1 id="using-element-mapper-ui">Using Element Mapper UI</h1>
+
+<p>This guide is here to get you up and running with Element Mapper. We have provided step by step visual directions, as well as, a video of the same instructions taking you through the whole process. Watch the Video or read at your own pace.</p>
+
+<p>This guide reviews the minimum number of steps to get you mapping your data with the leading Cloud Services using Element Mapper. If you have not signed up for Cloud Elements Service or authenticated an Element with us, see <a href="/docs/quickstart/overview.html">the Getting Started Guide</a>.</p>
+
+<iframe class="full-width" src="//player.vimeo.com/video/116909693" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+<div class="p-a-md">
+
+</div>
+
+<h2 id="what-you-will-need">What you will need:</h2>
+
+<ul>
+<li>Cloud Elements Account</li>
+<li>A Provisioned CRM Element (Salesforce, SugarCRM, ZohoCRM)</li>
+</ul>
+
+<p>Don’t have that set up?
+Check out <a href="/docs/quickstart/overview.html">the Getting Started Guide</a> to get set up.</p>
+
+<p><em>Salesforce will be used for this demonstration</em></p>
+
+<h2 id="what-we-ll-do">What we’ll do:</h2>
+
+<ol>
+<li><a href="#access-transformations">Access transformations</a>.</li>
+<li><a href="#create-an-account-object">Create an account object</a>.</li>
+<li><a href="#map-fields-to-the-account-object">Map fields to the account object</a>.</li>
+<li><a href="#view-the-object">View the object</a>.</li>
+</ol>
+
+<h3 id="access-transformations">Access transformations</h3>
+
+<ol>
+<li>Sign in to your account at Cloud Elements</li>
+<li>Once you are logged in to the Cloud Elements, click <strong>My Instances</strong>.
+<img src="img/my-instances.png" alt="Element Mapper Quick Start 2"></li>
+<li>Click <strong>Transformations</strong> for the elment that you want to use.
+<img src="img/transformations.png" alt="Element Mapper Quick Start 3"></li>
+</ol>
+
+<h3 id="create-an-account-object">Create an account object</h3>
+
+<ol>
+<li>Select an Object. We’ll use the Account Object as the example.</li>
+<li>Click <strong>New Object</strong>.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/01/Datamapper18.png" alt="Element Mapper Quick Start 4"></li>
+<li>Name the Object, e.g. “myAccounts”.</li>
+</ol>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> For some elements, you can see the methods associated with a specific object and the direction represent request and response. To see the methods associated with each object, click <b>Display Methods</b> under the resource name. In the example below, the custom fields <b>Key</b> and <b>Value</b> appear only in the <code>POST</code> and <code>PATCH</code> methods, but not <code>GET</code>. </div>
+
+<p><img src="img/display-methods.png" alt="Display Methods"></p>
+
+<h3 id="map-fields-to-the-account-object">Map fields to the account object</h3>
+
+<ol>
+<li>Drag and drop some Fields to map to the object “myAccounts”.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/01/Datamapper21.png" alt="Element Mapper Quick Start 5"></li>
+<li>Click the pencil to edit the object fields.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/01/Datamapper31.png" alt="Element Mapper Quick Start 6"></li>
+<li>Name the field – assign custom value e.g. “myName”.</li>
+<li>(Optional) Select Yes or No to “ignore unmapped” fields.
+
+<ul>
+<li>Yes gives you the flexibility to map only the fields you wish to the object.</li>
+<li>No gives you the option to map the custom fields of your choice and all available fields for the object within the Endpoint (Salesforce in our example).
+<img src="http://cloud-elements.com/wp-content/uploads/2015/01/Datamapper45.png" alt="Element Mapper Quick Start 7"></li>
+</ul></li>
+<li>OR you may click “Add Field” to map fields manually. This option gives you the power to create nested objects – meaning you can create a myAddress Object and map only the fields you wish to add, e.g. BillingStreet, BillingCity, BillingState.
+
+<ul>
+<li>Name the Object e.g. “myAddress”.</li>
+<li>Select type e.g. “object”.</li>
+<li>Name Field to Map e.g. “Address”.</li>
+<li>Click the green check mark to complete the action.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/01/Datamapper53.png" alt="Element Mapper Quick Start 7"></li>
+</ul></li>
+<li>Drag and drop the fields you wish to nest underneath the object.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/01/Datamapper63.png" alt="Element Mapper Quick Start 8"></li>
+<li>Assign values to each of the fields
+
+<ul>
+<li>Name the Object e.g. “myBillingState”.</li>
+<li>Select type e.g. “string”.</li>
+<li>Select Field to Map e.g. “BillingState”.</li>
+<li>Click the green check mark to complete the action.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/01/Datamapper73.png" alt="Element Mapper Quick Start 9"></li>
+</ul></li>
+<li>(Optional) Select the Level you wish to map the transformation with.
+
+<ul>
+<li>Organization = Your Company Level.</li>
+</ul></li>
+<li>Select “Transformation Level”.
+
+<ul>
+<li>Instance Level = Only for one Salesforce Connection.</li>
+<li>Organization Level = Your Company Level.</li>
+<li>Account Level = A customer of your Company.</li>
+</ul></li>
+<li>Click <strong>Save</strong>.</li>
+<li>Click “X”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/01/Datamapper82.png" alt="Element Mapper Quick Start 10"></li>
+</ol>
+
+<h3 id="view-the-object">View the object</h3>
+
+<ol>
+<li>To view your Object, click <strong>Documentation</strong>.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/01/Datamapper14.png" alt="Element Mapper Quick Start 11"></li>
+<li>Scroll down towards the bottom of the window to ” GET /{objectName}” and click the link
+<img src="http://cloud-elements.com/wp-content/uploads/2015/01/Datamapper15.png" alt="Element Mapper Quick Start 12"></li>
+<li>Scroll down to Parameters.</li>
+<li>Input the name of the Object you created, e.g. “myAccounts”.</li>
+<li>Click <strong>Try It Out</strong>.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/01/Datamapper16.png" alt="Element Mapper Quick Start 13"></li>
+<li>View Mapped Objects.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/01/Datamapper92.png" alt="Element Mapper Quick Start 14"></li>
+</ol>
+
+<h5 id="checkpoint">CHECKPOINT</h5>
+
+<p><strong>What we did:</strong></p>
+
+<ul>
+<li>Signed in to Cloud Elements.</li>
+<li>Created an object.</li>
+<li>Mapped fields to the object.</li>
+<li>Viewed the object.</li>
+</ul>
+
+<p>Don’t stop there, keep exploring the other functionality that Element Mapper has to offer by creating more custom objects with different Element Endpoints like HubSpot, QuickBooks and more.</p>
+
+<p>If you have any questions, please contact us at <a href="mailto:support@cloud-elements.com">support@cloud-elements.com</a></p>
+
+<p>We will do our best to get back to you within 24 hours. Your success is our success.</p>
+
+<p>Thanks for reading.</p>
+
+<p>The Cloud Elements Team</p>
+
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/legacy/formulas/examples.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> Formulas </h2>
+          <!-- <h4> View JSON examples of all of the different types of triggers and steps. </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/legacy/formulas/?elementId=">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/formulas/definitions.html?elementId=">Definitions</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/formulas/forumulaSteps.html?elementId=">Formula Step Types</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/formulas/firstFormula.html?elementId=">Build Your First Formula</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/formulas/formulaScopes.html?elementId=">Formula Step Scope</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/formulas/examples.html?elementId=">Examples</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/formulas/faqs.html?elementId=">FAQs</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/formulas/api-documentation.html?elementId=">API Documentation</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <div markdown="span" class="bs-callout bs-callout-info">The documentation in this section is for Cloud Elements 1.0. Find Cloud Elements 2.0 documentation at <a href=../../guides/formulasC2/index.html>Building Formulas</a>.</div>
+
+<h1 id="examples">Examples</h1>
+
+<p>Below are some JSON examples of all of the different types of triggers and steps that are currently available:</p>
+
+<blockquote>
+<p><strong>NOTE:</strong> When creating a formula using the Formula Builder UI, these JSON snippets are abstracted and generated for you.</p>
+</blockquote>
+
+<h1 id="triggers">Triggers</h1>
+
+<h2 id="example-elementrequest-triggers">Example <code>elementRequest</code> triggers:</h2>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"elementRequest"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"elementInstanceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${crm.instance.id}"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"api"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/crm/accounts"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GET"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"step1"</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> The <code>${crm.instance.id}</code> refers to a formula variable that will be assigned to a specific element instance when creating an instance of this formula.</p>
+
+<p><strong>NOTE:</strong> This trigger will listen for calls to <code>GET /hubs/crm/accounts</code> on the <code>${crm.instance.id}</code> element instance and then call the step named <code>step1</code>.</p>
+</blockquote>
+
+<h2 id="example-event-triggers">Example <code>event</code> triggers:</h2>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"event"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"elementInstanceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${crm.instance.id}"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"step1"</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> This trigger will listen for events on the <code>${crm.instance.id}</code> element instance and then call the step named <code>step1</code>.</p>
+</blockquote>
+
+<h2 id="example-scheduled-triggers">Example <code>scheduled</code> triggers:</h2>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scheduled"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"cron"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0 0/60 * 1/1 * ? *"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"step1"</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> Based on the cron string, this trigger will run every hour and will first call the step named <code>step1</code>.</p>
+</blockquote>
+
+<h1 id="steps">Steps</h1>
+
+<h2 id="example-filter-steps">Example <code>filter</code> steps:</h2>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"contact-filter-step"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"filter"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"create-update-filter-step"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"done(trigger.event.objectType.toUpperCase() === 'CONTACT' &amp;&amp; trigger.event.eventType === 'UPDATED');"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> The above script step assumes the trigger for this formula is an <code>event</code> type trigger.</p>
+
+<p><strong>NOTE:</strong> The above filter step passes <code>true</code> to the <code>done</code> callback if the event that triggered this formula execution is based on an event for an updated contact.</p>
+
+<p><strong>NOTE:</strong> The above filter step has no <code>onFailure</code> step(s) defined, therefore it will stop executing if this step passed <code>false</code> into the <code>done</code> callback.</p>
+</blockquote>
+
+<h2 id="example-script-steps">Example <code>script</code> steps:</h2>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"build-email-json"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"script"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"send-email"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"done({ body: { subject: 'Contact Updated', message: 'Contact ' + trigger.event.objectId + ' was updated', to: 'frank.ricard@old-school.com', from: 'joseph-pulaski@old-school.com' } });"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> The above script step assumes the trigger for this formula is an <code>event</code> type trigger.</p>
+
+<p><strong>NOTE:</strong> The above script step constructs a JSON object that is then passed to the step named <code>send-email</code> and is used as the JSON payload to send an email to an element in our messaging hub.</p>
+</blockquote>
+
+<h2 id="example-elementrequest-steps">Example <code>elementRequest</code> steps:</h2>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"send-email"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"elementRequest"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"some-other-step"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+     </span><span class="s2">"elementInstanceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${messaging.instance.id}"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"POST"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"api"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/messaging/messages"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${steps.build-email-json.body}"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> The <code>${messaging.instance.id}</code> refers to a formula variable that will be assigned to a specific element instance when creating an instance of this formula.</p>
+
+<p><strong>NOTE:</strong> The above step makes an API call to the <code>${messaging.instance.id}</code> element instance, using the JSON returned from a previous <code>script</code> step named <code>build-email-json</code>.  See <code>script</code> example above with step named <code>build-email-json</code> for that example.</p>
+</blockquote>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"get-contact"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"elementRequest"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"some-other-step"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+     </span><span class="s2">"elementInstanceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${crm.instance.id}"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GET"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"api"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/crm/contacts/{objectId}"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${trigger.event}"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> There must be a field called <code>objectId</code> in the <code>trigger.event</code> JSON object for the above API call to work.</p>
+</blockquote>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"get-object"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"elementRequest"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"some-other-step"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+     </span><span class="s2">"elementInstanceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${crm.instance.id}"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GET"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"api"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/crm/${config.resource.name}/{objectId}"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${trigger.event}"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> There must be a configured variable called <code>resource.name</code> for the above API call to work.</p>
+
+<p><strong>NOTE:</strong> When context variables, i.e., variables in the configuration, previous steps or int the trigger are used in the <code>api</code> for <code>elementRequest</code> steps, the format of the reference is <code>${&lt;var&gt;}</code>, where <code>&lt;var&gt;</code> is the name of the variable.</p>
+
+<p><strong>NOTE:</strong> There must be a field called <code>objectId</code> in the <code>trigger.event</code> JSON object for the above API call to work.</p>
+</blockquote>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"get-object"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"elementRequest"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"some-other-step"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+     </span><span class="s2">"elementInstanceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${crm.instance.id}"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GET"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"api"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/crm/${config.resource.name}/${trigger.event.objectId}"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> Context variables, including those in the <code>trigger</code> object can be referenced directly in the <code>api</code> without the need to provide these as a map/object in the <code>path</code>. In the above example, the <code>${trigger.event.objectId}</code> can be used instead of what was demonstrated in the previous example.</p>
+</blockquote>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"get-object"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"elementRequest"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"some-other-step"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+     </span><span class="s2">"elementInstanceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${crm.instance.id}"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GET"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"api"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${config.api.uri}"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> The entire <code>api</code> can also be configured as a variable as shown above via the <code>${config.api.uri}</code> variable, which means there is a configuration variable called <code>api.uri</code> that needs to exist.</p>
+</blockquote>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"search-contacts"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"elementRequest"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"some-other-step"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+     </span><span class="s2">"elementInstanceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${crm.instance.id}"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GET"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"api"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/crm/contacts"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"query"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${steps.buildQuery}"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> The above API call will pass any key/values returned from a previous step named <code>buildQuery</code> as query parameters to <code>GET /hubs/crm/contacts</code>.</p>
+</blockquote>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"search-contacts"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"elementRequest"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"some-other-step"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+     </span><span class="s2">"elementInstanceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${crm.instance.id}"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GET"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"api"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/crm/contacts"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"query"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${steps.buildQuery}"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"retry"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"retryAttempts"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"retryDelay"</span><span class="p">:</span><span class="w"> </span><span class="s2">"500"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"retryStatusCodes"</span><span class="p">:</span><span class="w"> </span><span class="s2">"500,502,503"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> The above API call leverages the optional retry properties.  With the above properties, if the API call fails with a <code>500</code>, <code>502</code> or <code>503</code> then we will retry that API call up to 3 times.</p>
+</blockquote>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"search-contacts"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"elementRequest"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"some-other-step"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+     </span><span class="s2">"elementInstanceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${crm.instance.id}"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GET"</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"api"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/crm/contacts?param1=${config.param1.value}"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> Instead of configuring a map via a <code>script</code> step to provide query parameters and values, these can be provided on the URI via configuration variables as demonstrated above via the <code>${config.param1.value}</code> configuration variable. This is <em>not</em> a best practice, i.e., adding query parameters directly to the URI, but can be done if absolutely necessary.</p>
+</blockquote>
+
+<h2 id="example-request-steps">Example <code>request</code> steps:</h2>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"get-instances"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"request"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"some-other-step"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"api"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/instances"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GET"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> These steps will look the same as any <code>elementRequest</code> except they do <em>not</em> need an <code>elementInstanceId</code> property since these API calls are not element instance API calls but instead just calls to one of our platform APIs.</p>
+
+<p><strong>NOTE:</strong> Variables for the <code>api</code> attribute can be used similar to that in the <code>elementRequest</code> step type.</p>
+</blockquote>
+
+<h2 id="example-httprequest-steps">Example <code>httpRequest</code> steps:</h2>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">372</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"some-other-step"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"onFailure"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"some-step-to-handle-failure"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"send-event"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"httpRequest"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"POST"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"query"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
+    </span><span class="s2">"path"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
+    </span><span class="s2">"headers"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
+    </span><span class="s2">"body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${steps.transform-event.response}"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:2222/events"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> The <code>httpRequest</code> step is primarily the same as any <code>request</code> step with the following exceptions.</p>
+
+<ul>
+<li>The <code>url</code> attribute, with a valid <code>HTTP</code> or <code>HTTPS</code> URL, is required.</li>
+</ul>
+
+<p><strong>NOTE:</strong> Variables for the <code>url</code> attribute can be used similar to that in the <code>elementRequest</code> and <code>request</code> step types.</p>
+</blockquote>
+
+<h2 id="example-elementrequeststream-steps">Example <code>elementRequestStream</code> steps:</h2>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">372</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"some-other-step"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"onFailure"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"some-step-to-handle-failure"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bulk-download-upload"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"elementRequestStream"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"downloadElementInstanceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${config.source}"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"downloadMethod"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GET"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"downloadApi"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/crm/bulk/${trigger.args.bulkQueryId}/${config.object.name}"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"downloadQuery"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"downloadHeaders"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"uploadElementInstanceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${config.target}"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"uploadMethod"</span><span class="p">:</span><span class="w"> </span><span class="s2">"POST"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"uploadApi"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/crm/bulk/${config.object.name}"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"uploadHeaders"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"uploadQuery"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"uploadFormData"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${steps.previous-step.targetMetadata}"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"uploadFormDataName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${steps.previous-step.targetMetadataName}"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">372</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"some-other-step"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"onFailure"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"some-step-to-handle-failure"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"move-file"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"elementRequestStream"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"downloadElementInstanceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${config.source}"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"downloadMethod"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GET"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"downloadApi"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/documents/files"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"downloadQuery"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${steps.previous-step.sourceQuery}"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"uploadElementInstanceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${config.target}"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"uploadApi"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/hubs/documents/files"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"uploadMethod"</span><span class="p">:</span><span class="w"> </span><span class="s2">"POST"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"uploadQuery"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${steps.previous-step.targetQuery}"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> The <code>elementRequestStream</code> step is primarily the same as any <code>request</code> step with the following exceptions.</p>
+
+<ul>
+<li>In this step you are outlining two API calls instead of just one. These are separated by using <code>download</code> to refer to the first API that will download the data and <code>upload</code> to refer to the second API call which uploads the data. The response body of the download request is used as the request body of the upload request.</li>
+</ul>
+</blockquote>
+
+<h2 id="example-amqprequest-steps">Example <code>amqpRequest</code> steps:</h2>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">373</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"some-other-step"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"onFailure"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"some-step-to-handle-failure"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"send-amqp-event"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"amqpRequest"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${steps.transform-event.response}"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"amqp://otqaqsml:tPpXwTl7-iMtezRmyJmD-y2U_XbroYpW@jaguar.rmq.cloudamqp.com/otqaqsml"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"exchange"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"queue"</span><span class="p">:</span><span class="w"> </span><span class="s2">"myqueue"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> The <code>amqpRequest</code> uses the <code>AMQP</code> protocol to post a message to an MQ server, e.g., <code>RabbitMQ</code>, etc.</p>
+
+<ul>
+<li>The <code>url</code> parameter is required, and is used to specify the <code>AMQP</code> URL endpoint of the MQ Server. The structure of the URL is as specified in the following documentation - <a href="https://www.rabbitmq.com/uri-spec.html">https://www.rabbitmq.com/uri-spec.html</a></li>
+<li>The <code>exchange</code> parameter is optional, and indicates the name of the MQ server exchange to which the message should be posted.</li>
+<li>The <code>queue</code> attribute is required and indicates the name of queue of the MQ server to which the message should be posted.</li>
+<li>The <code>body</code>, as for the other request types, is the <code>JSON</code> payload to post to the MQ server.</li>
+</ul>
+</blockquote>
+
+<h2 id="example-loop-steps">Example <code>loop</code> steps:</h2>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"configuration"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+      </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sfdc.instance.id"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The SFDC element instance that will trigger this formula."</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"elementInstance"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sfdc.instance.id"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"loop-formula"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"triggers"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+    </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"event"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"elementInstanceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${sfdc.instance.id}"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"create-list"</span><span class="w"> </span><span class="p">]</span><span class="w">
+  </span><span class="p">}],</span><span class="w">
+  </span><span class="s2">"steps"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+      </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"create-list"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"script"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"mimeType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"application/javascript"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"</span><span class="se">\n</span><span class="s2">const list = [];</span><span class="se">\n</span><span class="s2">for (var i = 0; i &lt; 5; i ++) {</span><span class="se">\n</span><span class="s2">  list.push({ name: 'churros-name-' + i, index: i });</span><span class="se">\n</span><span class="s2">}</span><span class="se">\n\n</span><span class="s2">done({ list: list });"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"looper"</span><span class="w"> </span><span class="p">]</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"get-element-by-key"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"request"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GET"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"api"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/elements/sfdc"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"looper"</span><span class="w"> </span><span class="p">]</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"last-step"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"filter"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"mimeType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"application/javascript"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"done(true);"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"looper"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"onFailure"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"last-step"</span><span class="w"> </span><span class="p">],</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"loop"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"list"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${steps.create-list.list}"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"onSuccess"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"get-element-by-key"</span><span class="w"> </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> The above JSON snippet is for an entire formula and not just a loop step, so you can see how steps interact with each other when using a <code>loop</code> step type.</p>
+
+<p><strong>NOTE:</strong> Executes the following steps in a loop. You must provide it with a list of objects to loop over. Set the <code>onSuccess</code> field to the first step in the loop. When you have reached the last step in the loop set the <code>onSuccess</code> field to the loop step, this will restart the loop for the next object. If you need to continue on after the loop is completed, you can set the loop step <code>onFailure</code> to the next step to execute after the loop is completed. For a loop step <code>onFailure</code> is executed when the loop has been executed for all objects in the list.</p>
+
+<p><strong>NOTE:</strong> For a step that is running inside of a loop you can access <code>loopStep.entry</code>, which is the current object in the list you are looping over and <code>loopStep.index</code>, which is the the index of the object in the list.</p>
+</blockquote>
+
+<h3 id="example-formula-step">Example <code>formula</code> step:</h3>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a-sub-formula-step"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"formula"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"formulaId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUB_FORMULA_ID"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> The <code>formulaId</code> property is abstracted in the Formula Builder UI, allowing you to just select the sub-formula by its name.</p>
+
+<p><strong>NOTE:</strong> The <code>onSuccess</code> or <code>onFailure</code> of a <code>formula</code> type step is based around whether the <em>entire</em> sub-formula was successful or failed and not just the final step of the sub-formula.</p>
+
+<p><strong>NOTE:</strong> The step execution values available to your parent formula are based on the <em>last</em> step of that sub-formula.  So whatever values the last step in your sub-formula makes available, those will be available in the parent formula&#39;s context.</p>
+</blockquote>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a-sub-formula-step"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"formula"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"formulaId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUB_FORMULA_ID"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"args"</span><span class="p">:</span><span class="w"> </span><span class="s2">"previous-step.build-args"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"subFormulaConfigs"</span><span class="p">:</span><span class="w"> </span><span class="s2">"previous-step.build-configs"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> The above JSON snippet shows an example of a step leveraging the optional <code>args</code> and <code>subFormulaConfigs</code> properties. Both point to a value that was constructed from a previous step. The args can be accessed in the sub-formula using <code>trigger.args</code>. The subFormulaConfigs can be accessed in the sub-formula using <code>config</code> for example: <code>config.crmInstanceId</code>.</p>
+
+<p><strong>NOTE:</strong> If the sub-formula requires variables to be set, then those variables can either be set in the parent formula instance using the same config names or passed in via the <code>subFormulaConfigs</code> property. All sub-formulas inherit their parent formula&#39;s configuration values. If you pass in the <code>subFormulaConfigs</code> these are added to the list of existing configs from the parent and the sub-formula has access to the parent&#39;s configs and those passed in with the values in <code>subFormulaConfigs</code> taking precedence.</p>
+</blockquote>
+
+<h2 id="example-retryformulaexecution-steps">Example <code>retryFormulaExecution</code> steps:</h2>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"retry"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"retryFormulaExecution"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"retryAttempts"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> The above snippet shows an example of a <code>retryFormulaExecution</code> step. In this example, the formula is set to attempt up to <code>3</code> retries. If the condition that required a formula execution retry, e.g., a service endpoint used by the formula being down for an extended period of time, is resolved between retries, then upon execution retry, the above step will NOT get executed and the formula should complete execution successfully.</p>
+
+<p><strong>NOTE:</strong> The <em>maximum</em> allowable number of retries for a given formula instance execution is <code>5</code>.</p>
+</blockquote>
+
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

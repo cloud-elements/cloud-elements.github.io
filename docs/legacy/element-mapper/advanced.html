@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/legacy/element-mapper/advanced.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> Element Mapper </h2>
+          <!-- <h4> View different advanced examples of Element Mapper in action. </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-mapper/?elementId=">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-mapper/definitions.html?elementId=">Definitions</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-mapper/get-started.html?elementId=">Getting Started</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-mapper/advanced.html?elementId=">Advanced</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-mapper/javascript.html?elementId=">Using Javascript</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-mapper/migrate-objects-and-transformations.html?elementId=">Migrate Object Definitions and Transformations</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-mapper/faqs.html?elementId=">FAQs</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-mapper/api-documentation.html?elementId=">Transformations API Reference</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <div markdown="span" class="bs-callout bs-callout-info">The documentation in this section is for Cloud Elements 1.0. Find Cloud Elements 2.0 documentation at <a href=../../guides/common-resources/index.html>Defining Common Resources & Transformations</a>.</div>
+
+<h1 id="advanced-examples">Advanced Examples</h1>
+
+<p>Below are a handful of advanced examples of leveraging Element Mapper.</p>
+
+<h1 id="create-custom-objects">Create Custom Objects</h1>
+
+<h3 id="my-object">My Object</h3>
+
+<p>Add object definitions to resources like accounts and contacts so they can be mapped to other cloud service applications.</p>
+
+<h4 id="currently-supported-services">Currently Supported Services</h4>
+
+<p>The My Object resource can be used with Elements in all of our Hubs with the exception of Documents and Messaging.</p>
+
+<p>This guide will walk you through the creation of an Object via <a href="#" data-toggle="tooltip" data-original-title="The Cloud Elements user interface that provides access to the features and APIs avalable with Cloud Elements.">Cloud Elements</a> .</p>
+
+<p>Log in to <a href="https://console.cloud-elements.com/elements/jsp/login.jsp">Cloud Elements</a></p>
+
+<p>Click “My Objects”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/06/MyObject1.png" alt="Element Mapper My Object 1"></p>
+
+<p>Click “Add/Edit Object”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/06/MyObject2.png" alt="Element Mapper My Object 2"></p>
+
+<p>Click “New Object”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/06/MyObject3.png" alt="Element Mapper My Object 3"></p>
+
+<p>Name the Object</p>
+
+<p>Select Object Level: Organization will include your company and your customers.</p>
+
+<p>Click “Add Field”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/06/MyObject4.png" alt="Element Mapper My Object 4"></p>
+
+<p>Name your field to map.</p>
+
+<p>Select which data type, e.g. string, number, etc.</p>
+
+<p>Click “green check mark”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/06/MyObject5.png" alt="Element Mapper My Object 5"></p>
+
+<p>Click “Save” when you have finished entering the fields you wish to map to the resource.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/06/MyObject6.png" alt="Element Mapper My Object 6"></p>
+
+<p>Click “X” to close.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/06/MyObject7.png" alt="Element Mapper My Object 7"></p>
+
+<p>Click “My Instances”</p>
+
+<p>Click “Transformations”
+(Salesforce will be used for this demonstration)
+<img src="http://cloud-elements.com/wp-content/uploads/2015/06/MyObject8.png" alt="Element Mapper My Object 8"></p>
+
+<p>Click “My Objects”</p>
+
+<p>Select “MyContact”
+(The object you created earlier in the workflow)
+<img src="http://cloud-elements.com/wp-content/uploads/2015/06/MyObject9.png" alt="Element Mapper My Object 9"></p>
+
+<p>Click the drop down menu on the right.</p>
+
+<p>Select “Contact” from the list of Salesforce resources
+<img src="http://cloud-elements.com/wp-content/uploads/2015/06/MyObject10.png" alt="Element Mapper My Object 10"></p>
+
+<p>Drag and drop the fields you wish to map to Salesforce on top of the fields you created for the object.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/06/MyObject11.png" alt="Element Mapper My Object 11"></p>
+
+<p>Optionally decide whether or not to ignore the unmapped fields from Salesforce.  We will ignore unmapped fields for this demonstration.</p>
+
+<p>Click “Save”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/06/MyObject12.png" alt="Element Mapper My Object 12"></p>
+
+<p>Click “X” to close
+<img src="http://cloud-elements.com/wp-content/uploads/2015/06/MyObject13.png" alt="Element Mapper My Object 13"></p>
+
+<p>Click “Documentation” to open API docs for the Salesforce instance</p>
+
+<p>Scroll down towards the bottom of the list and select “GET /{objectName} to expand the docs.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/06/MyObject14.png" alt="Element Mapper My Object 14"></p>
+
+<p>Input “MyContact” in the objectName field</p>
+
+<p>Click “Try it out!”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/06/MyObject15.png" alt="Element Mapper My Object 15"></p>
+
+<p>View the contact data displaying the fields mapped to that object.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/06/MyObject16.png" alt="Element Mapper My Object 16"></p>
+
+<h1 id="array-support">Array Support</h1>
+
+<h4 id="mapping-arrays-to-flat-fields">Mapping Arrays to Flat Fields</h4>
+
+<p>Regular expressions are now available within an object via Element Mapper.
+These expressions will give you the ability to map an array to a flat field.
+Custom objects can be formatted in JSON, then created via the transformation APIs or via the Element Mapper UI.</p>
+
+<p>The transformations APIs can be found under Platform APIs &gt; Organizations &gt; Create Transformations for Element in Organization of the documentation menu.  Or, log in to the Cloud Elements API Manager and navigate to the API DOCS &gt; Platform APIs &gt; Organizations.</p>
+
+<p>Let’s take a look at an example:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+  "account": {
+    "vendorName": "Account",
+    "fields": [
+      {
+        "path": "AppleIpadName",
+        "vendorPath": "Products[id=4].name" //Get the value of the name field from the Products array where id = 4
+      },
+      {
+        "path": "AppleProductName",
+        "vendorPath": "Products[?(@.id==2)].name" //Get the value of the name field from the Products array where id = 2
+      },
+      {
+        "path": "AppleNewProductName",
+        "vendorPath": "details.Products[?(@.id==2)].name" //Get the details of an object from the Products array where id = 2
+      },
+      {
+        "path": "AppleProductTouchId",
+        "vendorPath": "Products[?(@.id==2)].features.touchId" // Get the touchId value from the Products array with id=2 which is inside the features object
+      },
+      {
+        "path": "AppleTouchProductId",
+        "vendorPath": "Products[?(@.features.touchId==true)].id" //Get the Id of the array where touchId = true
+      },
+      {
+        "path": "AppleProductId",
+        "vendorPath": "Products[0].id" //Id value of the Products array at index 0
+      },
+      {
+        "path": "AppleProductsCount",
+        "vendorPath": "Products[*].size()" //Count of the Products array
+      }
+    ]
+  }
+}
+</code></pre></div>
+<p>Mapping flat fields to an array can also be done via the Element Mapper UI.
+A QuickBooks custom customer will be used. This document assumes a QuickBooks instance has been created. If an instance has not been created, please review the QuickBooks Documentation under Elements &gt; QuickBooks &gt; Endpoint Setup and Create Instance found in the left hand side of the documentation menu.</p>
+
+<p>Log in to <a href="https://console.cloud-elements.com/elements/jsp/login.jsp">Cloud Elements</a>.</p>
+
+<p>Navigate to ‘My Instances’</p>
+
+<p>Navigate to the QuickBooks Instance and select ‘Transformations’ to open the Element Mapper UI
+<img src="http://cloud-elements.com/wp-content/uploads/2015/10/FlatArrays1.png" alt="Element Mapper Array Support 1"></p>
+
+<p>Select ‘customer’ from the dropdown list of objects
+<img src="http://cloud-elements.com/wp-content/uploads/2015/10/FlatArrays2.png" alt="Element Mapper Array Support 2"></p>
+
+<p>Select ‘New Object’
+<img src="http://cloud-elements.com/wp-content/uploads/2015/10/FlatArrays3.png" alt="Element Mapper Array Support 3"></p>
+
+<p>Name the object, myCustomers will be used for this example</p>
+
+<p>Check ‘Yes’ for IGNORE UNMAPPED – this will only display the fields mapped to the myCustomers object. NOTE: A few fields have already been dragged and dropped from the right column for this example.</p>
+
+<p>Click ‘+ Add Field’ A phone number will be added to this object and mapped to an array</p>
+
+<p>Complete the following</p>
+
+<ul>
+<li>Name the field: myPhone</li>
+<li>Select data type: string</li>
+<li>Select the field to map: primaryPhone.freeFormNumber</li>
+</ul>
+
+<p>Click the green check mark to save field</p>
+
+<p>Click ‘Save’ to save the object</p>
+
+<p>Click ‘Try it out’ to see your newly created object
+<img src="http://cloud-elements.com/wp-content/uploads/2015/10/FlatArrays4.png" alt="Element Mapper Array Support 4"></p>
+
+<p>View the transformed object and the original object</p>
+
+<p>The primaryPhone.freeFormNumber field was mapped to the myPhone field – an array mapped to a flat field.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/10/FlatArrays5.png" alt="Element Mapper Array Support 5"></p>
+
+<p>If you have any questions regarding mapping flat fields to an array, please contact <a href="mailto:support@cloud-elements.com">Cloud Elements Support</a>.</p>
+
+<h1 id="transformations-api-usage">Transformations API Usage</h1>
+
+<p>The purpose of the Transformation APIs (Beta) is to give you the option of defining what an object would look like in your app.</p>
+
+<p>The Transformation APIs allow you to:</p>
+
+<ul>
+<li>manage custom object and custom data fields</li>
+<li>map custom data fields to and from the format that your application uses and expects</li>
+<li>programmatically persist and maintain transformations for each of your client’s CRM, Marketing, and Help Desk services</li>
+</ul>
+
+<h4 id="an-important-note-concerning-workflow">An important note concerning workflow:</h4>
+
+<p><strong>The objects referenced in your transform must exist (i.e. have been registered via the process outlined above), before registering the transform. Otherwise the transform registration will fail.
+Below is an example of the Supplemental Address Object defined in Salesforce and SugarCRM, and what it would look like in your application by utilizing the Transformation APIs.</strong></p>
+
+<p>In order to access the Organizations APIs, you must sign up for Cloud Elements Service.  You will need your <strong>Organization</strong> and <strong>User Secrets</strong> to make successful Transformations API calls.  These are generated for you when you sign up for our service.  <strong>Details on how to sign up and where to find your Organization and User Secrets are documented in the next section.</strong>
+<img src="http://cloud-elements.com/wp-content/uploads/2014/10/transformGrahpic1.png" alt="Element Mapper APIs 1"></p>
+
+<h4 id="signup-for-the-cloud-elements-service">Signup for the Cloud Elements Service</h4>
+
+<p>To sign up for the Cloud Elements service, using a web browser, go to: <a href="https://console.cloud-elements.com/elements/jsp/signup.jsp">https://console.cloud-elements.com/elements/jsp/signup.jsp</a>.</p>
+
+<p>You can create a new account with Cloud Elements using the “Sign Up” link shown here, or sign up for Cloud Elements service using your Google or GitHub account. When signing up via GitHub, you must set a public email address in GitHub profile. Screen shots on how to set a public email are below. If you choose not to use GitHub to sign up, you will then be required to validate your new account via a confirmation link that will be sent to your email. You will reset your password to one of your choice after your initial login.
+<img src="http://cloud-elements.com/wp-content/uploads/2014/10/quickGuideSignup.png" alt="CRM Hub Quick Start Guide 3"></p>
+
+<h5 id="setting-a-public-email-in-github">Setting a Public Email in GitHub</h5>
+
+<p>Navigate to your settings in GitHub.
+<img src="http://cloud-elements.com/wp-content/uploads/2014/08/gitHub2.gif" alt="Element Mapper APIs 2"></p>
+
+<p>Type in your public email in the designated field and click “Update Profile”.</p>
+
+<p>All set!</p>
+
+<p>The first step is to sign up for Cloud Elements Service.
+<img src="http://cloud-elements.com/wp-content/uploads/2014/08/gitHub21.gif" alt="Element Mapper APIs 3"></p>
+
+<p>After completing this process, click “Secrets” in the top right corner. Make note of the Org and User secrets as they needed to provision an Element Instance. The Secrets option is available from the top ribbon at all times.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/04/CloudElementsSecrets.png" alt="Element Mapper APIs 4"></p>
+
+<h4 id="how-to-use-the-transformation-apis">How to Use the Transformation APIs</h4>
+
+<p>The first step is to create an object and define its properties. For instance, let’s assume you want your account object to contain the fields ID, First Name, and Last Name. You would define that object with those definitions. Next, create a transformation to map an account object from an endpoint to the account object created for you app. For example, the endpoint’s account object has SID, first<em>name, and last</em>name as its properties. You can map your object to reference the SID as ID, first<em>name as firstName, and last</em>name as lastName.</p>
+
+<p>This document will show examples of how to create, retrieve, and delete an object. Next, examples on how to use the transformation APIs to map endpoint objects to your objects will be shown.</p>
+
+<h5 id="example-object-definition-api-calls">Example Object Definition API Calls</h5>
+
+<p><code>POST /organizations/objects/{objectName}/definitions</code></p>
+
+<p>Create the default object of type {objectName} for an organization.</p>
+
+<p>Below is an example cURL command demonstrating the <code>POST /organizations/objects/{objectName}/definitions</code> API call and successful response.  The <code>-d</code> is the data needed for successful object creation.  This is test data that was created for this demonstration.  Please make sure your quotes are straight in the cURL command.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> POST
+<span class="nt">-H</span> <span class="s1">'Authorization: User , Organization '</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span>
+<span class="nt">-d</span> @account.json
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/organizations/objects/account/definitions'</span>
+</code></pre></div>
+<p>account.json – JSON file needed to create object</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+  "fields": [
+    {
+      "path": "id",
+      "type": "string"
+    }
+  ]
+}
+</code></pre></div>
+<p>Example of Successful Response:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+  "fields": [
+    {
+      "type": "string",
+      "path": "id"
+    }
+  ],
+  "level": "organization"
+}
+</code></pre></div>
+<p><code>GET /organizations/objects/definitions</code></p>
+
+<p>Retrieve all of the object definitions within an organization.</p>
+
+<p>Below is an example cURL command demonstrating the <code>GET /organizations/objects/definitions</code> API call and successful response.  Please make sure your quotes are straight in the cURL command.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> GET
+<span class="nt">-H</span> <span class="s1">'Authorization: User , Organization '</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/organizations/objects/definitions'</span>
+</code></pre></div>
+<p>Example of Successful Response:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+ "account": {
+   "fields": [
+     {
+       "type": "string",
+       "path": "id"
+     }
+   ]
+ },
+ "contact": {
+   "fields": [
+     {
+       "type": "string",
+       "path": "id"
+     }
+   ]
+ },
+ "lead": {
+   "fields": [
+     {
+       "type": "string",
+       "path": "id"
+     }
+   ]
+ },
+ "opportunity": {
+   "fields": [
+     {
+       "type": "string",
+       "path": "id"
+     }
+   ]
+ },
+ "product": {
+   "fields": [
+     {
+       "type": "string",
+       "path": "id"
+     }
+   ]
+ },
+ "incident": {
+   "fields": [
+     {
+       "type": "string",
+       "path": "id"
+     }
+   ]
+ },
+ "user": {
+   "fields": [
+     {
+       "type": "string",
+       "path": "id"
+     }
+   ]
+ },
+ "level": "organization"
+}
+</code></pre></div>
+<p><code>DELETE /organizations/objects/definitions</code></p>
+
+<p>Delete all object definitions within an organization.</p>
+
+<p><strong>NOTE: This API call will delete all of the objects you have defined at the Organization Level. Please be careful.</strong></p>
+
+<p>Below is an example cURL command demonstrating the <code>DELETE /organizations/objects/definitions</code> API call and successful response. Please make sure your quotes are straight in the cURL command.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> DELETE
+<span class="nt">-H</span> <span class="s1">'Authorization: User , Organization '</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/organizations/objects/definitions'</span>
+</code></pre></div>
+<p>Example of Successful Response:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">HTTP 200 on success
+</code></pre></div>
+<p>Transformations allow you to map an endpoint’s object to the custom object that you just created. For example to transform the account object you just created to the endpoint object, you would use the JSON below.</p>
+
+<h5 id="example-transformations-api-calls">Example Transformations API Calls</h5>
+
+<p><code>POST /organizations/elements/{key}/transformations/{objectName}</code></p>
+
+<p>Update the default transformation for an element within an organization. The key field denotes the Element being referenced in the API call, i.e. sfdc (Salesforce).</p>
+
+<p>Below is an example cURL command demonstrating the <code>POST /organizations/elements/{key}/transformations/{objectName}</code>API call and successful response. The <code>-d</code>is the data needed for a successful update of a transformation. This is test data that was created for this demonstration. Please make sure your quotes are straight in the cURL command.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> POST
+<span class="nt">-H</span> <span class="s1">'Authorization: User , Organization '</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type:application/json'</span>
+<span class="nt">-d</span> @posttransform.json
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/organizations/elements/sfdc/transformations/account'</span>
+</code></pre></div>
+<p>createtransform.json: – JSON file needed to update transformation</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+  "vendorName": "Account",
+  "fields": [
+    {
+      "path": "id",
+      "vendorPath": "Id"
+    }
+  ]
+}
+</code></pre></div>
+<p>Example of Successful Response:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+  "level": "organization",
+  "vendorName": "Account",
+  "startDate": "2014-12-12 18:03:32.012321",
+  "fields": [
+    {
+      "path": "id",
+      "vendorPath": "Id"
+    }
+  ]
+}
+</code></pre></div>
+<p><code>GET /organizations/elements/{key}/transformations/{objectName}</code></p>
+
+<p>Retrieve the default transformation for a specific element within an organization. The key field denotes the Element being referenced in the API call, i.e. sfdc (Salesforce).</p>
+
+<p>Below is an example cURL command demonstrating the <code>GET /organizations/elements/{key}/transformations/{objectName}</code> API call and successful response.  Please make sure your quotes are straight in the cURL command.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">-X</span> GET
+<span class="nt">-H</span> <span class="s1">'Authorization: User , Organization '</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type:application/json'</span>
+<span class="s1">'https://api.cloud-elements.com/elements/api-v2/organizations/elements/sfdc/transformations/account'</span>
+</code></pre></div>
+<p>Example of Successful Response:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">{
+  "level": "organization",
+  "vendorName": "Account",
+  "startDate": "2014-12-12 18:03:32.012321",
+  "fields": [
+    {
+      "path": "id",
+      "vendorPath": "Id"
+    }
+  ]
+}
+</code></pre></div>
+<p><code>DELETE /organizations/elements/{key}/transformations/{objectName}</code></p>
+
+<p>Delete the default transformation for an element within an organization. The key field denotes the Element being referenced in the API call, i.e. sfdc (Salesforce).</p>
+
+<p>Below is an example cURL command demonstrating the <code>DELETE /organizations/elements/{key}/transformations/{objectName}</code> API call and successful response. Please make sure your quotes are straight in the cURL command.</p>
+
+<p><code>curl -X DELETE
+-H &#39;Authorization: User , Organization &#39;
+-H &#39;Content-Type:application/json&#39;
+&#39;https://api.cloud-elements.com/elements/api-v2/organizations/elements/sfdc/transformations/account&#39;
+</code></p>
+
+<p>Example of Successful Response:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">HTTP 200 on success
+</code></pre></div>
+<h4 id="support">Support</h4>
+
+<p>If you need any support integrating our APIs, please let us know. You can <a href="mailto:support@cloud-elements.com">email</a> or give us a call at +1.866.830.3456. We will do our best to get back to you within 24 hours. Your success is our success.</p>
+
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

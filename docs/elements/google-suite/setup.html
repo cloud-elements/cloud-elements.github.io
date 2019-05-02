@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/elements/google-suite/setup.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> Google Suite </h2>
+          <!-- <h4> Setup tasks required to authenticate an element instance </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/elements/google-suite/?elementId=5601">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/google-suite/setup.html?elementId=5601">API Provider Setup</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/google-suite/authenticate.html?elementId=5601">Authenticate</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/google-suite/events.html?elementId=5601">Events</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/google-suite/ceql.html?elementId=5601">Querying</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/elements/google-suite/api-documentation.html?elementId=5601">API Docs</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <h1 id="api-provider-setup">API Provider Setup</h1>
+
+<p>To authenticate a Google Suite element instance you must create a project with a web application in the Google API console. After you create the project and app, Google provides a <strong>Client ID</strong> and <strong>Client secret</strong> which you will use to <a href="authenticate.html">authenticate an element instance</a>. You&#39;ll also need the <strong>Authorized redirect URI</strong> that you configure while creating the app.</p>
+
+<p>When you set up your app, you must also enable the following Google APIs:</p>
+
+<ul>
+<li>Google People API</li>
+<li>GMail API</li>
+<li>Google Calendar API</li>
+</ul>
+
+<p>If you&#39;ve already set up an app and just need to know how to find your <strong>Client ID</strong> and <strong>Client secret</strong>, see <a href="#locate-credentials-for-authentication">Locate Credentials for Authentication</a>. If you need to create a project and register an app, see <a href="#create-an-application">Create an Application</a>.</p>
+
+<p>See the latest setup instructions in the <a href="https://support.google.com/googleapi/answer/7015000?hl=en&ref_topic=7014522&authuser=0">Google API documentation</a>.</p>
+
+<div markdown="span" class="bs-callout bs-callout-info"><strong>On this page</strong></br><a href=#locate-credentials-for-authentication>Locate Credentials for Authentication</a></br><a href=#create-an-application>Create an Application</a></div>
+
+<h2 id="locate-credentials-for-authentication">Locate Credentials for Authentication</h2>
+
+<p>If you already created a project and application, follow the steps below to locate the <strong>Client ID</strong>, <strong>Client secret</strong>, and <strong>Authorized redirect URI</strong>. If you have not created an app, see <a href="#create-an-application">Create an Application</a>.</p>
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Your app must have the Google People, Gmail, and Calendar APIs enabled. If they are not, see <a href=#enable-apis>Enable APIs</a> for more information  </div>
+
+<p>To find your OAuth 2.0 credentials:</p>
+
+<ol>
+<li>Log in to your account at <a href="https://console.developers.google.com/apis/dashboard">Google</a>.</li>
+<li><p>Click <strong>Select a project</strong>, choose your project from the list, and then click <strong>Open</strong>.
+<img src="img/select.png" alt="Select Project"></p>
+
+<p>Google displays your apps and associated <strong>Client ID</strong>.</p></li>
+<li><p>Click the pencil icon to see the <strong>Client ID</strong>, <strong>Client secret</strong>, and <strong>Authorized redirect URI</strong>.</p></li>
+<li><p>Record the <strong>Client ID</strong> and <strong>Client secret</strong>.</p></li>
+<li><p>Record the <strong>Authorized redirect URI</strong> for your app.
+<img src="img/sheets-creds-all.png" alt="Key secret and URL"></p></li>
+</ol>
+
+<h2 id="create-an-application">Create an Application</h2>
+
+<p>If you have not already created a project and application, you need one to authenticate with Google. Creating an application is a multi-step process:</p>
+
+<ol>
+<li><a href="#create-a-project">Create a project</a></li>
+<li><a href="#enable-apis">Enable APIs</a></li>
+<li><a href="#create-a-web-application">Create a web application</a></li>
+</ol>
+
+<h3 id="create-a-project">Create a Project</h3>
+
+<p>To create a project:</p>
+
+<ol>
+<li>Log in to your account at <a href="https://console.developers.google.com/apis/dashboard">Google</a>.</li>
+<li>Click <strong>Select a project</strong> and click the <strong>Create Project</strong> button.
+<img src="img/create-project.png" alt="Create Project"></li>
+<li>Accept the terms of service.</li>
+<li>Complete the required information (Project Name, email updates, and the Terms of Service).</li>
+<li>Click <strong>Create</strong>.
+<img src="img/new-project.png" alt="New Project"></li>
+</ol>
+
+<h3 id="enable-apis">Enable APIs</h3>
+
+<p>To make all of the requests available in the Google Suite element, you must enable the following APIs</p>
+
+<ul>
+<li>Google People API</li>
+<li>GMail API</li>
+<li>Google Calendar API</li>
+</ul>
+
+<p>To enable APIs:</p>
+
+<ol>
+<li>Select the project that you just created</li>
+<li>Click <strong>Enable APIs and Services</strong>.
+<img src="img/enable.png" alt="Enable APIs"></li>
+<li>Search for and enable the Google People API, GMail API, and Google Calendar API.
+<img src="img/search.png" alt="Search"></li>
+</ol>
+
+<h3 id="create-a-web-application">Create a Web Application</h3>
+
+<ol>
+<li>Click <strong>Credentials</strong> on the left menu.
+<img src="img/creds.png" alt="Credentials"></li>
+<li>Click the <strong>OAuth consent screen</strong> tab.</li>
+<li>Enter a Product Name and add any optional information, and then click <strong>Save</strong>.
+<img src="img/consent.png" alt="Consent"></li>
+<li>Click <strong>Create Credentials</strong>, and then select <strong>OAuth Client ID</strong>.
+<img src="img/oauth-client.png" alt="Credentials"></li>
+<li>Select <strong>Web application</strong> as the Application type.</li>
+<li>Enter a <strong>Name</strong> and the <strong>Authorized redirect URI</strong> for your app. Record this as the OAuth Callback URL that you will need to authenticate.
+<img src="img/client-id-page.png" alt="Client ID Page"></li>
+<li>Click <strong>Create</strong>.</li>
+<li>Record the <strong>Client ID</strong> and <strong>Client secret</strong> to use when you authenticate.
+<img src="img/sheets-creds.png" alt="Key Secret and URL"></li>
+</ol>
+
+<p>Next <a href="authenticate.html">authenticate an element instance with Google Suite</a>.</p>
+
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>

@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Cloud Elements is an API Integration Platform built for application developers and API publishers">
+  <meta name="keywords" content="Cloud Elements, API Documentation, API Integration Platform, API Integration, API Management, Integration Tools">
+  <meta name="author" content="Cloud Elements">
+  <meta name="google-site-verification" content="RCqiEIyEbmcYtLZRYMOejbAaMr4EhW9jkorS6AbdJ_k" />
+  <title>Developer Portal | Cloud Elements</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,400italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+  <link href="/assets/css/toolkit-light.css" rel="stylesheet">
+  <link href="/assets/css/docs.css" rel="stylesheet">
+  <link href="/assets/css/application.css" rel="stylesheet">
+  <link href="/assets/css/custom-styles.css" rel="stylesheet">
+  <link rel="canonical" href="https://developers.cloud-elements.com/docs/legacy/element-builder/create-via-element-builder-ui.html">
+  <!-- <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/> -->
+  <!-- <link href="/assets/css/elementDocs.css" rel="stylesheet"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/manifest.json">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+  <style>
+  /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+  /* this chunk of css is not part of the toolkit :) */
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  </style>
+</head>
+
+<body class="with-top-navbar">
+  <!-- Main Nav -->
+<!-- Include the aloglia light search client from jsdelivr-->
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script type="text/javascript">
+  let client = algoliasearch('G8W6UO94HX', 'f8dafac4c9e969eecadf7f97f8d3f15f');
+  let index = client.initIndex('developer_portal_pages');
+  let results;
+  function executeSearch(){
+    let resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = '';
+    let searchTerm = document.getElementById('searchBox').value;
+    // Only execute the search if the user has entered at least 3 characters
+    if(searchTerm.length >= 3){
+      index.search(searchTerm, function searchDone(err, content) {
+        // Loop through the results returned by aloglia
+        console.log(content);
+        content.hits.forEach(element => {
+          let listItem = document.createElement('li');
+          listItem.setAttribute("class", "resultsItem");
+          listItem.innerHTML =
+            listItem.innerHTML + '<a class=\'resultItemLink\' href='+element.url+'>' + element.heading + ' | ' + element.title + '</a>' + '<br/>' + element._snippetResult.text.value;
+          resultsList.appendChild(listItem);
+        })
+      });
+      $(".searchResultsContainerActive").click(function(e){
+        console.log("was clicked");
+        console.log(e.target);
+        if($(e.target).is("a") || $(e.target).is("div[id='resultsContainer']")){
+          let resultsList = document.getElementById('resultsList');
+          $(resultsList).empty();
+          $("#searchBox").val("");
+          document.getElementById("resultsContainer").className = "searchResultsContainer";
+        }
+      })
+    }
+    if(searchTerm.length >= 3){
+      document.getElementById("resultsContainer").className = "searchResultsContainerActive";
+    }
+    else{
+      document.getElementById("resultsContainer").className = "searchResultsContainer";
+    }
+  }
+</script>
+<link href="/assets/css/navbar.css" rel="stylesheet">
+<nav class="nav navbar navbar-light navbar-fixed-top">
+  <div class="container-fluid navbar-wraper">
+    <div class="navbar-header col-md-2">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand navbar-brand-emphasized" href="http://cloud-elements.com/">
+        <img src="/assets/img/cloud-elements-logo.png" alt="Cloud Elements Logo" />
+      </a>
+    </div>
+    <div class="searchBoxContainer col-md-4 hidden-sm hidden-xs">
+      <div class="searchBoxWrapper">
+        <input
+          id="searchBox"
+          class="searchBox"
+          type="text"
+          placeholder="Search the docs..."
+          onkeyup="executeSearch()"
+          autocomplete="off"
+        >
+        <span class="icon icon-magnifying-glass"></span>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse col-md-6 float-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="http://status.cloud-elements.com/">Status</a>
+        </li>
+        <li>
+          <a href="https://support.cloud-elements.com/hc/en-us">Support</a>
+        </li>
+        <li>
+          <a href="https://offers.cloud-elements.com/cloud-elements-free-trial-sign-up" target="_blank">
+          <button type="button" class="btn btn-lg btn-danger try-it">Try it For Free! <i class="fa fa-caret-right"></i></button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="searchResultsContainer" id='resultsContainer'>
+    <div class="leftPadding col-md-3"> </div>
+    <div class="resultsWrapper col-md-6">
+      <ul id="resultsList">
+
+      </ul>
+    </div>
+    <div class="rightPadding col-md-3"></div>
+  </div>
+  <script>
+    // $(document).ready(function(){
+    //   console.log('its ready');
+
+    // })
+  </script>
+</nav>
+<!-- END Main Nav -->
+
+
+  <div class="container-fluid pageContainer">
+    <div class="col-md-3 sidebar">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+<link href="/assets/css/release-notes.css" rel="stylesheet">
+<script type="text/javascript">
+  let currentSelection="";
+  // Initialize the expanded menu
+  function setCurrentSelection(selection){
+    currentSelection = selection;
+    document.getElementById(selection).className = "accordionListActive";
+  }
+  // Accordion List toggle
+  function selectAccordion(selection) {
+    if(currentSelection != ""){
+      document.getElementById(currentSelection).className = "accordionList";
+    }
+    document.getElementById(selection).className = "accordionListActive";
+    currentSelection = selection;
+  }
+</script>
+<div class="sidebarWrapper" id="sidebarWrapper">
+</div>
+<!-- This section loads in the accordion menu from the sitemap.html file
+     Its too expensive to build the site map for each page in the portal -->
+<script>
+  $(window).on('load',(e) => {
+    // Pull in the liquid generated sitemap
+    $("#sidebarWrapper").load("/docs/sitemap.html", () =>{
+      let pathWithQuery = `${window.location.pathname}${window.location.search}`;
+      // Expand the current high level accordion
+      let highLevelId = $(`a[href*='${pathWithQuery}']`).closest(`[class*='accordionList']`).attr("id");
+      if(highLevelId) setCurrentSelection(highLevelId);
+      // Expand the lower level heading
+      let currentSelection = $(`a[href*='${pathWithQuery}']`).closest('ul').find('.subItem');
+      if(currentSelection) currentSelection.attr('class', 'subItemActive');
+      // Create a click listener for sub items
+      // Accordion operations
+      $(".subHeading").click(function() {
+        let selection = $(this).parent().find(".subItem");
+        selection.attr('class', 'subItemActive');
+        if(currentSelection) currentSelection.attr('class', 'subItem');
+        currentSelection = selection;
+      });
+
+
+      // Initialized the highlighting wrapper
+      $(`.sidebarWrapper a[href='${pathWithQuery}']`).addClass("activeAccordionLink");
+      //Create Click listener for the links
+      $(".sidebarWrapper a").click((e)=> {
+        $(".activeAccordionLink").removeClass("activeAccordionLink");
+        $(e.target).addClass("activeAccordionLink");
+      })
+    });
+  });
+</script>
+
+    </div>
+    <div class="col-md-9 contentWrapper elementDocContentWrapper">
+      <link href="/api-docs/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/elementDocs.css" rel="stylesheet">
+      <div class="container-fluid">
+        <div class="pageHeading">
+          <h2> Element Builder </h2>
+          <!-- <h4> Create a new Element via the Element Builder UI. </h4> -->
+        </div>
+        <div class="pageTabs">
+          
+          
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/?elementId=">Overview</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/create-via-api.html?elementId=">Create Element via API</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/create-via-element-builder-ui.html?elementId=">Create Element via Element Builder UI</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/enhance-existing-elements.html?elementId=">Enhance Element via Element Builder UI</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/create-database-element.html?elementId=">Create Database Element</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/element-builder-authorization-types.html?elementId=">Authorization Types</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/element-builder-hooks.html?elementId=">Hooks</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/element-builder-api-debugging.html?elementId=">API Debugging</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/tips.html?elementId=">Tips</a>
+          </div>
+          
+          <div class="tab">
+            <a href="/docs/legacy/element-builder/api-documentation.html?elementId=">Platform Documentation</a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="elementDocContent">
+        <h2 id="element-builder-ui-beta">Element Builder UI BETA</h2>
+
+<p>Element Builder gives you the ability to create custom integrations to cloud services using the Cloud Elements API Management Platform.</p>
+
+<p>Twitter will be used for this demonstration.  A new Twitter connected app must be created prior to building the Element.</p>
+
+<p>Cloud Elements strongly recommends researching the endpoint prior to starting any work in Element Builder.  It is important to answer the following questions about an endpoint:</p>
+
+<ul>
+<li>Is there public API Documentation?</li>
+<li>Is the public API REST?</li>
+<li>Does the endpoint require a connected app with an API key and secret be created?</li>
+<li>What type of Authentication is expected (Basic, OAuth 1, OAuth 2)?</li>
+<li>Does the endpoint support search by last updated date or have webhook support for events?</li>
+</ul>
+
+<p>Prior to beginning work, research was done on the Twitter API.  The following was discovered:</p>
+
+<ul>
+<li>Twitter API Documentation: <a href="https://dev.twitter.com/overview/documentation">https://dev.twitter.com/overview/documentation</a></li>
+<li>API is REST</li>
+<li>Connected app required to connect to the endpoint</li>
+<li>Authentication Type: <strong>OAuth 1.0a</strong></li>
+<li>Twitter does support search by last date updated</li>
+</ul>
+
+<p>The Twitter API is well documented with example calls of authentication, each entity/resource, and even code samples.  This is not always the case with every endpoint.</p>
+
+<p>Let’s get started with the construction of the Twitter Element by first creating a new Twitter connected app.</p>
+
+<p>Follow these steps to set up a Twitter application with the endpoint.</p>
+
+<p>Via a web browser, go to <a href="https://apps.twitter.com/">https://apps.twitter.com/</a>.</p>
+
+<ol>
+<li><p>Click “Create application”.</p></li>
+<li><p>Enter you callback URL. For this example, let’s assume that the URL for your application is: <code>https://www.mycoolapp.com/oauth</code>
+<img src="/assets/img/element-builder/twitter-connected-app-1.png" alt="Twitter Connected App step 1"></p></li>
+<li><p>Click “Yes, I agree”.</p></li>
+<li><p>Click “Create your Twitter application”.
+<img src="/assets/img/element-builder/twitter-connected-app-2.png" alt="Twitter Connected App step 2"></p></li>
+<li><p>Click “Keys and Access Tokens”.</p></li>
+<li><p>Copy “API Key”.</p></li>
+<li><p>Copy “API Secret”.
+<img src="/assets/img/element-builder/twitter-connected-app-3.png" alt="Twitter Connected App step 3"></p></li>
+</ol>
+
+<p>The next step is to log in to the <a href="https://console.cloud-elements.com/elements/jsp/login.jsp">Cloud Elements API Manager</a> and begin building the Twitter Element.</p>
+
+<h4 id="create-new-elements">Create New elements</h4>
+
+<p>Log in to the <a href="https://console.cloud-elements.com/elements/jsp/login.jsp">Cloud Elements API Manager</a></p>
+
+<p>Click “Elements Builder”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Info1.png" alt="Element Builder Info 1"></p>
+
+<p>Click “Build Element”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Info2.png" alt="Element Builder Info 2"></p>
+
+<h4 id="info-tab">Info Tab</h4>
+
+<p>Select a Hub e.g. Social
+Hubs map resources from a collection of endpoints (What we call Elements) into a uniform set of APIs.
+Add a new hub from the dropdown menu to create a new collection if our defaults do not meet your needs.</p>
+
+<p>Name of the new Element, e.g. Twitter or My Twitter Element</p>
+
+<p>Add a description for the new Element.
+e.g. Add a Twitter Instance to connect your existing Twitter account to the Social Hub, allowing you to manage your statuses, pictures, etc. across multiple Social Elements. You will need your Twitter account information to add an instance.</p>
+
+<p>Add a URL to an image or logo to represent the new Element.</p>
+
+<p>Select the type of authentication the endpoint expects. The four types supported by Cloud Elements are Basic, OAuth 1, OAuth 2, and Custom.
+* <strong>Basic</strong> is a type of authentication where an enduser provides a username and password. It is not always the username and password, some endpoints ask for the API key and secret without disclosing the enduser’s credentials.
+* The <strong>OAuth 1</strong> protocol enables authentication to the endpoint without requiring users to expose their credentials. OAuth 1 is a 3 step authentication process. It is an older protocol. The OAuth 1 protocol involves signing the payload on every request and thus is used by many financial services.
+* <strong>OAuth 2</strong> authentication is a newer two step process employed by many of the today’s modern cloud services like Google.
+* <strong>Custom</strong> authentication is completely user defined, such as a username and password exchanged for an API key with some type of expiration involved.</p>
+
+<p>Click “Next”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Info3.png" alt="Element Builder Info 3"></p>
+
+<h4 id="configuration-tab">Configuration Tab</h4>
+
+<p>Add the base URL to the endpoint.  The base URL is the endpoint where all API requests will be sent, e.g. <code>https://api.twitter.com/1.1</code>.
+The Base URL can be found in most endpoint API Documentation within the Overview, Authentication, or Resources/Entities sections.
+The Twitter Base URL can be found in the Resources/Entities section.</p>
+
+<p>Select the page size, e.g. 100 objects per page.</p>
+
+<p>Select the paging type.
+Page is the default, but Offset is available to view portions of data, as well as, Cursor to move through large data sets.</p>
+
+<p>Input the OAuth Authorization URL
+Most endpoints have this information in the Authentication section of the API Documentation.
+Twitter’s OAuth Authorization URL can be found at <a href="https://dev.twitter.com/oauth/reference/get/oauth/authorize">https://dev.twitter.com/oauth/reference/get/oauth/authorize</a>.</p>
+
+<p>Input the OAuth API Key
+The API Key is generated when the connected app is created.</p>
+
+<p>Input the OAuth API Secret
+The API Secret is generated when the connected app is created.</p>
+
+<p>Input the OAuth Callback URL
+The same callback URL used when the connected app was created. In our example: <code>https://www.mycoolapp.com/oauth</code>.</p>
+
+<p>Input the OAuth Token URL
+Most endpoints have this information in the Authentication section of the API Documentation.
+Twitter’s OAuth Token URL can be found at <a href="https://dev.twitter.com/oauth/reference/post/oauth/access_token">https://dev.twitter.com/oauth/reference/post/oauth/access_token</a>.</p>
+
+<p>Input the OAuth Scope (Optional)
+Some endpoints require read and write privileges to objects. This information can be found in the Authentication section of most endpoint API documentation.</p>
+
+<p>Input the OAuth Token URL
+Most endpoints have this information in the Authentication section of the API Documentation.
+Twitter’s OAuth Token URL can be found at <a href="https://dev.twitter.com/oauth/reference/post/oauth/request_token">https://dev.twitter.com/oauth/reference/post/oauth/request_token</a>.</p>
+
+<p>Select the OAuth Request Authorization Type
+Cloud Elements supports two types: Query and Header
+Query will send the request in the URL path, while Header will send the request as a header.</p>
+
+<p>Select the Accept Header and the Content Type Header
+Cloud Elements supports two types: JSON and XML.
+Please select the type the endpoint expects. In our example, Twitter expects JSON payloads.</p>
+
+<p>Click “Next”</p>
+
+<p>Configurations, Parameters, and Hooks will not be covered in this guide as Twitter does not require any beyond the defaults provided by Element Builder.</p>
+
+<p>However, here are some definitions:</p>
+
+<ul>
+<li><strong>Configuration</strong>: A value which is stored when a connection to the endpoint is created. This value is populated via user input and will be used when invoking the API, e.g. an api<em>key and api</em>secret.</li>
+<li><strong>Parameter</strong>: A globally defined value that will apply to all API calls. Parameters can be sent as a header, path, query, body.</li>
+<li><strong>Hooks</strong>: Pre-Hook: Action you wish to execute prior to sending API calls e.g. manipulating or adding data (query, header, path, body, configuration).
+Post-Hook: Modify the response data (body, header, configuration) on the return call from the endpoint.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Configuration1.png" alt="Element Builder Configuration 1"></li>
+</ul>
+
+<h4 id="instance-tab">Instance Tab</h4>
+
+<p>Test the connection to the endpoint by creating an instance.</p>
+
+<p>Input a name for the instance, e.g. Test</p>
+
+<p>Click “Create Instance”</p>
+
+<p>In our example, this will take us through the Twitter OAuth 1.0a workflow.  A login screen will be presented, credentials inputted, and authorization of the app granting permission to the Twitter user profile.</p>
+
+<p>Click “Next”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Instance1.png" alt="Element Builder Instance 1"></p>
+
+<h4 id="resources-tab">Resources Tab</h4>
+
+<p>Add entities/resources to your Element within the Resources Tab.  Resources will need an HTTP verb like POST, GET, PATCH, PUT, or DELETE associated with it.  If the Element being created can be identified with one of Cloud Elements current hubs, pre-built resources can be used to get started in mapping out resources.</p>
+
+<p>We will begin adding a resource from one of the pre-built items available since we added Twitter to the Social Hub.  Once we complete adding that resource, we will add one from scratch.</p>
+
+<h5 id="adding-a-resource-from-cloud-elements-pre-built-api-calls">ADDING A RESOURCE FROM CLOUD ELEMENTS PRE-BUILT API CALLS</h5>
+
+<p>The endpoint API documentation will be needed to find out the following:</p>
+
+<ul>
+<li>vendor path of the resource</li>
+<li>HTTP verb</li>
+<li>JSON payload if applicable</li>
+</ul>
+
+<p>In our example, Twitter was placed within the Social hub.  There are 5 pre-built resources available.  See screenshot.</p>
+
+<p>To add a pre-built resource click the “arrow” and the resource will be added.  In our example, we will add the GET /users resource from the pre-built list.</p>
+
+<p>Click the arrow in the GET /users resource
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Resource1.png" alt="Element Builder Resources 1"></p>
+
+<p>The pre-built GET /users API call will have some fields already populated.  In order to complete the resource fields, the endpoint documentation will be needed.</p>
+
+<p>In our example, Twitter provides API documentation for the GET /users/search resource here:  <a href="https://dev.twitter.com/rest/reference/get/users/search">https://dev.twitter.com/rest/reference/get/users/search</a></p>
+
+<p>The Twitter documentation reveals the vendor path to the resource:
+<code>https://api.twitter.com/1.1/users/search.json</code></p>
+
+<p>Since the base URL was inputted on the Configuration Tab, only the <code>/users/search.json</code> is needed.</p>
+
+<p>Select the “Type” , e.g. API as we are adding an API</p>
+
+<p>Input <code>/users/search.json</code> in the “Vendor Path” field</p>
+
+<p>The method and description have been populated as well.  We will touch on these when we add a resource from scratch in the next section.</p>
+
+<p>The parameters will need to be added next.  A parameter must be defined on the Cloud Elements side and the vendor side.  For example, in our GET /users API call, the pageSize will be what Cloud Elements expects.  Twitter expects count instead of pageSize.  We reflect these name variations within the parameter fields.  Let’s take a look at this example in the Element Builder UI.</p>
+
+<p>The column on the left is what Cloud Elements expects.  The column on the right is what the endpoint expects, in this case, Twitter.  Let’s take a look at the fields:</p>
+
+<ul>
+<li><strong>Name:</strong> Cloud Elements uses pageSize when getting the number of records on a page.</li>
+<li><strong>Vendor Name:</strong> What the endpoint expects.  In our example, Twitter refers to “count” as the number of records on a page.</li>
+<li><strong>Type:</strong> Query – Cloud Elements is sending the endpoint a query request.</li>
+<li><strong>Vendor Type:</strong> Query – the endpoint expects a query search in this API call.</li>
+<li><strong>Data Type:</strong> Integer – the data type (string, integer, etc)</li>
+<li><strong>Vendor Data Type:</strong> Integer – data type the endpoint expects</li>
+<li><strong>Parameter Source:</strong> Request – the request is coming from Cloud Elements to the endpoint.  The reverse is also possible, Cloud Elements receives a response from the endpoint.  In our example, we are sending a <code>GET</code> request to Twitter.</li>
+<li><strong>Is it Required?:</strong>  If the endpoint expects this parameter on every API call, select “yes”.  If it is optional, select “no”.</li>
+<li><strong>Description:</strong>  input a description of the parameter, e.g. the number of objects to be returned.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/TwitterParameter1.png" alt="Element Builder Resources 2"></li>
+</ul>
+
+<p>Click “Add Parameter”</p>
+
+<p>Populate the parameter with the data above</p>
+
+<p>Click “Done”</p>
+
+<p>The information required for the vendor fields was found in Twitter’s API documentation: <a href="https://dev.twitter.com/rest/reference/get/users/search">https://dev.twitter.com/rest/reference/get/users/search</a>.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/TwitterParameter.png" alt="Element Builder Resources 3"></p>
+
+<p>Cloud Elements supports the following parameter types:</p>
+
+<p>Configuration: value that has been saved to the instance
+Header: value to be added in the header of the API request
+Path: value to be added to the URL of the API request
+Body: value to be sent with as data such as a JSON payload with the API request
+Query: query request
+Form: needed when multiple items must be sent in parts such as an ID, followed by the body
+Multipart: needed when performing a file upload
+Value: an exact value to be sent with the API request
+Body Field: field sent in the body of the request
+Body Token: token sent in the body of the request</p>
+
+<p>Let’s add the other two parameters needed to complete the GET /users API call: page and where.  These three parameters are needed by Cloud Elements to properly make a GET request on a resource.  We’ll use the Twitter API documentation once again to complete the parameters.</p>
+
+<p>Let’s begin with the page parameter.</p>
+
+<p>Click “Add Parameter”</p>
+
+<p>Input each of the fields:
+* <strong>Name:</strong> page
+* <strong>Vendor Name:</strong> page – taken from the Twitter documentation
+* <strong>Type:</strong> Query
+* <strong>Vendor Type:</strong> Query
+* <strong>Data Type:</strong> integer
+* <strong>Vendor Data Type:</strong> integer – taken from the Twitter documentation
+* <strong>Parameter Source:</strong> request – Cloud Elements is making the request
+* <strong>Is it Required?:</strong> No – according the Twitter documentation it is optional
+* <strong>Description:</strong> Specifies the page of results to retrieve.</p>
+
+<p>Click “Done”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/TwitterParameter2.png" alt="Element Builder Resources 4"></p>
+
+<p>One pre-built parameters were included in the GET /users call.  The vendor fields must be completed.</p>
+
+<p>Under “where” click “Edit”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/TwitterParameter3.png" alt="Element Builder Resources 5"></p>
+
+<p>Input each of the vendor fields:
+* <strong>Vendor Name:</strong> converter:toQueryParameters – this is to convert the call from the Cloud Elements Query Language (CEQL) to a vendor query
+* <strong>Vendor Type:</strong> Query
+* <strong>Vendor Data Type:</strong> string – taken from the Twitter documentation
+* <strong>Parameter Source:</strong> request – Cloud Elements is making the request
+Is it Required?: Yes – according the Twitter documentation it is required
+* <strong>Description:</strong> The CEQL search expression. The only valid field to search by is ‘q’ which represents the users’ username</p>
+
+<p>Click “Done”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/TwitterParameter4.png" alt="Element Builder Resources 6"></p>
+
+<p>Test out the newly created API by clicking “Try it out”</p>
+
+<p>This action will open a sliding panel displaying the newly created API call.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/TryItOut1.png" alt="Element Builder Resources 7"></p>
+
+<p>In the ‘where’ field, input ‘q=”jonsmith”‘
+The q=’username’ is the format in which Twitter expects query requests.  Information taken again from the endpoint’s API documentation.</p>
+
+<p>Click “Try it out!”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/TryItOut2.png" alt="Element Builder Resources 8"></p>
+
+<p>This action will execute the API call.  The column on the right will show you information regarding the vendor request – what Cloud Elements sends to the endpoint.  This is very helpful when trying to debug an API call.
+The column on the right displays the object returned from the executed API call.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/TryItOut3.png" alt="Element Builder Resources 9"></p>
+
+<h5 id="adding-a-resource-from-scratch">ADDING A RESOURCE FROM SCRATCH</h5>
+
+<p>Adding a resource from scratch is very similar to using one of Cloud Elements pre-built resources with the exception of completing a few more fields.</p>
+
+<p>For this example, the POST /statuses resource will be added to our Twitter Element, otherwise known as tweeting.  The API documentation will be needed found here: <a href="https://dev.twitter.com/rest/reference/post/statuses/update">https://dev.twitter.com/rest/reference/post/statuses/update</a>.</p>
+
+<p>Looking at the API documentation, the tweet must be sent as JSON in the form of a query within the URL.  The only required parameter is ‘status’.  This parameter will be added, however the other optional parameters will not for this demonstration.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/TwitterParameterPOST.png" alt="Element Builder Resources 10"></p>
+
+<p>Click “+ Add”</p>
+
+<p>Select the Resource Type, e.g. “API”</p>
+
+<p>Input the Path: <code>/hubs/social/statuses</code></p>
+
+<p>Input the Vendor Path: <code>/statuses/update.json</code> – taken from the Twitter API documentation</p>
+
+<p>Input the Method: <code>POST</code></p>
+
+<p>Input the Vendor Method: <code>POST</code></p>
+
+<p>Input the Description – what your users will see when they view the API documentation, e.g. “Create a new status for your profile”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/AddResource1.png" alt="Element Builder Resources 12"></p>
+
+<p>Click “Add Parameter”</p>
+
+<p>Input the Parameter Fields:
+* <strong>Name:</strong> status
+* <strong>Vendor Name:</strong> status
+* <strong>Type:</strong> Query
+* <strong>Vendor Type:</strong> Query
+* <strong>Data Type:</strong> string
+* <strong>Vendor Data Type:</strong> string
+* <strong>Parameter Source:</strong> Request
+* <strong>Is it Required:</strong> Yes
+* <strong>Description:</strong> The text of your status update</p>
+
+<p>Click “Done”</p>
+
+<p>Click “Try it out” and test the new resource
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/AddResource2.png" alt="Element Builder Resources 12"></p>
+
+<p>Input a Tweet</p>
+
+<p>Click “Try it out!”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/AddResource3.png" alt="Element Builder Resources 13"></p>
+
+<p>View the response</p>
+
+<p>Again, this screen can be used to inspect and debug requests and hooks.</p>
+
+<p>To add more resources, repeat the steps outlined above.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/AddResource4.png" alt="Element Builder Resources 13"></p>
+
+<h4 id="addendum-models-tab">ADDENDUM:  Models Tab</h4>
+
+<p>The Models Tab is an additional feature with some <strong>optional functionality</strong> to make resource creation more streamlined.</p>
+
+<p><strong>NOTE:</strong>  This functionality is only available for endpoints with JSON payloads.  SOAP endpoints or endpoints with XML payloads are not currently supported.</p>
+
+<p>The Freshdesk endpoint will be referenced in this portion of the documentation.</p>
+
+<p>The Models Tab allows the user to build resource models via customization, as well as, an import function.</p>
+
+<p>We will take a look at the Freshdesk Company endpoint which we will map to the Account resource.</p>
+
+<p>A review of the Freshdesk API documentation is needed prior to making any changes to the resource.  The docs can be found here:  <a href="https://developer.freshdesk.com/api/#view_company">https://developer.freshdesk.com/api/#view_company</a></p>
+
+<h5 id="model-customization">MODEL CUSTOMIZATION</h5>
+
+<p>Click on the Models Tab.  If you have any unsaved progress, an alert will appear asking if you want to save your changes.</p>
+
+<p>The current list of API resources will render.</p>
+
+<p>Select a model to edit.  In our example, we will be viewing the GET /accounts resource.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsCustomize1.png" alt="Element Builder Models 1"></p>
+
+<p>Looking at the “updated_at” field, we can see the value is a date.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsCustomize2.png" alt="Element Builder Models 2"></p>
+
+<p>In our model, the data type is set to string.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsCustomize3.png" alt="Element Builder Models 3"></p>
+
+<p>This can be modified within the code editor.</p>
+
+<p>Change “type” to “date”</p>
+
+<p>Click “Save Model” to update the resource
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsCustomize4.png" alt="Element Builder Models 4"></p>
+
+<h5 id="import-models">IMPORT MODELS</h5>
+
+<p>To import a model, head to the endpoint API documentation.  Navigate to the desired resource and locate the example response.</p>
+
+<p>Copy the response payload.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsImport1.png" alt="Element Builder Models 5"></p>
+
+<p>Select the resource in the list: GET /accounts</p>
+
+<p>Click “Generate from Payload”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsImport2.png" alt="Element Builder Models 6"></p>
+
+<p>Paste in the model</p>
+
+<p>Click “Generate Model”</p>
+
+<p>The model is now built. If you wish to make any changes, they can be made right in the code editor panel. Just remember to save your changes.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/EBModelsImport3.png" alt="Element Builder Models 7"></p>
+
+<h4 id="events-tab">Events Tab</h4>
+
+<p>Events:  Cloud Elements currently supports building integrations with polling or webhooks capability.  Polling is a mechanism where Cloud Elements executes the configured query every <strong>n minutes</strong> and capture the changed information.  Webhooks are when the provider lets Cloud Elements know what information has changed.</p>
+
+<p><strong>Polling:</strong>  In order to enable polling, the endpoint must support querying an object by last updated date.</p>
+
+<p><strong>Webhooks:</strong> In order to enable webhooks, the endpoint must support them.  Note additional endpoint setup may be required prior to creating your Element.  An event hook script must be defined that transforms the inbound event data to a format that Cloud Elements supports.</p>
+
+<p>Twitter supports a create<em>at field.  However, they do not support an updated</em>at field.  Since the updated_at field is not supported, polling will occur on objects created since a certain day and time.</p>
+
+<p>Let’s take a look at an example.</p>
+
+<p>Partial JSON payload of Twitter <code>GET /users resource</code>:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">[
+  {
+    "profile_sidebar_fill_color": "DDEEF6",
+    "profile_background_tile": true,
+    "profile_sidebar_border_color": "C0DEED",
+    "name": "Twitter API",
+///////////////////////////////////////////////////////
+////"created_at": "Wed May 23 06:01:13 +0000 2007",////
+///////////////////////////////////////////////////////
+    "profile_image_url":
+    ...
+  }
+]
+</code></pre></div>
+<p>We’ll be using the <code>created_at</code> field in our where clause below.</p>
+
+<p>Select “Yes” for “Enable Events and setup events configuration</p>
+
+<p>Select “Polling”</p>
+
+<p>Under the “users” resource click “Edit”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Events1.png" alt="Element Builder Events 1"></p>
+
+<p>In the “Where field with operator” field, input <code>created_at</code> with operator <code>&gt;</code>, or <code>created_at &gt;</code></p>
+
+<p>Select a date format that the endpoint expects. This information is available under the endpoint API documentation.</p>
+
+<p>Under the advanced section, input <code>created_at</code> in the Update Date Field and Created Date Field.</p>
+
+<p>Select the same Date format as above to match what the endpoint expects.</p>
+
+<p>Click “Done”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Events21.png" alt="Element Builder Events 2"></p>
+
+<h4 id="bulk-tab">Bulk Tab</h4>
+
+<p>Cloud Elements supports bulk download of objects in JSON format if the endpoint support filter by date.</p>
+
+<p>The following fields are required to enable bulk download:</p>
+
+<p>Bulk Query Time Format:  Select a time format from the dropdown list.  The time format must match the endpoint’s supported time format for queries.
+Bulk Query Field Name:  Provide an object and an operator in the Bulk Query Field Name, e.g. where orders &gt;= “{time_format}”.
+Bulk Query Operator: The Bulk Query Operator can be set to “=” or “&gt;=”.</p>
+
+<p>Twitter supports a create<em>at field.  However, they do not support an updated</em>at field.  Since the updated_at field is not supported, bulk download will occur on objects created since a certain day and time.</p>
+
+<p>Let’s take a look at an example.</p>
+
+<p>Partial JSON payload of Twitter GET /users resource:</p>
+<div class="highlight"><pre><code class="language-JSON" data-lang="JSON">[
+  {
+    "profile_sidebar_fill_color": "DDEEF6",
+    "profile_background_tile": true,
+    "profile_sidebar_border_color": "C0DEED",
+    "name": "Twitter API",
+///////////////////////////////////////////////////////
+////"created_at": "Wed May 23 06:01:13 +0000 2007",////
+///////////////////////////////////////////////////////
+    "profile_image_url":
+    ...
+  }
+]
+</code></pre></div>
+<p>We’ll be using the <code>created_at</code> field in the Bulk Query Field Name below.</p>
+
+<ol>
+<li><p>In the Bulk Query Field Name, input <code>created_at</code></p></li>
+<li><p>Select the Bulk Query Date Format, the format the endpoint expects.  This can be found in the endpoint API documentation.</p></li>
+<li><p>Input a Bulk Query Operator.  The Bulk Query Operator can be set to <code>=</code> or <code>&gt;=</code>.</p></li>
+<li><p>Click “Done”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Bulk1.png" alt="Element Builder Bulk 1"></p></li>
+</ol>
+
+<h4 id="documentation-tab">Documentation Tab</h4>
+
+<p>View the newly created API documentation for Element.  Try out the API calls right from Element Builder.</p>
+
+<p>View the new Element documentation by selecting an instance from the dropdown: “Change Instances”.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Documentation2.png" alt="Element Builder Documentation 1"></p>
+
+<p>If an instance has not been created, click “Add Instance”.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Documentation1.png" alt="Element Builder Documentation 2"></p>
+
+<p>Try It Out:  Click on a resource, e.g. GET /users</p>
+
+<p>Input the query parameter: q=’jonsmith’</p>
+
+<p>Click “Try it out!”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Documentation3.png" alt="Element Builder Documentation 3"></p>
+
+<p>View the response.
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Documentation4.png" alt="Element Builder Documentation 4"></p>
+
+<p>Click “Done”
+<img src="http://cloud-elements.com/wp-content/uploads/2015/04/Admin1.png" alt="Element Builder Documentation 5"></p>
+
+<h4 id="admin-dashboard">Admin Dashboard</h4>
+
+<p>Within the in Admin Dashboard, the following functions are available to exercise on all Elements created using Element Builder:</p>
+
+<ul>
+<li><strong>Edit an Element:</strong> change a URL, add a resource, edit configurations</li>
+<li><strong>Deactivate:</strong> deactivates an Element, temporarily removing it from the catalog</li>
+<li><strong>Delete:</strong> deletes an Element, permanently removing it from the catalog</li>
+<li><strong>Export:</strong> exports Element JSON, this JSON can be imported at a later time</li>
+</ul>
+
+<p>To access the Element admin functions, click on the gear.</p>
+
+<p>To import Element JSON, click “Import Element” and follow the prompts.  All functionality will be available based on the last state of the Element prior to export.
+<img src="http://cloud-elements.com/wp-content/uploads/2016/02/AdminClone1.png" alt="Element Builder Admin Dashboard 1"></p>
+
+<h4 id="support">Support</h4>
+
+<p>Element Builder is currently in BETA.  We would love to hear about enhancements or concerns regarding the application.  Please don’t hesitate to get in touch.</p>
+
+<p>Need some help?  Don’t hesitate to reach out to <a href="mailto:support@cloud-elements.com">Cloud Elements Support</a> with any questions or concerns.</p>
+
+<p>The Cloud Elements Team</p>
+
+      </div>
+      <script type="text/javascript">
+        // Init the active tab
+        $(`a[href='${window.location.pathname}${window.location.search}']`).parent().addClass("activeTab");
+        $(`a[href^='${window.location.pathname}?']`).parent().addClass("activeTab");
+        // Toggle the current active tab on the element menu
+        $(".tab a").click((e)=> {
+          $(".activeTab").removeClass("activeTab");
+          $(e.target).parent().addClass("activeTab");
+        })
+      </script>
+    </div>
+  </div>
+  <script src="/assets/js/tablesorter.min.js"></script>
+  <script src="/assets/js/toolkit.js"></script>
+  <script src="/assets/js/application.js"></script>
+  <!-- /_includes/google_analytics.html -->
+<script>
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ ga('create', 'UA-32342187-1', 'auto');
+ //ga('create', 'UA-106858868-1', 'auto');
+ ga('send', 'pageview');
+
+</script>
+
+  <!-- Engagio Tracking Script -->
+<script type=“text/javascript” charset=“utf-8 ">
+var _eiq = _eiq || [];
+var _engagio_settings = {
+accountId: “572b5582906e828baac61d212c133b568b913200”
+};
+(function() {
+var ei = document.createElement(‘script’); ei.type = ‘text/javascript’; ei.async = true;
+ei.src = (‘https:’ == document.location.protocol ? ‘https://’ : ‘http://’) + ‘web-analytics.engagio.com/js/ei.js’;
+var s = document.getElementsByTagName(‘script’)[0]; s.parentNode.insertBefore(ei, s);
+})();
+</script>
+  <!-- Start of Async HubSpot Analytics Code -->
+ <script type="text/javascript">
+   (function(d,s,i,r) {
+     if (d.getElementById(i)){return;}
+     var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+     n.id=i;n.src='//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/440197.js';
+     e.parentNode.insertBefore(n, e);
+   })(document,"script","hs-analytics",300000);
+ </script>
+<!-- End of Async HubSpot Analytics Code -->
+
+  <script src="/assets/js/ajaxLoading.js"></script>
+  <script>
+  // execute/clear BS loaders for docs
+  $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+  </script>
+</body>
+</html>
